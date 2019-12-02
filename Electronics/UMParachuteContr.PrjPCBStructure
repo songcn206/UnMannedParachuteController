@@ -1,0 +1,4 @@
+Record=TopLevelDocument|FileName=MainSheet.SchDoc
+Record=SheetSymbol|SourceDocument=MainSheet.SchDoc|Designator=U_MCU|SchDesignator=U_MCU|FileName=MCU.SchDoc|SymbolType=Normal|RawFileName=MCU.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=MainSheet.SchDoc|Designator=U_Motors|SchDesignator=U_Motors|FileName=Motors.SchDoc|SymbolType=Normal|RawFileName=Motors.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=MainSheet.SchDoc|Designator=U_UartsAndGPS|SchDesignator=U_UartsAndGPS|FileName=UartsAndGPS.SchDoc|SymbolType=Normal|RawFileName=UartsAndGPS.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
