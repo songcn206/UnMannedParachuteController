@@ -2299,7 +2299,7 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document134]
-DocumentPath=UartsAndGPS.SchDoc
+DocumentPath=Uarts.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
