@@ -65,7 +65,7 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
@@ -460,7 +460,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=YNFTXPCD
 
 [Document26]
 DocumentPath=altium_libs\DC-DC.SchLib
@@ -511,7 +511,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=LDLJAKVM
 
 [Document29]
 DocumentPath=altium_libs\dsub.PcbLib
@@ -783,7 +783,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=MGQDPMLV
 
 [Document45]
 DocumentPath=altium_libs\Inductors.SchLib
@@ -1548,7 +1548,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=KVAQUTSX
 
 [Document90]
 DocumentPath=altium_libs\pinheader.SchLib
@@ -1616,7 +1616,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=BOLDIDXC
 
 [Document94]
 DocumentPath=altium_libs\PressureSensors.SchLib
@@ -1786,7 +1786,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=XRWFRBSP
+DocumentUniqueId=BASTRYMF
 
 [Document104]
 DocumentPath=altium_libs\smart_edge_connect.PcbLib
@@ -1837,7 +1837,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=PWTQNEHI
 
 [Document107]
 DocumentPath=altium_libs\soic.PcbLib
@@ -1854,7 +1854,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=CRKLHGFY
 
 [Document108]
 DocumentPath=altium_libs\sot.PcbLib
@@ -1871,7 +1871,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=EBGLTBRI
 
 [Document109]
 DocumentPath=altium_libs\SuperCapTerminals.PcbLib
@@ -1908,6 +1908,23 @@ GenerateClassCluster=0
 DocumentUniqueId=TUQSWPAL
 
 [Document111]
+DocumentPath=altium_libs\GPS.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=QDFSYCIU
+
+[Document112]
 DocumentPath=altium_libs\Switches.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -1922,9 +1939,9 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=AQGQYSXT
 
-[Document112]
+[Document113]
 DocumentPath=altium_libs\Switches.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -1941,7 +1958,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=OYHJQOUQ
 
-[Document113]
+[Document114]
 DocumentPath=altium_libs\terminal_blocks.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -1958,7 +1975,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document114]
+[Document115]
 DocumentPath=altium_libs\terminal_blocks.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -1975,7 +1992,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=RUWJBWBV
 
-[Document115]
+[Document116]
 DocumentPath=altium_libs\Terminals_WP-SHFU.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -1992,7 +2009,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document116]
+[Document117]
 DocumentPath=altium_libs\Terminals_WP-SHFU.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2009,7 +2026,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BAPLFHWC
 
-[Document117]
+[Document118]
 DocumentPath=altium_libs\testPad.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2026,7 +2043,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document118]
+[Document119]
 DocumentPath=altium_libs\testPad.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2043,7 +2060,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=ILDWSHEM
 
-[Document119]
+[Document120]
 DocumentPath=altium_libs\TO.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2060,7 +2077,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document120]
+[Document121]
 DocumentPath=altium_libs\TouchSensor.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2077,7 +2094,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document121]
+[Document122]
 DocumentPath=altium_libs\TouchSensor.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2094,7 +2111,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FOCDRHUE
 
-[Document122]
+[Document123]
 DocumentPath=altium_libs\TQFP.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2111,7 +2128,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YGIOYNSD
 
-[Document123]
+[Document124]
 DocumentPath=altium_libs\Transducers.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2128,7 +2145,24 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document124]
+[Document125]
+DocumentPath=altium_libs\GPS.SchLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=WAPMGDLP
+
+[Document126]
 DocumentPath=altium_libs\Transducers.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2145,7 +2179,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=SFDJWCLM
 
-[Document125]
+[Document127]
 DocumentPath=altium_libs\transistors.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2162,7 +2196,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=OVQLEJVQ
 
-[Document126]
+[Document128]
 DocumentPath=altium_libs\unsorted_connectors.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2179,7 +2213,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document127]
+[Document129]
 DocumentPath=altium_libs\unsorted_connectors.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2196,7 +2230,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=EADKLFGQ
 
-[Document128]
+[Document130]
 DocumentPath=altium_libs\USB.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2213,7 +2247,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document129]
+[Document131]
 DocumentPath=altium_libs\USB.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2230,7 +2264,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=CHLEECVV
 
-[Document130]
+[Document132]
 DocumentPath=altium_libs\VoltageSupervisors.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2247,7 +2281,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=VYYRFKRR
 
-[Document131]
+[Document133]
 DocumentPath=altium_libs\VQFN.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2264,7 +2298,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=OWNURBHD
 
-[Document132]
+[Document134]
 DocumentPath=GPS.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2275,13 +2309,13 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DXNDRRRY
 
-[Document133]
+[Document135]
 DocumentPath=Power.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2292,13 +2326,13 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=MEUNORAS
 
-[Document134]
+[Document136]
 DocumentPath=IMUAndSonar.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2309,13 +2343,13 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QUPWNMLO
 
-[Document135]
+[Document137]
 DocumentPath=Motors.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2326,13 +2360,13 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AIDQREUO
 
-[Document136]
+[Document138]
 DocumentPath=Barometers.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2343,13 +2377,13 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IDOOYWDR
 
-[Document137]
+[Document139]
 DocumentPath=Uarts.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2360,13 +2394,13 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IFCLQVOL
 
-[Document138]
+[Document140]
 DocumentPath=MCU.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2377,13 +2411,13 @@ AnnotateOrder=-1
 DoLibraryUpdate=1
 DoDatabaseUpdate=1
 ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
+ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HQYJTJGW
 
-[Document139]
+[Document141]
 DocumentPath=altium_libs\LevelShifters.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -2400,7 +2434,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AQDCSCBM
 
-[Document140]
+[Document142]
 DocumentPath=Job2.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
