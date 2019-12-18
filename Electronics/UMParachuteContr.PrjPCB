@@ -1786,7 +1786,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=QLCIFCLV
+DocumentUniqueId=ASCQXNQR
 
 [Document104]
 DocumentPath=altium_libs\smart_edge_connect.PcbLib
@@ -2450,6 +2450,10 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
+
+[GeneratedDocument1]
+DocumentPath=Project Outputs for UMParachuteContr\Design Rule Check - UMParachuteContr.html
+DItemRevisionGUID=
 
 [Configuration1]
 Name=Sources
