@@ -1786,7 +1786,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=ASCQXNQR
+DocumentUniqueId=JGJHHCFE
 
 [Document104]
 DocumentPath=altium_libs\smart_edge_connect.PcbLib
@@ -2435,7 +2435,7 @@ GenerateClassCluster=0
 DocumentUniqueId=AQDCSCBM
 
 [Document142]
-DocumentPath=Job2.OutJob
+DocumentPath=Project Outputs for UMParachuteContr\Job1.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
