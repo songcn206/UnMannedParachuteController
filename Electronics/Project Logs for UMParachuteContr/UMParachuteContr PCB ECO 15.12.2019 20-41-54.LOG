@@ -1,0 +1,50 @@
+Added Component: Designator=U1(TQFP-64, NOMINAL)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://ww1.microchip.com/downloads/en/devicedoc/atmel-8386-8-and-16-bit-avr-microcontroller-atxmega64a3u-128a3u-192a3u-256a3u_datasheet.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Farnell"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "2066307"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=DebugLED1 Pin=U1-1
+Added Pin To Net: NetName=DebugLED2 Pin=U1-2
+Added Pin To Net: NetName=DebugLED3 Pin=U1-3
+Added Pin To Net: NetName=NetIC2_7 Pin=U1-6
+Added Pin To Net: NetName=NetIC5_11 Pin=U1-7
+Added Pin To Net: NetName=GND Pin=U1-14
+Added Pin To Net: NetName=3V3 Pin=U1-15
+Added Pin To Net: NetName=NetIC4_3 Pin=U1-16
+Added Pin To Net: NetName=NetIC4_4 Pin=U1-17
+Added Pin To Net: NetName=NetIC4_5 Pin=U1-18
+Added Pin To Net: NetName=NetIC4_6 Pin=U1-19
+Added Pin To Net: NetName=GND Pin=U1-24
+Added Pin To Net: NetName=3V3 Pin=U1-25
+Added Pin To Net: NetName=NetR1_2 Pin=U1-28
+Added Pin To Net: NetName=NetR2_2 Pin=U1-29
+Added Pin To Net: NetName=NetIC2_6 Pin=U1-30
+Added Pin To Net: NetName=NetIC2_4 Pin=U1-31
+Added Pin To Net: NetName=NetIC2_5 Pin=U1-32
+Added Pin To Net: NetName=NetIC2_2 Pin=U1-33
+Added Pin To Net: NetName=GND Pin=U1-34
+Added Pin To Net: NetName=3V3 Pin=U1-35
+Added Pin To Net: NetName=NetIC3_10 Pin=U1-36
+Added Pin To Net: NetName=NetIC3_11 Pin=U1-37
+Added Pin To Net: NetName=NetR19_2 Pin=U1-38
+Added Pin To Net: NetName=NetR18_2 Pin=U1-39
+Added Pin To Net: NetName=NetIC5_12 Pin=U1-40
+Added Pin To Net: NetName=NetIC5_14 Pin=U1-41
+Added Pin To Net: NetName=NetIC5_13 Pin=U1-42
+Added Pin To Net: NetName=NetIC5_16 Pin=U1-43
+Added Pin To Net: NetName=GND Pin=U1-44
+Added Pin To Net: NetName=3V3 Pin=U1-45
+Added Pin To Net: NetName=NetR3_2 Pin=U1-48
+Added Pin To Net: NetName=NetR4_2 Pin=U1-49
+Added Pin To Net: NetName=GND Pin=U1-52
+Added Pin To Net: NetName=3V3 Pin=U1-53
+Added Pin To Net: NetName=PDI_DATA Pin=U1-56
+Added Pin To Net: NetName=PDI_CLOCK Pin=U1-57
+Added Pin To Net: NetName=XTAL2 Pin=U1-58
+Added Pin To Net: NetName=XTAL1 Pin=U1-59
+Added Pin To Net: NetName=GND Pin=U1-60
+Added Pin To Net: NetName=3V3 Pin=U1-61
+Added Pin To Net: NetName=3V3 Pin=U1-62
+Added Pin To Net: NetName=NetC22_2 Pin=U1-63
+Added Member To Class: ClassName=U_MCU Member=Component U1 ATXMEGA256A3U
