@@ -19,3 +19,8 @@ void System :: Init() {
 	CCP = CCP_IOREG_gc;
 	CLK.CTRL = CLK_SCLKSEL_PLL_gc;
 }
+
+void System :: EnableInterrupts() {
+	PMIC.CTRL = PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
+	sei();
+}

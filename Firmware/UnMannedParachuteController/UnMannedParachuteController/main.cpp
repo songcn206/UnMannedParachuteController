@@ -7,23 +7,29 @@
 
 #include <avr/io.h>
 
+
 #include "HAL/System/System.hpp"
+#include "HAL/System/port.hpp"
 #include "HAL/UART/UART.hpp"
+
 
 int main(void) {
 	PORTA.DIRSET = (PIN3_bm | PIN4_bm | PIN5_bm);
 	
-	System :: Init();
-	Uart :: Init();
+	Port :: InitPin(Port::IOPorts::A, 3, Port::PortDirection::Output, Port::PortOutputState::TotemPole);
 	
+	PORTF.OUTSET |= PIN3_bm;
+	PORTF.DIRSET |= PIN3_bm;
+	
+	System :: Init();
+	ExtUart :: Init();
+	
+	System :: EnableInterrupts();
 	
     /* Replace with your application code */
     while (1) {
-		PORTA.OUTTGL = (PIN3_bm | PIN4_bm | PIN5_bm);
 		_delay_ms(100);
-		PORTA.OUTTGL = (PIN3_bm | PIN4_bm | PIN5_bm);
-		_delay_ms(100);
-		Uart :: SendString("Timo\n");
+		ExtUart :: SendString("Timo\n");
     }
 }
 

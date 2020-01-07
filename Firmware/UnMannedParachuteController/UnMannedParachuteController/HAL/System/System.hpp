@@ -10,6 +10,7 @@
 #define SYSTEM_HPP_
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 
 #define F_CPU (32000000UL)
 #include <util/delay.h>
@@ -22,6 +23,7 @@ class System {
 	
 	public:
 		static void Init();
+		static void EnableInterrupts();
 		
 	private:
 	
