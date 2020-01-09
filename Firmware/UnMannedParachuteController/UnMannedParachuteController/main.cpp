@@ -9,27 +9,57 @@
 
 
 #include "HAL/System/System.hpp"
-#include "HAL/System/port.hpp"
+#include "HAL/System/Pins.hpp"
 #include "HAL/UART/UART.hpp"
+#include "Control/StateMachine/StateMachine.hpp"
+
+void InitPins() {
+	led1 :: SetPinConf();
+	led2 :: SetPinConf();
+	led3 :: SetPinConf();
+	ExtUartTx :: SetPinConf();
+	ExtUartRx :: SetPinConf();
+	GpsUartTx :: SetPinConf();
+	GpsUartRx :: SetPinConf();
+	DebugUartTx :: SetPinConf();
+	DebugUartRx :: SetPinConf();
+	Left2ServoPWM :: SetPinConf();
+	Right2ServoPWM :: SetPinConf();
+	Left1ServoPWM :: SetPinConf();
+	Right1ServoPWM :: SetPinConf();
+	AbsBaroCS :: SetPinConf();
+	AbsBaroMOSI :: SetPinConf();
+	AbsBaroMISO :: SetPinConf();
+	AbsBaroCK :: SetPinConf();
+	ImuCS :: SetPinConf();
+	ImuMOSI :: SetPinConf();
+	ImuMISO :: SetPinConf();
+	ImuCK :: SetPinConf();
+	DiffBaroSDA :: SetPinConf();
+	DiffBaroSCL :: SetPinConf();
+	AbsBaroInt :: SetPinConf();
+	ImuInt :: SetPinConf();
+	SonarIn :: SetPinConf();
+}
+
+void CheckUarts() {
+	if (ExtUart :: IsReciveCompleted()) {
+		
+	}	
+}
 
 
 int main(void) {
-	PORTA.DIRSET = (PIN3_bm | PIN4_bm | PIN5_bm);
-	
-	Port :: InitPin(Port::IOPorts::A, 3, Port::PortDirection::Output, Port::PortOutputState::TotemPole);
-	
-	PORTF.OUTSET |= PIN3_bm;
-	PORTF.DIRSET |= PIN3_bm;
 	
 	System :: Init();
+	InitPins();
 	ExtUart :: Init();
-	
-	System :: EnableInterrupts();
+
+	System :: EnableAllInterrupts();
 	
     /* Replace with your application code */
     while (1) {
-		_delay_ms(100);
-		ExtUart :: SendString("Timo\n");
+		CheckUarts();
     }
 }
 

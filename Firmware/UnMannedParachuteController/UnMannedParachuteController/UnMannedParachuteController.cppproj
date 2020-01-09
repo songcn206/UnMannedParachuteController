@@ -171,7 +171,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="HAL\System\port.hpp">
+    <Compile Include="HAL\System\Pins.hpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\System\System.cpp">
