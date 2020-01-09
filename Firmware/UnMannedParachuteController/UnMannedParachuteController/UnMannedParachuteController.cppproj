@@ -171,6 +171,18 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Control\StateMachine\StateMachine.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\StateMachine\StateMachine.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\SPI\SPI.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\SPI\SPI.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HAL\System\Pins.hpp">
       <SubType>compile</SubType>
     </Compile>
@@ -178,6 +190,24 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\System\System.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\GenTimerD0.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\GenTimerD0.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\PWMTimer\PWMTimer.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\PWMTimer\PWMTimer.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\Timers.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\UART\ParseUart.hpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\UART\UART.cpp">
@@ -191,9 +221,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Control\StateMachine" />
     <Folder Include="HAL" />
+    <Folder Include="HAL\SPI" />
+    <Folder Include="HAL\Timers" />
+    <Folder Include="HAL\Timers\GenericTimer" />
+    <Folder Include="HAL\Timers\PWMTimer" />
     <Folder Include="HAL\UART" />
     <Folder Include="HAL\System" />
+    <Folder Include="Control" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

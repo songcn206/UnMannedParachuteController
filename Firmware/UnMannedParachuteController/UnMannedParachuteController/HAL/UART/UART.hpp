@@ -16,7 +16,7 @@
 template <typename conf>
 class Uart {
 	public:
-		static uint8_t* reciveArrayDataPointer;
+		static constexpr uint8_t terminatingChar = conf :: terminatingChar;
 		
 	private:
 		static constexpr uint32_t baudRate = conf :: baudRate;
@@ -24,7 +24,7 @@ class Uart {
 		static constexpr uint8_t rxInterruptPriority = conf :: RxInterrupt;
 		static volatile uint8_t reciveArray[conf :: rxArrayLength]; 
 		static volatile uint8_t reciveArrayFreePos;
-		static volatile bool reciveArrayReadyForRead;
+		static uint8_t reciveArrayOccupiedPos;
 		
 	public:
 		static void Init() {
@@ -85,19 +85,40 @@ class Uart {
 		// Using cycling/running buffer
 		static void RxInterruptHandler() {
 			uint8_t data = uart -> DATA;
-			if (reciveArrayFreePos == conf :: rxArrayLength) {
-				reciveArrayFreePos = 0;
+			
+			if (reciveArray[reciveArrayFreePos] != 0) {
+				System :: Halt("RX Buffer overflow\n");
 			}
+
 			reciveArray[reciveArrayFreePos] = data;
-			reciveArrayReadyForRead = true;
-			reciveArrayFreePos++;
+			if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
+				reciveArrayFreePos = 0;
+			} else {
+				reciveArrayFreePos++;
+			}
+			
+		}
+
+		static volatile uint8_t* GetRxBufferStart() {
+			return &reciveArray[0]; 
 		}
 		
-		static bool IsByteRecived() {
-			System :: DisableInterruptsByPriority(GetInterruptLevel());
-			bool tempBool = reciveArrayReadyForRead;
-			System :: EnableInterruptsByPriority(GetInterruptLevel());
-			return tempBool;
+		static volatile uint8_t* GetRxBufferEnd() {
+			return &reciveArray[conf :: rxArrayLength - 1];
+		}
+	
+		static System :: IntLevel GetInterruptLevel() {
+			switch (rxInterruptPriority) {
+				case USART_RXCINTLVL_LO_gc:
+					return System :: IntLevel :: Low;
+				case USART_RXCINTLVL_MED_gc:
+					return System :: IntLevel :: Med;
+				case USART_RXCINTLVL_HI_gc:
+					return System :: IntLevel :: High;
+				default:
+					System :: Halt("Wrong UARTRX Prio\n");
+					return System :: IntLevel :: Low;
+			}
 		}
 		
 	private:
@@ -137,19 +158,7 @@ class Uart {
 			uart -> BAUDCTRLA = (uint8_t) div;
 		}
 		
-		static System :: IntLevel GetInterruptLevel() {
-			switch (rxInterruptPriority) {
-				case USART_RXCINTLVL_LO_gc:
-					return System :: IntLevel :: Low;
-				case USART_RXCINTLVL_MED_gc:
-					return System :: IntLevel :: Med;
-				case USART_RXCINTLVL_HI_gc:
-					return System :: IntLevel :: High;
-				default:
-					System :: Halt("Wrong UARTRX Prio\n");
-					return;	
-			}
-		}
+		
 };
 
 template<typename conf>
@@ -157,9 +166,6 @@ uint8_t volatile Uart<conf> :: reciveArray[conf :: rxArrayLength] = {};
 	
 template<typename conf>
 uint8_t volatile Uart<conf> :: reciveArrayFreePos = 0;
-
-template<typename conf>
-bool volatile Uart<conf> :: reciveArrayReadyForRead = false;
 
 struct ExtUartConf {
 	static constexpr uint32_t baudRate = 500000;

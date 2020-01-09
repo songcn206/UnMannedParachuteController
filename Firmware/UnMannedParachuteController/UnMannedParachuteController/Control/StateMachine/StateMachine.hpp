@@ -9,7 +9,9 @@
 #ifndef STATEMACHINE_HPP_
 #define STATEMACHINE_HPP_
 
+class StateMachine {
 
+};
 
 
 
