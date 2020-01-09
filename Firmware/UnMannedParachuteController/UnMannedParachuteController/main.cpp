@@ -43,8 +43,8 @@ void InitPins() {
 }
 
 void CheckUarts() {
-	if (ExtUart :: IsReciveCompleted()) {
-		
+	if (ExtUart :: IsByteRecived()) {
+		// ParseUart :: ParseExtUart();
 	}	
 }
 

@@ -16,7 +16,8 @@
 template <typename conf>
 class Uart {
 	public:
-	
+		static uint8_t* reciveArrayDataPointer;
+		
 	private:
 		static constexpr uint32_t baudRate = conf :: baudRate;
 		static constexpr USART_t* uart = conf :: uart;
@@ -24,7 +25,7 @@ class Uart {
 		static volatile uint8_t reciveArray[conf :: rxArrayLength]; 
 		static volatile uint8_t reciveArrayFreePos;
 		static volatile bool reciveArrayReadyForRead;
-	
+		
 	public:
 		static void Init() {
 			InitBaudRegisters();			
@@ -81,22 +82,18 @@ class Uart {
 			SendUInt((uint16_t)value);
 		}
 		
+		// Using cycling/running buffer
 		static void RxInterruptHandler() {
 			uint8_t data = uart -> DATA;
-			if (data == conf :: terminatingChar) {
-				reciveArrayReadyForRead = true;
-				reciveArrayFreePos = 0; // TODO
-			} else {
-				if (reciveArrayFreePos == conf ::  rxArrayLength) {
-					System :: Halt("RXIntrrupt: Too much data\n");
-				} else {
-					reciveArray[reciveArrayFreePos] = data;
-					reciveArrayFreePos++;
-				}
+			if (reciveArrayFreePos == conf :: rxArrayLength) {
+				reciveArrayFreePos = 0;
 			}
+			reciveArray[reciveArrayFreePos] = data;
+			reciveArrayReadyForRead = true;
+			reciveArrayFreePos++;
 		}
 		
-		static bool IsReciveCompleted() {
+		static bool IsByteRecived() {
 			System :: DisableInterruptsByPriority(GetInterruptLevel());
 			bool tempBool = reciveArrayReadyForRead;
 			System :: EnableInterruptsByPriority(GetInterruptLevel());
