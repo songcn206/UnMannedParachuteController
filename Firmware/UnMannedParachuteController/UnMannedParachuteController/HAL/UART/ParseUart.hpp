@@ -29,7 +29,7 @@ class ParseUart {
 	public:
 		static void Parse() {
 			while (GetDataSafe(runningPointer) != 0) {
-				
+				led2 :: Toggle();
 				uint8_t data = GetDataSafe(runningPointer);
 				parseBuffer[parseBufferPos] = data;
 				SetDataSafe(runningPointer, 0);
