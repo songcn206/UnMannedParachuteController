@@ -38,7 +38,7 @@ class ImuSpi {
 		static volatile uint8_t data[18];
 		static volatile uint8_t dataPointer;
 		static volatile uint8_t DataAddr[18];
-		static volatile ImuSettings settings[19];
+		static volatile ImuSettings settings[16];
 		static volatile uint8_t settingsPointer;
 		static volatile bool isLastSettingApplied;
 		static volatile ImuSettings magnetometer[5];
@@ -46,7 +46,7 @@ class ImuSpi {
 	
 	public:
 		static void Init() {
-			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV128_gc;
+			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV16_gc;
 			SPIE.INTCTRL = SPI_INTLVL_HI_gc;
 			SPIE.STATUS = SPI_IF_bm;
 			state = SpiState :: ApplyingSettings;
@@ -84,6 +84,7 @@ class ImuSpi {
 							settingsPointer = 0;
 						} else {
 							ImuCS :: SetLow();
+							
 							SPIE.DATA = settings[settingsPointer].addr;
 							isLastSettingApplied = false;
 						}

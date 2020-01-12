@@ -58,7 +58,6 @@ void InitPins() {
 int main(void) {
 	System :: Init();
 	_delay_ms(1000);
-	
 	InitPins();
 	ExtUart :: Init();
 	GpsUart :: Init();
@@ -66,17 +65,24 @@ int main(void) {
 	GenTimerD0 :: Init();
 	ExtUart :: SendString("START!\n");
 	
+	ImuSpi :: Init();
 	
 	System :: EnableAllInterrupts();
 	
-	ImuSpi :: Init();
-	//ExtUart :: SendString("Before enable");
-	
-	//ExtUart :: SendString("after enable");
-    /* Replace with your application code */
+	uint16_t i;
     while (1) {
-		//ExtUart :: SendString("main\n");
-		//ExtUartParse :: Parse();
+		while(i <= 1250) {
+			i += 10;
+			PwmTimer :: UpdateCCReg('A', i);
+			PwmTimer :: UpdateCCReg('D', i);
+			_delay_ms(20);
+		}
+		while(i >= 250) {
+			i -= 10;
+			PwmTimer :: UpdateCCReg('A', i);
+			PwmTimer :: UpdateCCReg('D', i);
+			_delay_ms(20);
+		}
 		led3 :: Toggle();
 	}
 }

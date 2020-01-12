@@ -37,7 +37,7 @@ volatile uint8_t ImuSpi :: DataAddr[18] = {
 
 struct ImuSpi :: ImuSettings s0 = {.addr = 5, .value = 0b01000000}; // LP_GONFIG: I2C master duty cycle
 struct ImuSpi :: ImuSettings s1 = {.addr = 6, .value = 0b00000001}; // PWR_MGMT_1: Auto select clock
-struct ImuSpi :: ImuSettings s2 = {.addr = 7, .value = 0};			// PWR_MGMT_2: Enable cc and gyro
+struct ImuSpi :: ImuSettings s2 = {.addr = 7, .value = 0};			// PWR_MGMT_2: Enable cc and gyro	
 
 struct ImuSpi :: ImuSettings s3 = {.addr = 127, .value = 0b00100000}; // REG_BANK_SEL: Change to 2
 struct ImuSpi :: ImuSettings s4 = {.addr = 1, .value = 0b00000111}; // ACCEL_CONFIG: +-16g
@@ -67,7 +67,7 @@ struct ImuSpi :: ImuSettings s20 = {.addr = 6, .value = 0b11111111}; // I2C_SLV0
 	
 struct ImuSpi :: ImuSettings s21 = {.addr = 127, .value = 0};		// REG_BANK_SEL: Change to 0
 	
-volatile ImuSpi :: ImuSettings ImuSpi :: settings[19] = {
+volatile ImuSpi :: ImuSettings ImuSpi :: settings[16] = {
 s0,
 s1,
 s3,
@@ -86,9 +86,9 @@ s11,
 s15,
 s16,
 s17,
-s18,
-s19,
-s20,
+//s18,
+//s19,
+//s20,
 s21
 };
 
