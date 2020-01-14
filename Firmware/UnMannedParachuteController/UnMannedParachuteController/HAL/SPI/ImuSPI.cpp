@@ -11,7 +11,7 @@ volatile ImuSpi :: SpiState ImuSpi :: state = ImuSpi :: SpiState :: Uninited;
 volatile uint8_t ImuSpi :: data[18];
 volatile uint8_t ImuSpi :: dataPointer = 0;
 volatile uint8_t ImuSpi :: settingsPointer = 0;
-volatile bool ImuSpi :: isLastSettingApplied;
+volatile bool ImuSpi :: DataWritten;
 volatile uint8_t ImuSpi :: magnetometerPointer = 0;
 
 volatile uint8_t ImuSpi :: DataAddr[18] = {
@@ -51,7 +51,7 @@ struct ImuSpi :: ImuSettings s8 = {.addr = 127, .value = 0b00110000}; // REG_BAN
 	
 struct ImuSpi :: ImuSettings s9 = {.addr = 1, .value = 0b00000111}; // I2C_MST_CTRL: set clock 7
 struct ImuSpi :: ImuSettings s10 = {.addr = 2, .value = 0b00000001}; // I2C_MST_DELAY_CTRL: slave access delay
-struct ImuSpi :: ImuSettings s11 = {.addr = 5, .value = 0b10000110}; // I2C_SLV0_CTRL: slave 0 enable and bytes read from slave
+struct ImuSpi :: ImuSettings s11 = {.addr = 5, .value = 0b10001000}; // I2C_SLV0_CTRL: slave 0 enable and bytes read from slave
 
 struct ImuSpi :: ImuSettings s12 = {.addr = 3, .value = 0b00001100}; // I2C_SLV0_ADDR: physical address (0x0c) and write
 struct ImuSpi :: ImuSettings s13= {.addr = 4, .value = 0x32};		// I2C_SLV0_REG: slave control register

@@ -69,20 +69,7 @@ int main(void) {
 	
 	System :: EnableAllInterrupts();
 	
-	uint16_t i;
     while (1) {
-		while(i <= 1250) {
-			i += 10;
-			PwmTimer :: UpdateCCReg('A', i);
-			PwmTimer :: UpdateCCReg('D', i);
-			_delay_ms(20);
-		}
-		while(i >= 250) {
-			i -= 10;
-			PwmTimer :: UpdateCCReg('A', i);
-			PwmTimer :: UpdateCCReg('D', i);
-			_delay_ms(20);
-		}
 		led3 :: Toggle();
 	}
 }

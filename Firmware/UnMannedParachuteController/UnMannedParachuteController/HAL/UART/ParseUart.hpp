@@ -102,7 +102,7 @@ uint8_t ParseUart<conf> :: parseBuffer[parseBufferSize] = {};
 
 struct ExtUartParseConf {
 	typedef ExtUart uart;
-	static constexpr uint8_t parseBufferSize = 150;	
+	static constexpr uint8_t parseBufferSize = 200;	
 };
 typedef ParseUart<ExtUartParseConf> ExtUartParse;
 

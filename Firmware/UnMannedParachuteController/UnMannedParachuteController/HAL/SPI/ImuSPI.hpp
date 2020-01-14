@@ -40,30 +40,33 @@ class ImuSpi {
 		static volatile uint8_t DataAddr[18];
 		static volatile ImuSettings settings[16];
 		static volatile uint8_t settingsPointer;
-		static volatile bool isLastSettingApplied;
+		static volatile bool DataWritten;
 		static volatile ImuSettings magnetometer[5];
 		static volatile uint8_t magnetometerPointer;
+		
+		static constexpr uint8_t imuID = 0xea;
+		static constexpr uint8_t imuIDAddr = 0x00;
+		static constexpr uint8_t dummyData = 0xff;
 	
 	public:
 		static void Init() {
 			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV16_gc;
 			SPIE.INTCTRL = SPI_INTLVL_HI_gc;
 			SPIE.STATUS = SPI_IF_bm;
-			state = SpiState :: ApplyingSettings;
-			SetSettings();	
+			InitConnection();	
 		}
 		
 		static void InterruptHandler() {
 			led2 :: Toggle();
 			switch(state) {
 				case SpiState::SendDummyData:
-					SPIE.DATA = 0xff;
+					SPIE.DATA = dummyData;
 					state = SpiState::ReadDataFromRegister;
 					break;
 				case SpiState::ReadDataFromRegister:
 					data[dataPointer] = SPIE.DATA;
 					ImuCS :: SetHigh();
-					if (dataPointer >= 17) {
+					if (dataPointer >= (sizeof(DataAddr) - 1)) {
 						dataPointer = 0;
 						state = SpiState::DataUpdated;
 						
@@ -75,7 +78,7 @@ class ImuSpi {
 					}
 					break;
 				case SpiState::ApplyingSettings:
-					if (isLastSettingApplied) {
+					if (DataWritten) {
 						ExtUart :: SendString("Set ");
 						ImuCS :: SetHigh();
 						if (settingsPointer >= (sizeof(settings) / sizeof(ImuSettings))) {
@@ -83,19 +86,21 @@ class ImuSpi {
 							state = SpiState :: Wait;
 							settingsPointer = 0;
 						} else {
+							/*for(uint16_t i = 0; i < 32000; i++) {
+								asm volatile("nop");
+							}*/
 							ImuCS :: SetLow();
-							
 							SPIE.DATA = settings[settingsPointer].addr;
-							isLastSettingApplied = false;
+							DataWritten = false;
 						}
 					} else {
 						SPIE.DATA = settings[settingsPointer].value;
 						settingsPointer++;
-						isLastSettingApplied = true;
+						DataWritten = true;
 					}
 					break;
 				case SpiState::UpdatingMagnetometer:
-					if (isLastSettingApplied) {
+					if (DataWritten) {
 						ImuCS :: SetHigh();
 						if (magnetometerPointer >= (sizeof(magnetometer) / sizeof(ImuSettings))) {
 							ReadIMURegistersValues();
@@ -103,12 +108,29 @@ class ImuSpi {
 						} else {
 							ImuCS :: SetLow();
 							SPIE.DATA = magnetometer[magnetometerPointer].addr;
-							isLastSettingApplied = false;
+							DataWritten = false;
 						}
 					} else {
 						SPIE.DATA = magnetometer[magnetometerPointer].value;
 						magnetometerPointer++;
-						isLastSettingApplied = true;
+						DataWritten = true;
+					}
+					break;
+				case SpiState::Uninited:
+					ExtUart :: SendString("Here!");
+					if (DataWritten) {
+						ImuCS :: SetHigh();
+						if (SPIE.DATA == imuID) {
+							state = SpiState :: ApplyingSettings;
+							SetSettings();
+						} else {
+							ImuCS :: SetLow();
+							SPIE.DATA = (1 << 7 | imuIDAddr);
+							DataWritten = false;
+						}
+					} else {
+						SPIE.DATA = dummyData;
+						DataWritten = true;
 					}
 					break;
 				default:
@@ -121,7 +143,7 @@ class ImuSpi {
 			//ExtUart :: SendString("Start settings\n");
 			ImuCS :: SetLow();
 			SPIE.DATA = settings[0].addr;
-			isLastSettingApplied = false;
+			DataWritten = false;
 			//ExtUart :: SendString("Send addr\n");
 		}
 		
@@ -144,12 +166,18 @@ class ImuSpi {
 			ImuCS :: SetLow();
 			SPIE.DATA = magnetometer[0].addr;
 			state = SpiState::UpdatingMagnetometer;
-			isLastSettingApplied = false;
+			DataWritten = false;
 			System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpiInterruptLevel);
 		}
 		
 		static void DataTransferCompleted() {
 			state = SpiState::Wait;			
+		}
+		
+		static void InitConnection() {
+			ImuCS :: SetLow();
+			SPIE.DATA = (1 << 7 | imuIDAddr);
+			DataWritten = false;
 		}
 		
 };
