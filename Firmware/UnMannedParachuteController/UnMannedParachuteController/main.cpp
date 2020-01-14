@@ -51,13 +51,12 @@ void InitPins() {
 	//DiffBaroSCL :: SetPinConf();
 	//AbsBaroInt :: SetPinConf();
 	ImuInt :: SetPinConf();
-	ImuInt :: ConfigInterrupt();
+	//ImuInt :: ConfigInterrupt();
 	//SonarIn :: SetPinConf();
 }
 
 int main(void) {
 	System :: Init();
-	_delay_ms(1000);
 	InitPins();
 	ExtUart :: Init();
 	GpsUart :: Init();
@@ -71,6 +70,7 @@ int main(void) {
 	
     while (1) {
 		led3 :: Toggle();
+		_delay_ms(50);
 	}
 }
 

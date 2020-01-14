@@ -86,9 +86,6 @@ class ImuSpi {
 							state = SpiState :: Wait;
 							settingsPointer = 0;
 						} else {
-							/*for(uint16_t i = 0; i < 32000; i++) {
-								asm volatile("nop");
-							}*/
 							ImuCS :: SetLow();
 							SPIE.DATA = settings[settingsPointer].addr;
 							DataWritten = false;
