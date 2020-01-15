@@ -51,13 +51,14 @@ int main(void) {
 	InitPins();
 	ExtUart :: Init();
 	GpsUart :: Init();
-	//PwmTimer :: Init();
+	PwmTimer :: Init();
 	GenTimerD0 :: Init();
 
 	System :: EnableAllInterrupts();
 	
     /* Replace with your application code */
     while (1) {
+		led2 :: Toggle();
     }
 }
 

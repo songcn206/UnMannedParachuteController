@@ -16,21 +16,21 @@ class Timers {
 		static uint8_t GetPreScaler(uint16_t preScaler) {
 			switch (preScaler) {
 				case 0:
-					return TC_CLKSEL_OFF_gc;
+					return TC_TC0_CLKSEL_OFF_gc;
 				case 1:
-					return TC_CLKSEL_DIV1_gc;
+					return TC_TC0_CLKSEL_DIV1_gc;
 				case 2:
-					return TC_CLKSEL_DIV2_gc;
+					return TC_TC0_CLKSEL_DIV2_gc;
 				case 4:
-					return TC_CLKSEL_DIV4_gc;
+					return TC_TC0_CLKSEL_DIV4_gc;
 				case 8:
-					return TC_CLKSEL_DIV8_gc;
+					return TC_TC0_CLKSEL_DIV8_gc;
 				case 64:
-					return TC_CLKSEL_DIV64_gc;
+					return TC_TC0_CLKSEL_DIV64_gc;
 				case 256:
-					return TC_CLKSEL_DIV256_gc;
+					return TC_TC0_CLKSEL_DIV256_gc;
 				case 1024:
-					return TC_CLKSEL_DIV1024_gc;
+					return TC_TC0_CLKSEL_DIV1024_gc;
 				default:
 					System :: Halt("Timer prescaler\n");
 					return 0;

@@ -27,8 +27,8 @@ class GenTimerD0 {
 		
 	public:
 		static void Init() {
-			TCD0.CTRLB = TC_WGMODE_NORMAL_gc;
-			TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc | TC_CCBINTLVL_LO_gc;
+			TCD0.CTRLB = TC_TC0_WGMODE_NORMAL_gc;
+			TCD0.INTCTRLB = TC_TC0_CCAINTLVL_LO_gc | TC_TC0_CCBINTLVL_LO_gc;
 			TCD0.PER = 65535;
 			TCD0.CCA = compareMatchAValue;
 			TCD0.CCB = compareMatchBValue;
@@ -39,12 +39,12 @@ class GenTimerD0 {
 		static void CompareMatchAHandler() {
 			ExtUartParse :: Parse();
 			TCD0.CCA += compareMatchAValue;
-			TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
+			TCD0.CTRLFSET = TC_TC0_CMD_UPDATE_gc;
 		}
 		
 		static void CompareMatchBHandler() {
 			TCD0.CCB += compareMatchBValue;
-			TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
+			TCD0.CTRLFSET = TC_TC0_CMD_UPDATE_gc;
 		}
 
 

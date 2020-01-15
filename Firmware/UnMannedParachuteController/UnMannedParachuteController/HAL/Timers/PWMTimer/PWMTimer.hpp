@@ -26,7 +26,7 @@ class PwmTimer {
 		
 	public:
 		static void Init() {
-			TCC0.CTRLB = TC0_CCDEN_bm | TC0_CCAEN_bm | TC_WGMODE_SINGLESLOPE_gc; // Add more if needed to
+			TCC0.CTRLB = TC0_CCDEN_bm | TC0_CCAEN_bm | TC_TC0_WGMODE_SINGLESLOPE_gc; // Add more if needed to
 			TCC0.PER = timerTopValue;
 			TCC0.CCD = 1000; 
 			TCC0.CCA = 1000;
