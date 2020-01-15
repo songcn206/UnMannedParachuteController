@@ -44,6 +44,7 @@ void System :: EnableInterruptsByPriority(System :: IntLevel level) {
 			PMIC.CTRL |= PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm;
 			break;
 	}
+	//ExtUart :: SendString("ENABLE\n");
 }
 
 void System :: DisableInterruptsByPriority(System :: IntLevel level) {
@@ -58,6 +59,7 @@ void System :: DisableInterruptsByPriority(System :: IntLevel level) {
 			PMIC.CTRL &= 0xff ^ (PMIC_HILVLEN_bm | PMIC_MEDLVLEN_bm | PMIC_LOLVLEN_bm);
 			break;
 	}
+	//ExtUart :: SendString("DISABLE\n");
 }
 
 void System :: Halt(const char* msg) {

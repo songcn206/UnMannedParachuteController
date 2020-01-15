@@ -15,15 +15,18 @@
 #include "HAL/UART/ParseUart.hpp"
 
 
+
 class GenTimerD0 {
-	private:
+	public:
 		static constexpr uint16_t preScaler = 1024;
 		
-		static constexpr float compareMatchAValue_ms = 1.0f;
-		static constexpr float compareMatchBValue_ms = 500.0f;
+		static constexpr float compareMatchAValue_ms = 10.0f;
+		static constexpr float compareMatchBValue_ms = 100.0f;
+		static constexpr float compareMatchCValue_ms = 100.0f;
 		
 		static volatile constexpr uint16_t compareMatchAValue = System :: CPU_CLOCK / preScaler * (compareMatchAValue_ms / 1000);
 		static volatile constexpr uint16_t compareMatchBValue = System :: CPU_CLOCK / preScaler * (compareMatchBValue_ms / 1000);
+		static volatile constexpr uint16_t compareMatchCValue = System :: CPU_CLOCK / preScaler * (compareMatchCValue_ms / 1000);
 		
 	public:
 		static void Init() {
@@ -33,8 +36,7 @@ class GenTimerD0 {
 			TCD0.CCA = compareMatchAValue;
 			TCD0.CCB = compareMatchBValue;
 			
-			TCD0.CTRLA = Timers :: GetPreScaler(preScaler);
-		}
+		static void CompareMatchAHandler();
 		
 		static void CompareMatchAHandler() {
 			ExtUartParse :: Parse();
@@ -42,11 +44,10 @@ class GenTimerD0 {
 			TCD0.CTRLFSET = TC_TC0_CMD_UPDATE_gc;
 		}
 		
-		static void CompareMatchBHandler() {
-			TCD0.CCB += compareMatchBValue;
-			TCD0.CTRLFSET = TC_TC0_CMD_UPDATE_gc;
-		}
+		static void CompareMatchCHandler() {
 
+		static void StartImuDataCommunication();
+}
 
 
 };

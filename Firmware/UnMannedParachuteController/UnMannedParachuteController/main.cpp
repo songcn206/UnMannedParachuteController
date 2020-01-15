@@ -5,6 +5,14 @@
  * Author : timot
  */ 
 
+
+// ===================================================
+// 1) Kas praegune viis kuidas kontrollitakse uartrx täituvust on okei, just katkestuste värk?
+// 2) Kuidas toimetada IMU-st tulevate andmetega nii, et uuendamine ja nende küsimine ei teeks andmeid katki
+// 3) IMU magnetomeeter
+// ====================================================
+
+
 #include <avr/io.h>
 
 
@@ -15,6 +23,7 @@
 #include "HAL/UART/ParseUart.hpp"
 #include "HAL/Timers/PWMTimer/PWMTimer.hpp"
 #include "HAL/Timers/GenericTimer/GenTimerD0.hpp"
+#include "HAL/SPI/ImuSPI.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -34,31 +43,34 @@ void InitPins() {
 	//AbsBaroMOSI :: SetPinConf();
 	//AbsBaroMISO :: SetPinConf();
 	//AbsBaroCK :: SetPinConf();
-	//ImuCS :: SetPinConf();
-	//ImuMOSI :: SetPinConf();
+	ImuCS :: SetPinConf();
+	ImuMOSI :: SetPinConf();
 	//ImuMISO :: SetPinConf();
-	//ImuCK :: SetPinConf();
+	ImuCK :: SetPinConf();
 	//DiffBaroSDA :: SetPinConf();
 	//DiffBaroSCL :: SetPinConf();
 	//AbsBaroInt :: SetPinConf();
-	//ImuInt :: SetPinConf();
+	ImuInt :: SetPinConf();
+	//ImuInt :: ConfigInterrupt();
 	//SonarIn :: SetPinConf();
 }
 
 int main(void) {
-	
 	System :: Init();
 	InitPins();
 	ExtUart :: Init();
 	GpsUart :: Init();
 	PwmTimer :: Init();
 	GenTimerD0 :: Init();
+	ExtUart :: SendString("START!\n");
 
+	ImuSpi :: Init();
+	
 	System :: EnableAllInterrupts();
 	
-    /* Replace with your application code */
     while (1) {
-		led2 :: Toggle();
+		led3 :: Toggle();
+		_delay_ms(50);
     }
 }
 

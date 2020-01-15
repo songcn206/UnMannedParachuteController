@@ -29,7 +29,7 @@ class ParseUart {
 	public:
 		static void Parse() {
 			while (GetDataSafe(runningPointer) != 0) {
-				
+				led2 :: Toggle();
 				uint8_t data = GetDataSafe(runningPointer);
 				parseBuffer[parseBufferPos] = data;
 				SetDataSafe(runningPointer, 0);
@@ -102,7 +102,7 @@ uint8_t ParseUart<conf> :: parseBuffer[parseBufferSize] = {};
 
 struct ExtUartParseConf {
 	typedef ExtUart uart;
-	static constexpr uint8_t parseBufferSize = 150;	
+	static constexpr uint8_t parseBufferSize = 200;	
 };
 typedef ParseUart<ExtUartParseConf> ExtUartParse;
 

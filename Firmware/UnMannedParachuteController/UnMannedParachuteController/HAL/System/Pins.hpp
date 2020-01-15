@@ -77,6 +77,11 @@ class Pins {
 		static void Toggle() {
 			port -> OUTTGL = mask;
 		}
+		
+		static void ConfigInterrupt() {
+			port -> INTCTRL = PORT_INT0LVL_HI_gc;
+			port -> INT0MASK = mask;
+		}
 };
 
 // LEDs
