@@ -171,6 +171,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Control\GPS\Gps.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\GPS\Gps.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Control\Imu\Imu.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -216,6 +222,9 @@
     <Compile Include="HAL\Timers\Timers.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HAL\UART\ParseUart.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HAL\UART\ParseUart.hpp">
       <SubType>compile</SubType>
     </Compile>
@@ -231,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Control\Imu" />
+    <Folder Include="Control\GPS" />
     <Folder Include="Control\StateMachine" />
     <Folder Include="HAL" />
     <Folder Include="HAL\SPI" />

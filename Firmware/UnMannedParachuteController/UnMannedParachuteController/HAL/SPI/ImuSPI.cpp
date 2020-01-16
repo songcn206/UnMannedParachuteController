@@ -13,6 +13,7 @@ volatile uint8_t ImuSpi :: dataPointer = 0;
 volatile uint8_t ImuSpi :: settingsPointer = 0;
 volatile bool ImuSpi :: DataWritten;
 volatile uint8_t ImuSpi :: magnetometerPointer = 0;
+volatile bool ImuSpi :: gotIDFirstTime = false;
 
 volatile uint8_t ImuSpi :: DataAddr[18] = {
 45,

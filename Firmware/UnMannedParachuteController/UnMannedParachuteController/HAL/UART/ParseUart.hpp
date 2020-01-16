@@ -11,25 +11,24 @@
 
 #include "HAL/UART/UART.hpp"
 #include "HAL/System/Pins.hpp"
+#include <stdlib.h>
 
-template <typename conf>
-class ParseUart {
-	public:
-	
+class ParseExtUart {
 	private:
 		static volatile uint8_t* arrayStartPointer;
 		static volatile uint8_t* arrayEndPointer;
-		static constexpr char terminatingChar = conf :: uart :: terminatingChar;
-		
-		static constexpr uint8_t parseBufferSize = conf :: parseBufferSize;	
-		static uint8_t parseBuffer[parseBufferSize];
-		static uint8_t parseBufferPos;
 		static volatile uint8_t* runningPointer;
 
+		static constexpr char terminatingChar = ExtUart :: terminatingChar;
+		static constexpr uint8_t parseBufferSize = 200;	
+		
+		static uint8_t parseBuffer[parseBufferSize];
+		static uint8_t parseBufferPos;
+		
 	public:
 		static void Parse() {
 			while (GetDataSafe(runningPointer) != 0) {
-				led2 :: Toggle();
+				//led2 :: Toggle();
 				uint8_t data = GetDataSafe(runningPointer);
 				parseBuffer[parseBufferPos] = data;
 				SetDataSafe(runningPointer, 0);
@@ -58,16 +57,16 @@ class ParseUart {
 		}
 
 		static uint8_t GetDataSafe(volatile uint8_t* pointer) {
-			System :: DisableInterruptsByPriority(conf :: uart :: GetInterruptLevel());
+			System :: DisableInterruptsByPriority(ExtUart :: GetInterruptLevel());
 			uint8_t tempData = *pointer;
-			System :: EnableInterruptsByPriority(conf :: uart :: GetInterruptLevel());
+			System :: EnableInterruptsByPriority(ExtUart :: GetInterruptLevel());
 			return tempData;
 		}
 
 		static void SetDataSafe(volatile uint8_t* pointer, uint8_t data) {
-			System :: DisableInterruptsByPriority(conf :: uart :: GetInterruptLevel());
+			System :: DisableInterruptsByPriority(ExtUart :: GetInterruptLevel());
 			*pointer = data;
-			System :: EnableInterruptsByPriority(conf :: uart :: GetInterruptLevel());
+			System :: EnableInterruptsByPriority(ExtUart :: GetInterruptLevel());
 		}
 
 		static bool MatchCommands(uint8_t* pointer, uint8_t bufferlength, const char* command, uint8_t commandLength) {
@@ -85,28 +84,93 @@ class ParseUart {
 		}
 };
 
-template<typename conf>
-volatile uint8_t* ParseUart<conf> :: arrayStartPointer = conf :: uart :: GetRxBufferStart();
+class ParseGPSUart {
+	private:
+		static volatile uint8_t* arrayStartPointer;
+		static volatile uint8_t* arrayEndPointer;
+		static volatile uint8_t* runningPointer;
 
-template<typename conf>
-volatile uint8_t* ParseUart<conf> :: arrayEndPointer = conf :: uart :: GetRxBufferEnd();
+		static constexpr char terminatingChar = GpsUart :: terminatingChar;
+		static constexpr uint8_t parseBufferSize = 200;
+		
+		static uint8_t parseBuffer[parseBufferSize];
+		static uint8_t parseBufferPos;
+	
+	public:
+		static void Parse() {
+			while (GetDataSafe(runningPointer) != 0) {
+				uint8_t data = GetDataSafe(runningPointer);
+				parseBuffer[parseBufferPos] = data;
+				SetDataSafe(runningPointer, 0);
+				
+				if (data == terminatingChar) {
+					
+					if (MatchCommands(&parseBuffer[0], parseBufferPos, "$PUBX", sizeof("$PUBX"))) {
+						HandlePUBXCommand(&parseBuffer[sizeof("$PUBX")]); // Check buffer index
+						
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "$GPGLA", sizeof("$GPGLA"))) {
+							
+					}
+					
+					parseBufferPos = parseBufferSize - 1; // Hack
+				}
+				
+				if (runningPointer == arrayEndPointer) {
+					runningPointer = arrayStartPointer;
+				} else {
+					runningPointer++;
+				}
+				
+				if (parseBufferPos == parseBufferSize - 1) {
+					parseBufferPos = 0;
+				} else {
+					parseBufferPos++;
+				}
+			}
+		}
+		
+		static uint8_t GetDataSafe(volatile uint8_t* pointer) {
+			System :: DisableInterruptsByPriority(GpsUart :: GetInterruptLevel());
+			uint8_t tempData = *pointer;
+			System :: EnableInterruptsByPriority(GpsUart :: GetInterruptLevel());
+			return tempData;
+		}
 
-template<typename conf>
-volatile uint8_t* ParseUart<conf> :: runningPointer = arrayStartPointer;
-
-template<typename conf>
-uint8_t ParseUart<conf> :: parseBufferPos = 0;
-
-template<typename conf>
-uint8_t ParseUart<conf> :: parseBuffer[parseBufferSize] = {};
-
-struct ExtUartParseConf {
-	typedef ExtUart uart;
-	static constexpr uint8_t parseBufferSize = 200;	
+		static void SetDataSafe(volatile uint8_t* pointer, uint8_t data) {
+			System :: DisableInterruptsByPriority(GpsUart :: GetInterruptLevel());
+			*pointer = data;
+			System :: EnableInterruptsByPriority(GpsUart :: GetInterruptLevel());
+		}
+		
+		static bool MatchCommands(uint8_t* pointer, uint8_t bufferlength, const char* command, uint8_t commandLength) {
+			if (bufferlength < commandLength - 1) {
+				return false;
+			}
+			for (uint8_t i = 0; i < commandLength - 1; i++) {
+				if (*pointer != *command) {
+					return false;
+				}
+				pointer++;
+				command++;
+			}
+			return true;
+		}
+		
+		static uint8_t ParseUint8(uint8_t* pointer) {
+			const char number[2] = {pointer[0], pointer[1]};
+			pointer += 3;
+			return atoi((const char*)number);
+		}
+		
+		static float ParseFloat(uint8_t* pointer) {
+			const char number[4] = {pointer[0], pointer[1], pointer[2], pointer[3]};
+			pointer += 5;
+			return atoi((const char*)number);
+		}
+		
+		static void HandlePUBXCommand(uint8_t* bufferpointer) {
+			uint8_t id = ParseUint8(bufferpointer);
+			float utcTime = ParseFloat(bufferpointer);
+		}
 };
-typedef ParseUart<ExtUartParseConf> ExtUartParse;
-
-
-
-
 #endif /* PARSEUART_H_ */

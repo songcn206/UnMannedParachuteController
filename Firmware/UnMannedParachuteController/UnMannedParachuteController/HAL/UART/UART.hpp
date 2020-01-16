@@ -84,11 +84,10 @@ class Uart {
 		
 		// Using cycling/running buffer
 		static void RxInterruptHandler() {
-			led1 :: Toggle();
 			uint8_t data = uart -> DATA;
 			
 			if (reciveArray[reciveArrayFreePos] != 0) {
-				//System :: Halt("RX Buffer overflow\n");
+				System :: Halt("RX Buffer overflow\n");
 			}
 
 			reciveArray[reciveArrayFreePos] = data;
@@ -97,7 +96,6 @@ class Uart {
 			} else {
 				reciveArrayFreePos++;
 			}
-			
 		}
 
 		static volatile uint8_t* GetRxBufferStart() {
@@ -178,7 +176,7 @@ struct ExtUartConf {
 typedef Uart<ExtUartConf> ExtUart;
 
 struct GpsUartConf {
-	static constexpr uint32_t baudRate = 500000;
+	static constexpr uint32_t baudRate = 115200;
 	static constexpr USART_t* uart = &USARTD0;
 	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_MED_gc;
 	static constexpr uint8_t rxArrayLength = 150;

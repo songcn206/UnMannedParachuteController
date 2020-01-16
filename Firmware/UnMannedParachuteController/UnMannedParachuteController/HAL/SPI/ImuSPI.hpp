@@ -43,6 +43,7 @@ class ImuSpi {
 		static volatile bool DataWritten;
 		static volatile ImuSettings magnetometer[5];
 		static volatile uint8_t magnetometerPointer;
+		static volatile bool gotIDFirstTime;
 		
 		static constexpr uint8_t imuID = 0xea;
 		static constexpr uint8_t imuIDAddr = 0x00;
@@ -50,7 +51,7 @@ class ImuSpi {
 	
 	public:
 		static void Init() {
-			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV16_gc;
+			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV128_gc;
 			SPIE.INTCTRL = SPI_INTLVL_HI_gc;
 			SPIE.STATUS = SPI_IF_bm;
 			InitConnection();	
@@ -79,7 +80,7 @@ class ImuSpi {
 					break;
 				case SpiState::ApplyingSettings:
 					if (DataWritten) {
-						ExtUart :: SendString("Set ");
+						ExtUart :: SendString("Set\n");
 						ImuCS :: SetHigh();
 						if (settingsPointer >= (sizeof(settings) / sizeof(ImuSettings))) {
 							GenTimerD0 :: StartImuDataCommunication();
@@ -114,7 +115,7 @@ class ImuSpi {
 					}
 					break;
 				case SpiState::Uninited:
-					ExtUart :: SendString("Here!");
+					ExtUart :: SendString("Asking IMU ID\n");
 					if (DataWritten) {
 						ImuCS :: SetHigh();
 						if (SPIE.DATA == imuID) {
@@ -172,6 +173,7 @@ class ImuSpi {
 		}
 		
 		static void InitConnection() {
+			state = SpiState :: Uninited;
 			ImuCS :: SetLow();
 			SPIE.DATA = (1 << 7 | imuIDAddr);
 			DataWritten = false;

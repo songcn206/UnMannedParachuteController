@@ -32,13 +32,15 @@ void  GenTimerD0 :: Init() {
 	TCD0.PER = 65535;
 	TCD0.CCA = GenTimerD0 :: compareMatchAValue;
 	TCD0.CCB =  GenTimerD0 :: compareMatchBValue;
+	TCD0.CCC = GenTimerD0 :: compareMatchCValue;
 	
 	TCD0.CTRLA = Timers :: GetPreScaler(GenTimerD0 :: preScaler);
 }
 
 void GenTimerD0 :: CompareMatchAHandler() {
 	//ExtUart :: SendString("compareA\n");
-	ExtUartParse :: Parse();
+	ParseExtUart :: Parse();
+	ParseGPSUart :: Parse();
 	Imu :: CheckForUpdates();
 	TCD0.CCA +=  GenTimerD0 :: compareMatchAValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;

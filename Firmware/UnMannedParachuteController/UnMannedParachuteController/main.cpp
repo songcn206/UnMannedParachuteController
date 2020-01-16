@@ -70,7 +70,7 @@ int main(void) {
 	
     while (1) {
 		led3 :: Toggle();
-		_delay_ms(50);
+		//_delay_ms(50);
 	}
 }
 

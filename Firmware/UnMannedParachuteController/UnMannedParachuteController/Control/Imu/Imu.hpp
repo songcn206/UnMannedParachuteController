@@ -56,6 +56,9 @@ class Imu {
 					pointer += 2;
 				}
 				ImuSpi :: DataTransferCompleted();
+				if (mag[0] == 0 && mag[1] == 0 && mag[2] == 0) {
+					ImuSpi :: InitConnection();
+				}
 			}
 			System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 		}
