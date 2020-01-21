@@ -89,7 +89,7 @@ class Uart {
 			if (reciveArray[reciveArrayFreePos] != 0) {
 				System :: Halt("RX Buffer overflow\n");
 			}
-
+			
 			reciveArray[reciveArrayFreePos] = data;
 			if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
 				reciveArrayFreePos = 0;
@@ -169,7 +169,7 @@ uint8_t volatile Uart<conf> :: reciveArrayFreePos = 0;
 struct ExtUartConf {
 	static constexpr uint32_t baudRate = 500000;
 	static constexpr USART_t* uart = &USARTF0;
-	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_LO_gc;
+	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_HI_gc;
 	static constexpr uint8_t rxArrayLength = 150;
 	static constexpr uint8_t terminatingChar = '\n';
 };
@@ -178,7 +178,7 @@ typedef Uart<ExtUartConf> ExtUart;
 struct GpsUartConf {
 	static constexpr uint32_t baudRate = 115200;
 	static constexpr USART_t* uart = &USARTD0;
-	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_MED_gc;
+	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_HI_gc;
 	static constexpr uint8_t rxArrayLength = 150;
 	static constexpr uint8_t terminatingChar = '\n';
 };

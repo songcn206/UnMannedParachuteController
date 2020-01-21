@@ -12,6 +12,7 @@
 #include "HAL/UART/UART.hpp"
 #include "HAL/System/Pins.hpp"
 #include <stdlib.h>
+#include <stdio.h>
 
 class ParseExtUart {
 	private:
@@ -98,19 +99,19 @@ class ParseGPSUart {
 	
 	public:
 		static void Parse() {
+
 			while (GetDataSafe(runningPointer) != 0) {
 				uint8_t data = GetDataSafe(runningPointer);
 				parseBuffer[parseBufferPos] = data;
 				SetDataSafe(runningPointer, 0);
-				
 				if (data == terminatingChar) {
 					
 					if (MatchCommands(&parseBuffer[0], parseBufferPos, "$PUBX", sizeof("$PUBX"))) {
-						HandlePUBXCommand(&parseBuffer[sizeof("$PUBX")]); // Check buffer index
+						HandlePUBXCommand(&parseBuffer[0], parseBufferPos);
 						
-					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "$GPGLA", sizeof("$GPGLA"))) {
+					} /*else if (MatchCommands(&parseBuffer[0], parseBufferPos, "$GPGLA", sizeof("$GPGLA"))) {
 							
-					}
+					}*/
 					
 					parseBufferPos = parseBufferSize - 1; // Hack
 				}
@@ -156,6 +157,7 @@ class ParseGPSUart {
 			return true;
 		}
 		
+		/*
 		static uint8_t ParseUint8(uint8_t* pointer) {
 			const char number[2] = {pointer[0], pointer[1]};
 			pointer += 3;
@@ -166,11 +168,73 @@ class ParseGPSUart {
 			const char number[4] = {pointer[0], pointer[1], pointer[2], pointer[3]};
 			pointer += 5;
 			return atoi((const char*)number);
-		}
+		}*/
 		
-		static void HandlePUBXCommand(uint8_t* bufferpointer) {
-			uint8_t id = ParseUint8(bufferpointer);
-			float utcTime = ParseFloat(bufferpointer);
+		static void HandlePUBXCommand(uint8_t* bufferpointer, uint8_t parseBufferLen) {
+			uint8_t gpsDataStartArray[21] = {};
+			//uint8_t gpsDataLengthArray[20] = {};
+			uint8_t gpsDataPosition = 0;
+			gpsDataStartArray[gpsDataPosition] = 0;
+			gpsDataPosition++;
+			
+			//uint8_t length = 0;
+			for(uint8_t i = 0; i < parseBufferLen; i++) {
+				//length++;
+				if (bufferpointer[i] == ',') {
+					bufferpointer[i] = ' ';
+					gpsDataStartArray[gpsDataPosition] = i + 1;
+					//gpsDataLengthArray[gpsDataPosition] = length - 1;
+					gpsDataPosition++;
+					//length = 0;
+				}
+			}
+			/*
+			
+			int glonassSatelites;
+			sscanf((const char*)bufferpointer, "%d %d", &gpsSatelites, &glonassSatelites);
+			ExtUart :: SendInt(gpsSatelites);
+			ExtUart :: SendString("\n");*/
+			
+			uint8_t dateTimePos = gpsDataStartArray[2];
+			uint8_t latitudePos = gpsDataStartArray[3];
+			uint8_t longitudePos = gpsDataStartArray[5];
+			uint8_t altitudePos = gpsDataStartArray[7];
+			uint8_t gpsCountPos = gpsDataStartArray[18];
+			
+			ExtUart :: SendString("[GPS] T ");
+			for (uint8_t i = 0; i < (gpsDataStartArray[3] - 1 - dateTimePos); i++) {
+				ExtUart :: SendByte((uint8_t)bufferpointer[dateTimePos + i]);
+			}
+			ExtUart :: SendString(" La ");
+			for (uint8_t i = 0; i <  (gpsDataStartArray[4] - 1 - latitudePos); i++) {
+				ExtUart :: SendByte((uint8_t)bufferpointer[latitudePos + i]);
+			}
+			ExtUart :: SendString(" Lo ");
+			for (uint8_t i = 0; i <  (gpsDataStartArray[6] - 1 - longitudePos); i++) {
+				ExtUart :: SendByte((uint8_t)bufferpointer[longitudePos + i]);
+			}	
+			ExtUart :: SendString(" Alt ");
+			for (uint8_t i = 0; i <  (gpsDataStartArray[8] - 1 - altitudePos); i++) {
+				ExtUart :: SendByte((uint8_t)bufferpointer[altitudePos + i]);
+			}
+			ExtUart :: SendString(" No ");
+			for (uint8_t i = 0; i <  (gpsDataStartArray[19] - 1 - gpsCountPos); i++) {
+				ExtUart :: SendByte((uint8_t)bufferpointer[gpsCountPos + i]);
+			}		
+			ExtUart :: SendString("\n");
+			
+			float latitude = 0.0f;
+			float longitude = 0.0f;
+			sscanf((const char*)&bufferpointer[latitudePos], "%f", &latitude);
+			sscanf((const char*)&bufferpointer[longitudePos], "%f", &longitude);
+			asm volatile ("nop");
+			/*ExtUart :: SendUInt(dateTime);
+			
+			if (dateTime == 194300) {
+				ExtUart :: SendString("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\n");
+			}*/
+			
+			led1 :: Toggle();
 		}
 };
 #endif /* PARSEUART_H_ */

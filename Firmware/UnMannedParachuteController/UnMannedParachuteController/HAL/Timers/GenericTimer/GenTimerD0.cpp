@@ -28,7 +28,7 @@ ISR(TCD0_CCC_vect) {
 void  GenTimerD0 :: Init() {
 	//ExtUart :: SendString("timer init\n");
 	TCD0.CTRLB = TC_WGMODE_NORMAL_gc;
-	TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc | TC_CCCINTLVL_LO_gc;
+	TCD0.INTCTRLB = TC_CCAINTLVL_MED_gc | TC_CCCINTLVL_LO_gc;
 	TCD0.PER = 65535;
 	TCD0.CCA = GenTimerD0 :: compareMatchAValue;
 	TCD0.CCB =  GenTimerD0 :: compareMatchBValue;
@@ -62,5 +62,5 @@ void  GenTimerD0 :: CompareMatchCHandler() {
 
 void  GenTimerD0 :: StartImuDataCommunication() {
 	//ExtUart :: SendString("startdatacom");
-	TCD0.INTCTRLB |= TC_CCBINTLVL_LO_gc;
+	TCD0.INTCTRLB |= TC_CCBINTLVL_MED_gc;
 }

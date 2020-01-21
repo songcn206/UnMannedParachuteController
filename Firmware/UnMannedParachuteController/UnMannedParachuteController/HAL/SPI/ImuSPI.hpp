@@ -30,7 +30,7 @@ class ImuSpi {
 			uint8_t value;
 		};
 		
-		static constexpr uint8_t ImuSpiInterruptLevel = (uint8_t)System :: IntLevel :: High;
+		static constexpr uint8_t ImuSpiInterruptLevel = (uint8_t)System :: IntLevel :: Med;
 		
 	private:
 
@@ -52,7 +52,7 @@ class ImuSpi {
 	public:
 		static void Init() {
 			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV128_gc;
-			SPIE.INTCTRL = SPI_INTLVL_HI_gc;
+			SPIE.INTCTRL = SPI_INTLVL_MED_gc;
 			SPIE.STATUS = SPI_IF_bm;
 			InitConnection();	
 		}

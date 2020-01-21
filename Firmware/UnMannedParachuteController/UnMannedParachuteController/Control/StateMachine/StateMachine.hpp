@@ -15,23 +15,23 @@
 class StateMachine {
 	public:
 		static void sendStatus() {
-			ExtUart :: SendString("[STATUS] AccX: ");
+			ExtUart :: SendString("[IMU] AX ");
 			ExtUart :: SendInt(Imu :: GetAccXYZ()[0]);
-			ExtUart :: SendString(" AccY: ");
+			ExtUart :: SendString(" AY ");
 			ExtUart :: SendInt(Imu :: GetAccXYZ()[1]);
-			ExtUart :: SendString(" AccZ: ");
+			ExtUart :: SendString(" AZ ");
 			ExtUart :: SendInt(Imu :: GetAccXYZ()[2]);
-			ExtUart :: SendString(" GyroX: ");
+			ExtUart :: SendString(" GX ");
 			ExtUart :: SendInt(Imu :: GetGyroXYZ()[0]);
-			ExtUart :: SendString(" GyroY: ");
+			ExtUart :: SendString(" GY ");
 			ExtUart :: SendInt(Imu :: GetGyroXYZ()[1]);
-			ExtUart :: SendString(" GyroZ: ");
+			ExtUart :: SendString(" GZ ");
 			ExtUart :: SendInt(Imu :: GetGyroXYZ()[2]);
-			ExtUart :: SendString(" MagX: ");
+			ExtUart :: SendString(" MX ");
 			ExtUart :: SendInt(Imu :: GetMagXYZ()[0]);
-			ExtUart :: SendString(" MagY: ");
+			ExtUart :: SendString(" MY ");
 			ExtUart :: SendInt(Imu :: GetMagXYZ()[1]);
-			ExtUart :: SendString(" MagZ: ");
+			ExtUart :: SendString(" MZ ");
 			ExtUart :: SendInt(Imu :: GetMagXYZ()[2]);
 			ExtUart :: SendString("\n");
 		}
