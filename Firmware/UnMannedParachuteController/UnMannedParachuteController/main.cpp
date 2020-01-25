@@ -24,6 +24,8 @@
 #include "HAL/Timers/PWMTimer/PWMTimer.hpp"
 #include "HAL/Timers/GenericTimer/GenTimerD0.hpp"
 #include "HAL/SPI/ImuSPI.hpp"
+#include "HAL/DataPackets/DataPackets.hpp"
+#include "HAL/ADC/ADC.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -52,7 +54,7 @@ void InitPins() {
 	//AbsBaroInt :: SetPinConf();
 	ImuInt :: SetPinConf();
 	//ImuInt :: ConfigInterrupt();
-	//SonarIn :: SetPinConf();
+	SonarIn :: SetPinConf();
 }
 
 int main(void) {
@@ -63,14 +65,24 @@ int main(void) {
 	PwmTimer :: Init();
 	GenTimerD0 :: Init();
 	ExtUart :: SendString("START!\n");
-	
+	Sonar :: Init();
 	ImuSpi :: Init();
 	
 	System :: EnableAllInterrupts();
 	
     while (1) {
 		led3 :: Toggle();
-		//_delay_ms(50);
+		if (GenTimerD0 :: checkUartAndImu) {
+			ParseExtUart :: Parse();
+			ParseGPSUart :: Parse();
+			Imu :: CheckForUpdates();
+			GenTimerD0 :: checkUartAndImu = false;
+		}
+		
+		if (GenTimerD0 :: sendData) {
+			//DataPackets :: sendStatus();
+			GenTimerD0 :: sendData = false;
+		}
 	}
 }
 

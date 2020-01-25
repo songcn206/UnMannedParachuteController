@@ -28,6 +28,9 @@ class GenTimerD0 {
 		static volatile constexpr uint16_t compareMatchBValue = System :: CPU_CLOCK / preScaler * (compareMatchBValue_ms / 1000);
 		static volatile constexpr uint16_t compareMatchCValue = System :: CPU_CLOCK / preScaler * (compareMatchCValue_ms / 1000);
 		
+		static volatile bool checkUartAndImu;
+		static volatile bool sendData;
+		
 	public:
 		static void Init();
 		

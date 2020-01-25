@@ -13,6 +13,9 @@
 #include "HAL/System/Pins.hpp"
 #include <avr/interrupt.h>
 
+
+#include <stdio.h>
+
 template <typename conf>
 class Uart {
 	public:
@@ -74,12 +77,51 @@ class Uart {
 			SendByte((uint8_t)(value % 10) + '0');
 		}
 		
+		static void SendUIntWithZeros(uint16_t value ) {
+			SendByte((uint8_t)(value / 10000) + '0');
+			value = value % 10000;
+			SendByte((uint8_t)(value / 1000) + '0');
+			value = value % 1000;
+			SendByte((uint8_t)(value / 100) + '0');
+			value = value % 100;
+			SendByte((uint8_t)(value / 10) + '0');
+			SendByte((uint8_t)(value % 10) + '0');
+		}
+		
 		static void SendInt(int16_t value) {
 			if (value < 0) {
 				SendByte('-');
 				value = -value;
 			}
 			SendUInt((uint16_t)value);
+		}
+		
+		static void SendFloat(float value) {
+			//char buff[20] = {0};
+			
+			//sprintf(buff, "%f", (double)value);
+			
+			//SendString(buff);
+			
+			uint16_t beforePoint = value;
+			SendUInt(beforePoint);
+			SendByte('.');
+			value = value - (float)beforePoint;
+			
+			value = value * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
 		}
 		
 		// Using cycling/running buffer

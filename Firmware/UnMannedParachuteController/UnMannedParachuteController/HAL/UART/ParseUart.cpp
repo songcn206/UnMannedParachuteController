@@ -18,3 +18,8 @@ uint8_t ParseGPSUart :: parseBuffer[ParseGPSUart :: parseBufferSize] = {};
 volatile uint8_t* ParseGPSUart :: arrayStartPointer = GpsUart :: GetRxBufferStart();
 volatile uint8_t* ParseGPSUart :: arrayEndPointer = GpsUart :: GetRxBufferEnd();
 volatile uint8_t* ParseGPSUart :: runningPointer = ParseGPSUart :: arrayStartPointer;
+
+volatile float ParseGPSUart :: longitude;
+volatile float ParseGPSUart :: latitude;
+volatile float ParseGPSUart :: altitude;
+volatile uint8_t ParseGPSUart :: gpsCount;
