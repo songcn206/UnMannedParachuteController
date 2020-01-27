@@ -58,7 +58,6 @@ class ImuSpi {
 		}
 		
 		static void InterruptHandler() {
-			led2 :: Toggle();
 			switch(state) {
 				case SpiState::SendDummyData:
 					SPIE.DATA = dummyData;
@@ -70,7 +69,6 @@ class ImuSpi {
 					if (dataPointer >= (sizeof(DataAddr) - 1)) {
 						dataPointer = 0;
 						state = SpiState::DataUpdated;
-						
 					} else {
 						dataPointer++;
 						ImuCS :: SetLow();
@@ -80,7 +78,7 @@ class ImuSpi {
 					break;
 				case SpiState::ApplyingSettings:
 					if (DataWritten) {
-						ExtUart :: SendString("Set\n");
+						//ExtUart :: SendString("Set\n");
 						ImuCS :: SetHigh();
 						if (settingsPointer >= (sizeof(settings) / sizeof(ImuSettings))) {
 							GenTimerD0 :: StartImuDataCommunication();

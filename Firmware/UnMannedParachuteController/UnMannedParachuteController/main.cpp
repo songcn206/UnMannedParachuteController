@@ -6,13 +6,6 @@
  */ 
 
 
-// ===================================================
-// 1) Kas praegune viis kuidas kontrollitakse uartrx täituvust on okei, just katkestuste värk?
-// 2) Kuidas toimetada IMU-st tulevate andmetega nii, et uuendamine ja nende küsimine ei teeks andmeid katki
-// 3) IMU magnetomeeter
-// ====================================================
-
-
 #include <avr/io.h>
 
 
@@ -47,7 +40,7 @@ void InitPins() {
 	//AbsBaroCK :: SetPinConf();
 	ImuCS :: SetPinConf();
 	ImuMOSI :: SetPinConf();
-	//ImuMISO :: SetPinConf();
+	ImuMISO :: SetPinConf();
 	ImuCK :: SetPinConf();
 	//DiffBaroSDA :: SetPinConf();
 	//DiffBaroSCL :: SetPinConf();
@@ -59,6 +52,7 @@ void InitPins() {
 
 int main(void) {
 	System :: Init();
+	_delay_ms(1000);
 	InitPins();
 	ExtUart :: Init();
 	GpsUart :: Init();
@@ -80,7 +74,7 @@ int main(void) {
 		}
 		
 		if (GenTimerD0 :: sendData) {
-			//DataPackets :: sendStatus();
+			DataPackets :: sendStatus();
 			GenTimerD0 :: sendData = false;
 		}
 	}

@@ -10,3 +10,5 @@
 int16_t Imu :: acc[3];
 int16_t Imu :: gyro[3];
 int16_t Imu :: mag[3];
+
+uint8_t Imu :: discardedPackets = 0;

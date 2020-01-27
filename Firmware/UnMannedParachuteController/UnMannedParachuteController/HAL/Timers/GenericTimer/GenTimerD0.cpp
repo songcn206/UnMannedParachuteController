@@ -13,6 +13,7 @@
 volatile constexpr uint16_t GenTimerD0 :: compareMatchAValue;
 volatile constexpr uint16_t GenTimerD0 :: compareMatchBValue;
 volatile constexpr uint16_t GenTimerD0 :: compareMatchCValue;
+volatile constexpr uint16_t GenTimerD0 :: compareMatchDValue;
 
 volatile bool GenTimerD0 :: checkUartAndImu = false;
 volatile bool GenTimerD0 :: sendData = false;
@@ -29,14 +30,19 @@ ISR(TCD0_CCC_vect) {
 	GenTimerD0 :: CompareMatchCHandler();
 }
 
+ISR(TCD0_CCD_vect) {
+	GenTimerD0 :: CompareMatchDHandler();
+}
+
 void  GenTimerD0 :: Init() {
 	//ExtUart :: SendString("timer init\n");
 	TCD0.CTRLB = TC_WGMODE_NORMAL_gc;
-	TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc | TC_CCCINTLVL_LO_gc;
+	TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc | TC_CCCINTLVL_LO_gc | TC_CCDINTLVL_LO_gc;
 	TCD0.PER = 65535;
 	TCD0.CCA = GenTimerD0 :: compareMatchAValue;
-	TCD0.CCB =  GenTimerD0 :: compareMatchBValue;
+	TCD0.CCB = GenTimerD0 :: compareMatchBValue;
 	TCD0.CCC = GenTimerD0 :: compareMatchCValue;
+	TCD0.CCD = GenTimerD0 :: compareMatchDValue;
 	
 	TCD0.CTRLA = Timers :: GetPreScaler(GenTimerD0 :: preScaler);
 }
@@ -50,7 +56,7 @@ void GenTimerD0 :: CompareMatchAHandler() {
 // IMU start comm
 void  GenTimerD0 :: CompareMatchBHandler() {
 	ImuSpi :: UpdateMagnetometerRegisters();
-	Sonar :: Start();
+	
 	TCD0.CCB +=  GenTimerD0 :: compareMatchBValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
@@ -58,6 +64,12 @@ void  GenTimerD0 :: CompareMatchBHandler() {
 void  GenTimerD0 :: CompareMatchCHandler() {
 	sendData = true;
 	TCD0.CCC +=  GenTimerD0 :: compareMatchCValue;
+	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
+}
+
+void  GenTimerD0 :: CompareMatchDHandler() {
+	Sonar :: Start();
+	TCD0.CCD +=  GenTimerD0 :: compareMatchDValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
 

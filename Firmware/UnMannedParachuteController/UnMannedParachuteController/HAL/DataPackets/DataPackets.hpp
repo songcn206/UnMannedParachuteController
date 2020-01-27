@@ -12,6 +12,7 @@
 #include "Control/Imu/Imu.hpp"
 #include "HAL/UART/ParseUart.hpp"
 #include "HAL/UART/UART.hpp"
+#include "HAL/ADC/ADC.hpp"
 
 class DataPackets {
 	public:
@@ -42,6 +43,8 @@ class DataPackets {
 			ExtUart :: SendFloat(ParseGPSUart :: GetAltitude());
 			ExtUart :: SendString(" No ");
 			ExtUart :: SendUInt(ParseGPSUart :: GetGPSCount());
+			ExtUart :: SendString(" D ");
+			ExtUart :: SendUInt(Sonar :: GetDistance());
 			ExtUart :: SendString("\n");
 		}
 };

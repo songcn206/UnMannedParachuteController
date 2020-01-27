@@ -113,7 +113,7 @@ class ParseGPSUart {
 				if (data == terminatingChar) {
 					
 					if (MatchCommands(&parseBuffer[0], parseBufferPos, "$PUBX", sizeof("$PUBX"))) {
-						//HandlePUBXCommand(&parseBuffer[0], parseBufferPos);
+						HandlePUBXCommand(&parseBuffer[0], parseBufferPos);
 						
 					} 
 					
@@ -237,8 +237,8 @@ class ParseGPSUart {
 			longitude = atof(tempLongitude);
 			altitude = atof(tempAltitude);
 			*/
-			
 			led1 :: Toggle();
+			
 		}
 		
 		static uint8_t StringToUint8(const char* pointer, uint8_t len) {
@@ -266,8 +266,6 @@ class ParseGPSUart {
 			return result;
 		}
 		 
-
-		
 		static uint32_t findPowerOf(uint8_t base, uint8_t exponent) {
 			uint32_t result = 1;
 			for (uint8_t i = 0; i < exponent; i++) {

@@ -17,6 +17,10 @@ class Imu {
 		static int16_t gyro[3];
 		static int16_t mag[3];
 		
+	private:
+		static constexpr uint8_t allowedFalsePackets = 5;
+		static uint8_t discardedPackets;
+		
 	public:
 		static int16_t* GetAccXYZ() {
 			return &acc[0];
@@ -57,8 +61,14 @@ class Imu {
 				}
 				ImuSpi :: DataTransferCompleted();
 				if (mag[0] == 0 && mag[1] == 0 && mag[2] == 0) {
-					ImuSpi :: InitConnection();
-				}
+					if (allowedFalsePackets <= discardedPackets) {
+						ImuSpi :: InitConnection();
+						discardedPackets = 0;
+						//led2 :: Toggle();
+					} else {
+						discardedPackets++;
+					}
+				} 
 			}
 			System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 		}

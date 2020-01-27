@@ -10,10 +10,14 @@
 #define ADC_HPP_
 
 #include "HAL/UART/UART.hpp"
+#include "HAL/System/System.hpp"
 
 class Sonar {
 	public:
 	
+	private:
+		static volatile uint16_t distance_mm;
+		
 	public:
 		static void Init() {
 			ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc | ADC_CH_INPUTMODE_SINGLEENDED_gc;
@@ -30,9 +34,17 @@ class Sonar {
 		}
 		
 		static void InterruptHandler() {
-			ExtUart :: SendUInt(ADCA.CH0RES);
-			ExtUart :: SendString("\n");
+			uint16_t adcValue = ADCA.CH0RES;
+			distance_mm = adcValue * (5000 / 4095);
 		}
+		
+		static uint16_t GetDistance() {
+			System :: DisableInterruptsByPriority(System::IntLevel::Med);
+			uint16_t tempDistance = distance_mm;
+			System :: EnableInterruptsByPriority(System::IntLevel::Med);
+			return tempDistance;
+		}
+		
 };
 
 
