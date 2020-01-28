@@ -19,6 +19,8 @@
 #include "HAL/SPI/ImuSPI.hpp"
 #include "HAL/DataPackets/DataPackets.hpp"
 #include "HAL/ADC/ADC.hpp"
+#include "HAL/SPI/AbsSpi.hpp"
+#include "Control/AbsBaro/AbsBaro.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -34,10 +36,10 @@ void InitPins() {
 	//Right2ServoPWM :: SetPinConf();
 	//Left1ServoPWM :: SetPinConf();
 	Right1ServoPWM :: SetPinConf();
-	//AbsBaroCS :: SetPinConf();
-	//AbsBaroMOSI :: SetPinConf();
-	//AbsBaroMISO :: SetPinConf();
-	//AbsBaroCK :: SetPinConf();
+	AbsBaroCS :: SetPinConf();
+	AbsBaroMOSI :: SetPinConf();
+	AbsBaroMISO :: SetPinConf();
+	AbsBaroCK :: SetPinConf();
 	ImuCS :: SetPinConf();
 	ImuMOSI :: SetPinConf();
 	ImuMISO :: SetPinConf();
@@ -58,23 +60,30 @@ int main(void) {
 	GpsUart :: Init();
 	PwmTimer :: Init();
 	GenTimerD0 :: Init();
+	GenTimerE0 :: Init();
 	ExtUart :: SendString("START!\n");
 	Sonar :: Init();
+	AbsSpi :: Init();
 	ImuSpi :: Init();
+	
 	
 	System :: EnableAllInterrupts();
 	
     while (1) {
 		led3 :: Toggle();
-		if (GenTimerD0 :: checkUartAndImu) {
+		if (GenTimerD0 :: checkUartAndSpi) {
 			ParseExtUart :: Parse();
 			ParseGPSUart :: Parse();
 			Imu :: CheckForUpdates();
-			GenTimerD0 :: checkUartAndImu = false;
+			AbsoluteBaro :: CheckForUpdates();
+			GenTimerD0 :: checkUartAndSpi = false;
 		}
 		
 		if (GenTimerD0 :: sendData) {
 			DataPackets :: sendStatus();
+			/*if (AbsSpi :: GetState() == AbsSpi::SpiState::Wait) {
+				AbsSpi :: StartDataCommunication();
+			}*/
 			GenTimerD0 :: sendData = false;
 		}
 	}

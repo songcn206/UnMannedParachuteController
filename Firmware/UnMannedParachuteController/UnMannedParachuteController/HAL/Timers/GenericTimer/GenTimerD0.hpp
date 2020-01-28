@@ -14,8 +14,6 @@
 #include "HAL/UART/UART.hpp"
 #include "HAL/UART/ParseUart.hpp"
 
-
-
 class GenTimerD0 {
 	public:
 		static constexpr uint16_t preScaler = 1024;
@@ -30,7 +28,7 @@ class GenTimerD0 {
 		static volatile constexpr uint16_t compareMatchCValue = System :: CPU_CLOCK / preScaler * (compareMatchCValue_ms / 1000);
 		static volatile constexpr uint16_t compareMatchDValue = System :: CPU_CLOCK / preScaler * (compareMatchDValue_ms / 1000);
 		
-		static volatile bool checkUartAndImu;
+		static volatile bool checkUartAndSpi;
 		static volatile bool sendData;
 		
 	public:

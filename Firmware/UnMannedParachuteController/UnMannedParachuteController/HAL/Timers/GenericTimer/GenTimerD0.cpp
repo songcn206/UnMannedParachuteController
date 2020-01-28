@@ -15,7 +15,7 @@ volatile constexpr uint16_t GenTimerD0 :: compareMatchBValue;
 volatile constexpr uint16_t GenTimerD0 :: compareMatchCValue;
 volatile constexpr uint16_t GenTimerD0 :: compareMatchDValue;
 
-volatile bool GenTimerD0 :: checkUartAndImu = false;
+volatile bool GenTimerD0 :: checkUartAndSpi = false;
 volatile bool GenTimerD0 :: sendData = false;
 
 ISR(TCD0_CCA_vect) {
@@ -48,7 +48,7 @@ void  GenTimerD0 :: Init() {
 }
 
 void GenTimerD0 :: CompareMatchAHandler() {
-	checkUartAndImu = true;
+	checkUartAndSpi = true;
 	TCD0.CCA +=  GenTimerD0 :: compareMatchAValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
@@ -56,7 +56,6 @@ void GenTimerD0 :: CompareMatchAHandler() {
 // IMU start comm
 void  GenTimerD0 :: CompareMatchBHandler() {
 	ImuSpi :: UpdateMagnetometerRegisters();
-	
 	TCD0.CCB +=  GenTimerD0 :: compareMatchBValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
