@@ -8,5 +8,7 @@
 #include "I2C.hpp"
 
 ISR(TWIE_TWIM_vect ) {
-	
+	I2cDiffBaro :: InterruptHandler();
 }
+
+volatile uint8_t I2cDiffBaro :: counter = 0;

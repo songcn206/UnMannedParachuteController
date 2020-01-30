@@ -66,8 +66,7 @@ int main(void) {
 	Sonar :: Init();
 	AbsSpi :: Init();
 	ImuSpi :: Init();
-	//I2cDiffBaro :: Init();
-	
+	I2cDiffBaro :: Init();
 	
 	System :: EnableAllInterrupts();
 	
@@ -88,6 +87,9 @@ int main(void) {
 			/*if (AbsSpi :: GetState() == AbsSpi::SpiState::Wait) {
 				AbsSpi :: StartDataCommunication();
 			}*/
+			
+			//DiffBaroSCL :: Toggle();
+			
 			GenTimerD0 :: sendData = false;
 		}
 	}

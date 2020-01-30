@@ -16,33 +16,51 @@ class I2cDiffBaro {
 	public:
 	
 	private:
-		static constexpr uint32_t baudRate_Hz = 100000;
+		static constexpr uint32_t baudRate_Hz = 125000;
 		static constexpr uint8_t baud = (System :: CPU_CLOCK / (2.0f * baudRate_Hz)) - 5;
+		
+		static volatile uint8_t counter;
 		
 	public:
 		static void Init() {
-			PR.PRPC	&= ~PR_TWI_bm;
-			TWIE.CTRL = TWI_SDAHOLD_OFF_gc; // või 50ns viivitust
+			//PR.PRPC	&= ~PR_TWI_bm;
+			TWIE.CTRL = TWI_SDAHOLD_50NS_gc; // või 50ns viivitust
 			TWIE.MASTER.BAUD = baud;
-			TWIE.MASTER.CTRLA = /*TWI_MASTER_INTLVL_HI_gc | TWI_MASTER_RIEN_bm | TWI_MASTER_WIEN_bm | */TWI_MASTER_ENABLE_bm; // kas kõik
-			TWIE.MASTER.CTRLB = TWI_MASTER_SMEN_bm | TWI_MASTER_TIMEOUT_200US_gc; // quick command
+			 // kas kõik
+			TWIE.MASTER.CTRLB = TWI_MASTER_TIMEOUT_DISABLED_gc; // quick command
+			TWIE.MASTER.CTRLA = TWI_MASTER_INTLVL_HI_gc | TWI_MASTER_RIEN_bm | TWI_MASTER_WIEN_bm | TWI_MASTER_ENABLE_bm;
 			//TWIE.MASTER.CTRLC = ... Ack ja cmd
 			TWIE.MASTER.STATUS = TWI_MASTER_BUSSTATE_IDLE_gc;
+
+			TWIE.SLAVE.CTRLA = 0;
 		}
 		
 		static void InterruptHandler() {
-			ExtUart :: SendString("Katkestus ");
-			ExtUart :: SendUInt(TWIE.MASTER.STATUS);
-			ExtUart :: SendString("\n");		
+			asm volatile ("nop");
+			if ((TWIE.MASTER.STATUS & TWI_MASTER_RXACK_bm) && (counter == 0)) {
+
+				TWIE.MASTER.DATA = 0x36;
+				asm volatile ("nop");
+				counter = 1;
+			} else if ((TWIE.MASTER.STATUS & TWI_MASTER_RXACK_bm) && (counter == 1)) {
+				asm volatile ("nop");
+				TWIE.MASTER.ADDR = (0x6c << 1) | true;
+				counter = 2;
+			} else {
+				asm volatile ("nop");
+				ExtUart :: SendUInt(TWIE.MASTER.DATA);
+			}
+			asm volatile ("nop");
 		}
 		
 		static void WriteAddr(uint8_t addr, bool read) {
 			asm volatile ("nop");
-			/*TWIE.MASTER.ADDR = (addr << 1) | read;
-			while ((TWIE.MASTER.STATUS & TWI_MASTER_WIF_bm) == 0);
+			TWIE.MASTER.ADDR = (addr << 1) | read;
+			//while ((TWIE.MASTER.STATUS & TWI_MASTER_WIF_bm) == 0);
 			asm volatile ("nop");
+			/*
 			TWIE.MASTER.DATA = 0x36;
-			while ((TWIE.MASTER.STATUS & TWI_MASTER_WIF_bm) == 0);
+			//while ((TWIE.MASTER.STATUS & TWI_MASTER_WIF_bm) == 0);
 			asm volatile ("nop");
 			TWIE.MASTER.ADDR = (addr << 1) | true;
 			_delay_us(200);
@@ -51,9 +69,9 @@ class I2cDiffBaro {
 			asm volatile ("nop");
 			//ExtUart :: SendUInt(TWIE.MASTER.DATA);
 			//ExtUart :: SendUInt(TWIE.MASTER.DATA);
-			_delay_us(500);
+			//_delay_us(500);
 
-			_delay_us(500);
+			//_delay_us(500);
 			asm volatile ("nop");*/
 		}
 
