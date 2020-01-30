@@ -22,6 +22,7 @@
 #include "HAL/SPI/AbsSpi.hpp"
 #include "Control/AbsBaro/AbsBaro.hpp"
 #include "HAL/I2C/I2C.hpp"
+#include "Control/DiffBaro/DiffBaro.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -70,7 +71,7 @@ int main(void) {
 	
 	System :: EnableAllInterrupts();
 	
-	//I2cDiffBaro :: WriteAddr(0x6c, false);
+	
 	
     while (1) {
 		led3 :: Toggle();
@@ -79,6 +80,7 @@ int main(void) {
 			ParseGPSUart :: Parse();
 			Imu :: CheckForUpdates();
 			AbsoluteBaro :: CheckForUpdates();
+			DiffBaro :: CheckForUpdates();
 			GenTimerD0 :: checkUartAndSpi = false;
 		}
 		
@@ -89,7 +91,6 @@ int main(void) {
 			}*/
 			
 			//DiffBaroSCL :: Toggle();
-			
 			GenTimerD0 :: sendData = false;
 		}
 	}

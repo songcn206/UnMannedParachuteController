@@ -9,6 +9,7 @@
 #include "Control/Imu/Imu.hpp"
 #include "Control/StateMachine/StateMachine.hpp"
 #include "HAL/ADC/ADC.hpp"
+#include "HAL/I2C/I2C.hpp"
 
 volatile constexpr uint16_t GenTimerD0 :: compareMatchAValue;
 volatile constexpr uint16_t GenTimerD0 :: compareMatchBValue;
@@ -56,6 +57,7 @@ void GenTimerD0 :: CompareMatchAHandler() {
 // IMU start comm
 void  GenTimerD0 :: CompareMatchBHandler() {
 	ImuSpi :: UpdateMagnetometerRegisters();
+	I2cDiffBaro :: GetData();
 	TCD0.CCB +=  GenTimerD0 :: compareMatchBValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }

@@ -201,6 +201,12 @@
     <Compile Include="Control\AbsBaro\AbsBaro.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Control\DiffBaro\DiffBaro.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\DiffBaro\DiffBaro.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Control\GPS\Gps.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -299,6 +305,7 @@
     <Folder Include="Control\Imu" />
     <Folder Include="Control\GPS" />
     <Folder Include="Control\AbsBaro" />
+    <Folder Include="Control\DiffBaro" />
     <Folder Include="Control\StateMachine" />
     <Folder Include="HAL" />
     <Folder Include="HAL\DataPackets" />

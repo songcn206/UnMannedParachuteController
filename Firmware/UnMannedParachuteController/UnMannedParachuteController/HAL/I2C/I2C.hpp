@@ -14,12 +14,21 @@
 
 class I2cDiffBaro {
 	public:
+		enum class Action {
+			Write,
+			Read	
+		};
+		
+		static constexpr uint8_t I2cDiffBaroInterruptLevel = (uint8_t)System :: IntLevel :: Med;
 	
 	private:
-		static constexpr uint32_t baudRate_Hz = 125000;
+		static constexpr uint32_t baudRate_Hz = 100000;
 		static constexpr uint8_t baud = (System :: CPU_CLOCK / (2.0f * baudRate_Hz)) - 5;
 		
-		static volatile uint8_t counter;
+		static volatile uint8_t dataCounter;
+		static volatile Action action;
+		static volatile uint8_t pressure[2];
+		static volatile bool measureReady;
 		
 	public:
 		static void Init() {
@@ -28,7 +37,7 @@ class I2cDiffBaro {
 			TWIE.MASTER.BAUD = baud;
 			 // kas kõik
 			TWIE.MASTER.CTRLB = TWI_MASTER_TIMEOUT_DISABLED_gc; // quick command
-			TWIE.MASTER.CTRLA = TWI_MASTER_INTLVL_HI_gc | TWI_MASTER_RIEN_bm | TWI_MASTER_WIEN_bm | TWI_MASTER_ENABLE_bm;
+			TWIE.MASTER.CTRLA = TWI_MASTER_INTLVL_MED_gc | TWI_MASTER_RIEN_bm | TWI_MASTER_WIEN_bm | TWI_MASTER_ENABLE_bm;
 			//TWIE.MASTER.CTRLC = ... Ack ja cmd
 			TWIE.MASTER.STATUS = TWI_MASTER_BUSSTATE_IDLE_gc;
 
@@ -36,46 +45,56 @@ class I2cDiffBaro {
 		}
 		
 		static void InterruptHandler() {
-			asm volatile ("nop");
-			if ((TWIE.MASTER.STATUS & TWI_MASTER_RXACK_bm) && (counter == 0)) {
-
-				TWIE.MASTER.DATA = 0x36;
-				asm volatile ("nop");
-				counter = 1;
-			} else if ((TWIE.MASTER.STATUS & TWI_MASTER_RXACK_bm) && (counter == 1)) {
-				asm volatile ("nop");
-				TWIE.MASTER.ADDR = (0x6c << 1) | true;
-				counter = 2;
-			} else {
-				asm volatile ("nop");
-				ExtUart :: SendUInt(TWIE.MASTER.DATA);
+			if (TWIE.MASTER.STATUS & TWI_MASTER_WIF_bm) {
+				WriteInterruptHandler();
+			} else if (TWIE.MASTER.STATUS & TWI_MASTER_RIF_bm) {
+				ReadInterruptHandler();
 			}
-			asm volatile ("nop");
 		}
 		
-		static void WriteAddr(uint8_t addr, bool read) {
-			asm volatile ("nop");
-			TWIE.MASTER.ADDR = (addr << 1) | read;
-			//while ((TWIE.MASTER.STATUS & TWI_MASTER_WIF_bm) == 0);
-			asm volatile ("nop");
-			/*
-			TWIE.MASTER.DATA = 0x36;
-			//while ((TWIE.MASTER.STATUS & TWI_MASTER_WIF_bm) == 0);
-			asm volatile ("nop");
-			TWIE.MASTER.ADDR = (addr << 1) | true;
-			_delay_us(200);
-			asm volatile ("nop");
-			ExtUart :: SendUInt(TWIE.MASTER.DATA);
-			asm volatile ("nop");
-			//ExtUart :: SendUInt(TWIE.MASTER.DATA);
-			//ExtUart :: SendUInt(TWIE.MASTER.DATA);
-			//_delay_us(500);
-
-			//_delay_us(500);
-			asm volatile ("nop");*/
+		static void GetData() {
+			TWIE.MASTER.ADDR = 0x6c << 1;
+			action = Action :: Write;
+			dataCounter = 0;
 		}
-
-	
+		
+		static void WriteInterruptHandler() {
+			if (TWIE.MASTER.STATUS & TWI_MASTER_RXACK_bm) {
+				TWIE.MASTER.CTRLC = TWI_MASTER_CMD_STOP_gc;
+				ExtUart :: SendString("NACK\n");
+			} else if (action == Action :: Write) {
+				TWIE.MASTER.DATA = 0x30;
+				action = Action :: Read;
+			} else if (action == Action :: Read) {
+				TWIE.MASTER.ADDR = (0x6c << 1) | 1;
+			} else {
+				TWIE.MASTER.CTRLC = TWI_MASTER_CMD_STOP_gc;
+				ExtUart :: SendString("WRITESTOP\n");
+			}
+		}
+		
+		static void ReadInterruptHandler() {
+			pressure[dataCounter] = TWIE.MASTER.DATA;
+			if (dataCounter == 0) {
+				TWIE.MASTER.CTRLC = 0 | TWI_MASTER_CMD_RECVTRANS_gc;
+				dataCounter++;
+			} else {
+				measureReady = true;
+				TWIE.MASTER.CTRLC = (1 << 2) | TWI_MASTER_CMD_STOP_gc;
+			}
+		}
+		
+		static bool GetMeasureReady() {
+			return measureReady;
+		}
+		
+		static void SetMeasureReady(bool b) {
+			measureReady = b;
+		}
+		
+		static volatile uint8_t* GetPointer() {
+			return &pressure[0];
+		}
 };
 
 

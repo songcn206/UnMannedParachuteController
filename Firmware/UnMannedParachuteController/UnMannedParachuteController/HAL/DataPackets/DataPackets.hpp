@@ -14,6 +14,7 @@
 #include "HAL/UART/UART.hpp"
 #include "HAL/ADC/ADC.hpp"
 #include "Control/AbsBaro/AbsBaro.hpp"
+#include "Control/DiffBaro/DiffBaro.hpp"
 
 class DataPackets {
 	public:
@@ -46,8 +47,10 @@ class DataPackets {
 			ExtUart :: SendUInt(ParseGPSUart :: GetGPSCount());
 			ExtUart :: SendString(" D ");
 			ExtUart :: SendUInt(Sonar :: GetDistance());
-			ExtUart :: SendString(" Prs ");
+			ExtUart :: SendString(" APr ");
 			ExtUart :: SendFloat(AbsoluteBaro :: GetPressure());
+			ExtUart :: SendString(" DPr ");
+			ExtUart :: SendInt(DiffBaro :: GetPressure());
 			ExtUart :: SendString("\n");
 		}
 };
