@@ -21,6 +21,7 @@
 #include "HAL/ADC/ADC.hpp"
 #include "HAL/SPI/AbsSpi.hpp"
 #include "Control/AbsBaro/AbsBaro.hpp"
+#include "HAL/I2C/I2C.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -44,8 +45,8 @@ void InitPins() {
 	ImuMOSI :: SetPinConf();
 	ImuMISO :: SetPinConf();
 	ImuCK :: SetPinConf();
-	//DiffBaroSDA :: SetPinConf();
-	//DiffBaroSCL :: SetPinConf();
+	DiffBaroSDA :: SetPinConf();
+	DiffBaroSCL :: SetPinConf();
 	//AbsBaroInt :: SetPinConf();
 	ImuInt :: SetPinConf();
 	//ImuInt :: ConfigInterrupt();
@@ -65,9 +66,12 @@ int main(void) {
 	Sonar :: Init();
 	AbsSpi :: Init();
 	ImuSpi :: Init();
+	//I2cDiffBaro :: Init();
 	
 	
 	System :: EnableAllInterrupts();
+	
+	//I2cDiffBaro :: WriteAddr(0x6c, false);
 	
     while (1) {
 		led3 :: Toggle();
