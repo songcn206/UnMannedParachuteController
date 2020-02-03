@@ -7,6 +7,8 @@
 
 #include "ImuSPI.hpp"
 
+#include <avr/pgmspace.h>
+
 volatile ImuSpi :: SpiState ImuSpi :: state = ImuSpi :: SpiState :: Uninited;
 volatile uint8_t ImuSpi :: data[18];
 volatile uint8_t ImuSpi :: dataPointer = 0;
@@ -15,7 +17,7 @@ volatile bool ImuSpi :: DataWritten;
 volatile uint8_t ImuSpi :: magnetometerPointer = 0;
 volatile bool ImuSpi :: gotIDFirstTime = false;
 
-volatile uint8_t ImuSpi :: DataAddr[18] = {
+volatile uint8_t ImuSpi :: DataAddr[18]= {
 45,
 46,
 47,

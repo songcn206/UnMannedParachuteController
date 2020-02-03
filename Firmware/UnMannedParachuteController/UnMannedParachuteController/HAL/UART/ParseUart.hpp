@@ -11,6 +11,9 @@
 
 #include "HAL/UART/UART.hpp"
 #include "HAL/System/Pins.hpp"
+#include "HAL/Timers/GenericTimer/GenTimerD0.hpp"
+#include "HAL/Timers/GenericTimer/GenTimerE0.hpp"
+#include "HAL/DataPackets/DataPackets.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
@@ -36,10 +39,12 @@ class ParseExtUart {
 				SetDataSafe(runningPointer, 0);
 				
 				if (data == terminatingChar) {
-					if (MatchCommands(&parseBuffer[0], parseBufferPos, "START", sizeof("START"))) {
-						led1 :: Toggle();
-					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "CANCEL", sizeof("CANCEL"))) {
-						led3 :: Toggle();
+					if (MatchCommands(&parseBuffer[0], parseBufferPos, "getdata", sizeof("getdata"))) {
+						led2 :: Toggle();
+						HandleGetData();
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "save", sizeof("save"))) {
+						led2 :: Toggle();
+						HandleSaveData();
 					}
 					parseBufferPos = parseBufferSize - 1; // Hack
 				}
@@ -84,6 +89,20 @@ class ParseExtUart {
 			}
 			return true;
 		}
+		
+		static void HandleGetData() {
+			GenTimerD0 :: StopImuSonarDiffBaro();
+			GenTimerE0 :: StopAbsBaroCommunication();
+			GpsUart :: DisableRX();
+			DataPackets :: SendDataFromArray();
+			GpsUart :: EnableRX();
+			GenTimerE0 :: StartAbsBaroCommunication();
+			GenTimerD0 :: StartImuSonarDiffBaro();
+		}
+		
+		static void HandleSaveData() {
+			DataPackets :: StartSavingData();
+		}
 };
 
 class ParseGPSUart {
@@ -114,7 +133,6 @@ class ParseGPSUart {
 					
 					if (MatchCommands(&parseBuffer[0], parseBufferPos, "$PUBX", sizeof("$PUBX"))) {
 						HandlePUBXCommand(&parseBuffer[0], parseBufferPos);
-						
 					} 
 					
 					parseBufferPos = parseBufferSize - 1; // Hack
@@ -188,40 +206,40 @@ class ParseGPSUart {
 			
 			uint8_t altitudePointPos = 0;
 			
-			ExtUart :: SendString("[GPS]");
+			//ExtUart :: SendString("[GPS]");
 			/*ExtUart :: SendString(" T ");
 			for (uint8_t i = 0; i < (gpsDataStartArray[3] - 1 - dateTimePos); i++) {
 				ExtUart :: SendByte((uint8_t)bufferpointer[dateTimePos + i]);
 				tempDateTime[i] = bufferpointer[dateTimePos + i];	
 			}*/
 			
-			ExtUart :: SendString(" La ");
+			//ExtUart :: SendString(" La ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[4] - 1 - latitudePos); i++) {
-				ExtUart :: SendByte((uint8_t)bufferpointer[latitudePos + i]);
+				//ExtUart :: SendByte((uint8_t)bufferpointer[latitudePos + i]);
 				tempLatitude[i] = bufferpointer[latitudePos + i];
 			}
 
-			ExtUart :: SendString(" Lo ");
+			//ExtUart :: SendString(" Lo ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[6] - 1 - longitudePos); i++) {
-				ExtUart :: SendByte((uint8_t)bufferpointer[longitudePos + i]);
+				//ExtUart :: SendByte((uint8_t)bufferpointer[longitudePos + i]);
 				tempLongitude[i] = bufferpointer[longitudePos + i];
 			}	
-			ExtUart :: SendString(" Alt ");
+			//ExtUart :: SendString(" Alt ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[8] - 1 - altitudePos); i++) {
-				ExtUart :: SendByte((uint8_t)bufferpointer[altitudePos + i]);
+				//ExtUart :: SendByte((uint8_t)bufferpointer[altitudePos + i]);
 				tempAltitude[i] = bufferpointer[altitudePos + i];
 				if (bufferpointer[altitudePos + i] == '.') {
 					altitudePointPos = i;
 				}
 			}
 			
-			ExtUart :: SendString(" No ");
+			//ExtUart :: SendString(" No ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[19] - 1 - gpsCountPos); i++) {
-				ExtUart :: SendByte((uint8_t)bufferpointer[gpsCountPos + i]);
+				//ExtUart :: SendByte((uint8_t)bufferpointer[gpsCountPos + i]);
 				tempGpsCount[i] = bufferpointer[gpsCountPos + i];
 			}		
-			ExtUart :: SendString("\n");
-
+			//ExtUart :: SendString("\n");
+				
 			//dateTime = StringToFloat(tempDateTime, sizeof(tempDateTime), 6);
 			latitude = StringToFloat(tempLatitude, gpsDataStartArray[4] - 1 - latitudePos, 4);
 			longitude = StringToFloat(tempLongitude, gpsDataStartArray[6] - 1 - longitudePos, 5);

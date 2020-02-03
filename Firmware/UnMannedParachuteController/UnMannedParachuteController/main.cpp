@@ -85,12 +85,7 @@ int main(void) {
 		}
 		
 		if (GenTimerD0 :: sendData) {
-			DataPackets :: sendStatus();
-			/*if (AbsSpi :: GetState() == AbsSpi::SpiState::Wait) {
-				AbsSpi :: StartDataCommunication();
-			}*/
-			
-			//DiffBaroSCL :: Toggle();
+			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
 		}
 	}

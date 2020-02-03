@@ -10,6 +10,7 @@
 #include "Control/StateMachine/StateMachine.hpp"
 #include "HAL/ADC/ADC.hpp"
 #include "HAL/I2C/I2C.hpp"
+#include "HAL/UART/ParseUart.hpp"
 
 volatile constexpr uint16_t GenTimerD0 :: compareMatchAValue;
 volatile constexpr uint16_t GenTimerD0 :: compareMatchBValue;
@@ -54,7 +55,7 @@ void GenTimerD0 :: CompareMatchAHandler() {
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
 
-// IMU start comm
+// IMU start comm TODO: maybe should not use diffbaro and imu together
 void  GenTimerD0 :: CompareMatchBHandler() {
 	ImuSpi :: UpdateMagnetometerRegisters();
 	I2cDiffBaro :: GetData();
@@ -76,4 +77,21 @@ void  GenTimerD0 :: CompareMatchDHandler() {
 
 void  GenTimerD0 :: StartImuDataCommunication() {
 	TCD0.INTCTRLB |= TC_CCBINTLVL_MED_gc;
+}
+
+void GenTimerD0 :: StopImuSonarDiffBaro() {
+	TCD0.INTCTRLB &= (0xff ^ ((3 << 2) | (3 << 6)));
+}
+
+void GenTimerD0 :: StartImuSonarDiffBaro() {
+	StartImuDataCommunication(); // imu and Diff baro
+	TCD0.INTCTRLB |= TC_CCDINTLVL_LO_gc;
+}
+
+void GenTimerD0 :: StopSendStatusPackets() {
+	TCD0.INTCTRLB &= (0xff ^ (3 << 4));
+}
+
+void GenTimerD0 :: StartSendStatusPackets() {
+	TCD0.INTCTRLB |= TC_CCCINTLVL_LO_gc;
 }

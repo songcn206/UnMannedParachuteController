@@ -30,6 +30,10 @@ void GenTimerE0 :: CompareMatchAHandler() {
 	TCE0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
 
-void GenTimerE0 :: StartAbsBaroDataCommunication() {
+void GenTimerE0 :: StartAbsBaroCommunication() {
 	TCE0.INTCTRLB |= TC_CCAINTLVL_MED_gc;
+}
+
+void GenTimerE0 :: StopAbsBaroCommunication() {
+	TCE0.INTCTRLB &= (0xff ^ (3 << 0));
 }

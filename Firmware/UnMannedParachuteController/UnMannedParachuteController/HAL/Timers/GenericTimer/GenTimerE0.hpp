@@ -37,7 +37,9 @@ class GenTimerE0 {
 		
 		//static void CompareMatchDHandler();
 		
-		static void StartAbsBaroDataCommunication();
+		static void StartAbsBaroCommunication();
+		
+		static void StopAbsBaroCommunication();
 
 };
 

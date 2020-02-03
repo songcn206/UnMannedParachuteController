@@ -231,7 +231,16 @@
     <Compile Include="HAL\ADC\ADC.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HAL\DataPackets\DataPackets.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HAL\DataPackets\DataPackets.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Filters\ExpMovingFilter.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Filters\MovingAverageFilter.hpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\I2C\I2C.cpp">
@@ -311,6 +320,7 @@
     <Folder Include="HAL\DataPackets" />
     <Folder Include="HAL\ADC" />
     <Folder Include="HAL\I2C" />
+    <Folder Include="HAL\Filters" />
     <Folder Include="HAL\SPI" />
     <Folder Include="HAL\Timers" />
     <Folder Include="HAL\Timers\GenericTimer" />

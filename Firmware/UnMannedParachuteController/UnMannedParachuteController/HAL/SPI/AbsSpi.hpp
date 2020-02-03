@@ -57,7 +57,7 @@ class AbsSpi {
 						AbsBaroCS :: SetHigh();
 						if (settingsPointer >= (sizeof(settings) / sizeof(ImuSettings))) {
 							state = SpiState::Wait;
-							GenTimerE0 :: StartAbsBaroDataCommunication();
+							GenTimerE0 :: StartAbsBaroCommunication();
 							settingsPointer = 0;
 						} else {
 							AbsBaroCS :: SetLow();

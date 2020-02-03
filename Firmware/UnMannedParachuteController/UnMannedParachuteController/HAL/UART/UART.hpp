@@ -161,6 +161,14 @@ class Uart {
 			}
 		}
 		
+		static void DisableRX() {
+			uart -> CTRLB &= (0xff ^ USART_RXEN_bm);
+		}
+		
+		static void EnableRX() {
+			uart -> CTRLB |= USART_RXEN_bm;
+		}
+		
 	private:
 		static void InitBaudRegisters() {
 			// Used microchip own example code for calculating baud rate
@@ -197,6 +205,8 @@ class Uart {
 			uart -> BAUDCTRLB = (uint8_t) (((div >> 8) & 0x0f) | (exp << 4));
 			uart -> BAUDCTRLA = (uint8_t) div;
 		}
+		
+		
 		
 		
 };

@@ -13,31 +13,34 @@
 #include "HAL/UART/UART.hpp"
 #include "HAL/SPI/AbsSpi.hpp"
 
+#include <stdio.h>
+#include <string.h>
+
 class AbsoluteBaro {
 	private:
 		static float pressure;
+		static uint8_t data[3];
 	
 	public: 
 		static void CheckForUpdates() {
 			System :: DisableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
 			if (AbsSpi :: GetState() == AbsSpi::SpiState::DataUpdated) {
-				volatile uint8_t* pointer = AbsSpi :: GetDataPointer();
-				uint32_t highByte = pointer[2];
-				uint8_t lowByte = pointer[1];
-				uint8_t ultraLowByte = pointer[0];
+				memcpy(&data[0], (const void*)AbsSpi :: GetDataPointer(), sizeof(data));
+				System :: EnableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
+
+				uint32_t highByte = data[2];
+				uint8_t lowByte = data[1];
+				uint8_t ultraLowByte = data[0];
 				
 				uint16_t middle = lowByte << 8;
 				uint32_t tempPressure = (highByte << 16) | middle | ultraLowByte;
 				pressure = tempPressure / 4096.0f;
 				
-				//ExtUart :: SendFloat(pressure);
-				//ExtUart :: SendString("\n");
-				
 				AbsSpi :: ChangeStateToWait();
+			} else {
+				System :: EnableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
 			}
-			System :: EnableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
 		}
-		
 		
 		static float GetPressure() {
 			return pressure;

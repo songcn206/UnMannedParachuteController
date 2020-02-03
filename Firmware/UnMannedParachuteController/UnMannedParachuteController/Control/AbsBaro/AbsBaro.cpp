@@ -8,3 +8,4 @@
 #include "AbsBaro.hpp"
 
 float AbsoluteBaro :: pressure;
+uint8_t AbsoluteBaro :: data[3];

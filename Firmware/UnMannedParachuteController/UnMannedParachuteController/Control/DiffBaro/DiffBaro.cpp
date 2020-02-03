@@ -7,3 +7,4 @@
 #include "DiffBaro.hpp"
 
 int16_t DiffBaro :: pressure;
+uint8_t DiffBaro :: data[2];
