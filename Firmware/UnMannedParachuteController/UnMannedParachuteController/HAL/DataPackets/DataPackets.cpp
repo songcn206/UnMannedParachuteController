@@ -9,7 +9,7 @@
 #include "HAL/UART/ParseUart.hpp"
 
 uint16_t DataPackets :: datapointer = 0;
-DataPackets :: SavedData DataPackets :: savedData[1000];
+DataPackets :: SavedData DataPackets :: savedData[1250];
 bool DataPackets :: saveData = false;
 bool DataPackets :: arrayFull = false;
 
@@ -62,8 +62,7 @@ void DataPackets :: SendOrSaveData() {
 }
 
 void DataPackets :: SaveDataFromSensors() {
-	savedData[datapointer] = {.lat = ParseGPSUart :: GetLatitude(), .lon = ParseGPSUart :: GetLongitude(),
-		.alt = ParseGPSUart :: GetAltitude(), .no = ParseGPSUart :: GetGPSCount()};
+	savedData[datapointer] = {.sonar = Sonar :: GetDistance(), .absbaro = AbsoluteBaro :: GetPressure(), .diffbaro = DiffBaro :: GetPressure(), .alt = ParseGPSUart :: GetAltitude()};
 	
 	if (datapointer == sizeof(savedData) / sizeof (SavedData) - 1) {
 		arrayFull = true;
@@ -75,13 +74,13 @@ void DataPackets :: SendDataFromArray() {
 	GenTimerD0 :: StopSendStatusPackets();
 	ExtUart :: SendString("[DATA FROM ARRAY]\n");
 	for (uint16_t i = 0; i < datapointer; i++) {
-		ExtUart :: SendFloat(savedData[i].lat);
+		ExtUart :: SendUInt(savedData[i].sonar);
 		ExtUart :: SendString(" ");
-		ExtUart :: SendFloat(savedData[i].lon);
+		ExtUart :: SendFloat(savedData[i].absbaro);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].diffbaro);
 		ExtUart :: SendString(" ");
 		ExtUart :: SendFloat(savedData[i].alt);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendUInt(savedData[i].no);
 		ExtUart :: SendString("\n");
 	}
 	saveData = false;

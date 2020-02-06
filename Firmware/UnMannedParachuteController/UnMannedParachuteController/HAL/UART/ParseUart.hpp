@@ -25,7 +25,7 @@ class ParseExtUart {
 		static volatile uint8_t* runningPointer;
 
 		static constexpr char terminatingChar = ExtUart :: terminatingChar;
-		static constexpr uint8_t parseBufferSize = 200;	
+		static constexpr uint8_t parseBufferSize = 50;	
 		
 		static uint8_t parseBuffer[parseBufferSize];
 		static uint8_t parseBufferPos;
@@ -33,32 +33,22 @@ class ParseExtUart {
 	public:
 		static void Parse() {
 			while (GetDataSafe(runningPointer) != 0) {
-				//led2 :: Toggle();
 				uint8_t data = GetDataSafe(runningPointer);
-				parseBuffer[parseBufferPos] = data;
-				SetDataSafe(runningPointer, 0);
 				
-				if (data == terminatingChar) {
-					if (MatchCommands(&parseBuffer[0], parseBufferPos, "getdata", sizeof("getdata"))) {
-						led2 :: Toggle();
-						HandleGetData();
-					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "save", sizeof("save"))) {
-						led2 :: Toggle();
-						HandleSaveData();
-					}
-					parseBufferPos = parseBufferSize - 1; // Hack
+				if (data == '4') {
+					HandleSaveData();
+					led2 :: SetHigh();
+				} else if (data == '5') {
+					HandleGetData();
+					led2 :: SetLow();
 				}
 				
+				SetDataSafe(runningPointer, 0);
+
 				if (runningPointer == arrayEndPointer) {
 					runningPointer = arrayStartPointer;
 				} else {
 					runningPointer++;
-				}
-				
-				if (parseBufferPos == parseBufferSize - 1) {
-					parseBufferPos = 0;
-				} else {
-					parseBufferPos++;
 				}
 			}
 		}

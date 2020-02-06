@@ -22,14 +22,14 @@
 class DataPackets {
 	public:
 		struct SavedData {
-			float lat;
-			float lon;
+			uint16_t sonar;
+			float absbaro;
+			int16_t diffbaro;
 			float alt;
-			uint8_t no;
 		};
 	
 	private:
-		static SavedData savedData[1000]; // max ~14KB
+		static SavedData savedData[1250]; // max ~14KB
 		static uint16_t datapointer;
 		static bool saveData;
 		static bool arrayFull;

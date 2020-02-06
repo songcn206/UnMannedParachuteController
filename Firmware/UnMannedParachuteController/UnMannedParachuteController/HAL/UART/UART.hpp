@@ -14,6 +14,7 @@
 #include <avr/interrupt.h>
 
 
+
 #include <stdio.h>
 
 template <typename conf>
@@ -28,6 +29,7 @@ class Uart {
 		static volatile uint8_t reciveArray[conf :: rxArrayLength]; 
 		static volatile uint8_t reciveArrayFreePos;
 		static uint8_t reciveArrayOccupiedPos;
+
 		
 	public:
 		static void Init() {
@@ -126,10 +128,10 @@ class Uart {
 		// Using cycling/running buffer
 		static void RxInterruptHandler() {
 			uint8_t data = uart -> DATA;
-			
-			if (reciveArray[reciveArrayFreePos] != 0) {
+
+			/*if (reciveArray[reciveArrayFreePos] != 0) {
 				System :: Halt("RX Buffer overflow\n");
-			}
+			}*/
 			
 			reciveArray[reciveArrayFreePos] = data;
 			if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
@@ -138,6 +140,7 @@ class Uart {
 				reciveArrayFreePos++;
 			}
 		}
+
 
 		static volatile uint8_t* GetRxBufferStart() {
 			return &reciveArray[0]; 
@@ -217,11 +220,12 @@ uint8_t volatile Uart<conf> :: reciveArray[conf :: rxArrayLength] = {};
 template<typename conf>
 uint8_t volatile Uart<conf> :: reciveArrayFreePos = 0;
 
+
 struct ExtUartConf {
 	static constexpr uint32_t baudRate = 500000;
 	static constexpr USART_t* uart = &USARTF0;
 	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_HI_gc;
-	static constexpr uint8_t rxArrayLength = 150;
+	static constexpr uint8_t rxArrayLength = 50;
 	static constexpr uint8_t terminatingChar = '\n';
 };
 typedef Uart<ExtUartConf> ExtUart;
@@ -234,13 +238,13 @@ struct GpsUartConf {
 	static constexpr uint8_t terminatingChar = '\n';
 };
 typedef Uart<GpsUartConf> GpsUart;
-
+/*
 struct DebugUartConf {
 	static constexpr uint32_t baudRate = 500000;
 	static constexpr USART_t* uart = &USARTC1;
 	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_OFF_gc;
 	static constexpr uint8_t rxArrayLength = 150;
 	static constexpr uint8_t terminatingChar = '\n';
-};
+};*/
 
 #endif /* UART._H_ */
