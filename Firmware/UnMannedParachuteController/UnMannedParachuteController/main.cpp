@@ -71,10 +71,8 @@ int main(void) {
 	
 	System :: EnableAllInterrupts();
 	
-	
-	
     while (1) {
-		led3 :: Toggle();
+		//led3 :: Toggle();
 		if (GenTimerD0 :: checkUartAndSpi) {
 			ParseExtUart :: Parse();
 			ParseGPSUart :: Parse();

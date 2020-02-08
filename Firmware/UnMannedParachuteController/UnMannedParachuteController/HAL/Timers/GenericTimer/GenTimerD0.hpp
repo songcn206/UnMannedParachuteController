@@ -20,7 +20,7 @@ class GenTimerD0 {
 		
 		static constexpr float compareMatchAValue_ms = 10.0f; // Check for updates (uart, imu, etc)
 		static constexpr float compareMatchBValue_ms = 100.0f; // Imu and Differential barometer
-		static constexpr float compareMatchCValue_ms = 250.0f; // Save data
+		static constexpr float compareMatchCValue_ms = 100.0f; // Save data
 		static constexpr float compareMatchDValue_ms = 50.0f; // Sonar
 		
 		static volatile constexpr uint16_t compareMatchAValue = System :: CPU_CLOCK / preScaler * (compareMatchAValue_ms / 1000);

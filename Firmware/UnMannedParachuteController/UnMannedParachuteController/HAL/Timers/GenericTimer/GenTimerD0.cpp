@@ -51,6 +51,10 @@ void  GenTimerD0 :: Init() {
 
 void GenTimerD0 :: CompareMatchAHandler() {
 	checkUartAndSpi = true;
+	/*ExtUart :: SendUInt(TCD0.CCA);
+	ExtUart :: SendString(" ");
+	ExtUart :: SendUInt(TCD0.CNT);
+	ExtUart :: SendString("\n");*/
 	TCD0.CCA +=  GenTimerD0 :: compareMatchAValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }

@@ -34,21 +34,35 @@ class ParseExtUart {
 		static void Parse() {
 			while (GetDataSafe(runningPointer) != 0) {
 				uint8_t data = GetDataSafe(runningPointer);
-				
-				if (data == '4') {
-					HandleSaveData();
-					led2 :: SetHigh();
-				} else if (data == '5') {
-					HandleGetData();
-					led2 :: SetLow();
+				parseBuffer[parseBufferPos] = data;
+				SetDataSafe(runningPointer, 0);
+				if (data == terminatingChar) {
+					
+					if (MatchCommands(&parseBuffer[0], parseBufferPos, "save", sizeof("save"))) {
+						HandleSaveData();
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "get", sizeof("get"))) {
+						HandleGetData();
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "cancel", sizeof("cancel"))) {
+						HandleCancelData();
+					}
+					
+					for (uint8_t i = 0; i < parseBufferPos; i++) {
+						parseBuffer[i] = 0;
+					}
+					
+					parseBufferPos = parseBufferSize - 1; 
 				}
 				
-				SetDataSafe(runningPointer, 0);
-
 				if (runningPointer == arrayEndPointer) {
 					runningPointer = arrayStartPointer;
 				} else {
 					runningPointer++;
+				}
+				
+				if (parseBufferPos == parseBufferSize - 1) {
+					parseBufferPos = 0;
+				} else {
+					parseBufferPos++;
 				}
 			}
 		}
@@ -93,6 +107,10 @@ class ParseExtUart {
 		static void HandleSaveData() {
 			DataPackets :: StartSavingData();
 		}
+		
+		static void HandleCancelData() {
+			DataPackets :: CancelSavingData();
+		}
 };
 
 class ParseGPSUart {
@@ -125,7 +143,7 @@ class ParseGPSUart {
 						HandlePUBXCommand(&parseBuffer[0], parseBufferPos);
 					} 
 					
-					parseBufferPos = parseBufferSize - 1; // Hack
+					parseBufferPos = parseBufferSize - 1; 
 				}
 				
 				if (runningPointer == arrayEndPointer) {

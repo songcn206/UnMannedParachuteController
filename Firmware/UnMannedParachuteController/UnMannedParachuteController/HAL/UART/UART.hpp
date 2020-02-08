@@ -98,12 +98,13 @@ class Uart {
 			SendUInt((uint16_t)value);
 		}
 		
-		static void SendFloat(float value) {
-			//char buff[20] = {0};
-			//sprintf(buff, "%f", (double)value);
-			//SendString(buff);
+		static void SendFloat(float value) {	
 			asm volatile ("nop");
-			uint16_t beforePoint = value;
+			char buff[20] = {0};
+			sprintf(buff, "%f", (double)value);
+			SendString(buff);
+		
+			/*uint16_t beforePoint = value;
 			SendUInt(beforePoint);
 			SendByte('.');
 			value = value - (float)beforePoint;
@@ -121,23 +122,41 @@ class Uart {
 			SendByte((uint8_t)(value + '0'));
 			
 			value = (value-(uint8_t)value) * 10;
-			SendByte((uint8_t)(value + '0'));
+			SendByte((uint8_t)(value + '0'));*/
 			asm volatile ("nop");
 		}
 		
 		// Using cycling/running buffer
-		static void RxInterruptHandler() {
+		static void GPSRxInterruptHandler() {
 			uint8_t data = uart -> DATA;
 
-			/*if (reciveArray[reciveArrayFreePos] != 0) {
+			if (reciveArray[reciveArrayFreePos] != 0) {
 				System :: Halt("RX Buffer overflow\n");
-			}*/
+			}
 			
 			reciveArray[reciveArrayFreePos] = data;
 			if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
 				reciveArrayFreePos = 0;
 			} else {
 				reciveArrayFreePos++;
+			}
+		}
+		
+		static void ExtRxInterruptHandler() {
+			uint8_t data = uart -> DATA;
+				
+			if (reciveArray[reciveArrayFreePos] != 0) {
+				System :: Halt("RX Buffer overflow\n");
+			}
+			
+			// Used because removing and attaching UART dongle generated unwanted data flow.
+			if (data == '\n' || (data > 96 && data < 123)) {
+				reciveArray[reciveArrayFreePos] = data;
+				if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
+					reciveArrayFreePos = 0;
+				} else {
+					reciveArrayFreePos++;
+				}
 			}
 		}
 

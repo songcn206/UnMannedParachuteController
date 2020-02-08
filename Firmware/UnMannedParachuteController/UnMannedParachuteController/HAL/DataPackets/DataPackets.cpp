@@ -9,7 +9,7 @@
 #include "HAL/UART/ParseUart.hpp"
 
 uint16_t DataPackets :: datapointer = 0;
-DataPackets :: SavedData DataPackets :: savedData[1250];
+DataPackets :: SavedData DataPackets :: savedData[1000];
 bool DataPackets :: saveData = false;
 bool DataPackets :: arrayFull = false;
 
@@ -51,11 +51,7 @@ void DataPackets :: SendStatus() {
 
 void DataPackets :: SendOrSaveData() {
 	if (saveData) {
-		if (arrayFull) {
-			SendStatus();
-		} else {
-			SaveDataFromSensors();
-		}
+		SaveDataFromSensors();
 	} else {
 		SendStatus();
 	}
@@ -65,7 +61,7 @@ void DataPackets :: SaveDataFromSensors() {
 	savedData[datapointer] = {.sonar = Sonar :: GetDistance(), .absbaro = AbsoluteBaro :: GetPressure(), .diffbaro = DiffBaro :: GetPressure(), .alt = ParseGPSUart :: GetAltitude()};
 	
 	if (datapointer == sizeof(savedData) / sizeof (SavedData) - 1) {
-		arrayFull = true;
+		saveData = false;
 	}
 	datapointer++;
 }
@@ -83,12 +79,14 @@ void DataPackets :: SendDataFromArray() {
 		ExtUart :: SendFloat(savedData[i].alt);
 		ExtUart :: SendString("\n");
 	}
-	saveData = false;
-	arrayFull = false;
-	datapointer = 0;
 	GenTimerD0 :: StartSendStatusPackets();
 }
 
 void DataPackets :: StartSavingData() {
 	saveData = true;
+	datapointer = 0;
+}
+
+void DataPackets :: CancelSavingData() {
+	saveData = false;
 }
