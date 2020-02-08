@@ -59,7 +59,7 @@ struct ImuSpi :: ImuSettings s14 = {.addr = 6, .value = 0b00000001}; // I2C_SLV0
 
 struct ImuSpi :: ImuSettings s15 = {.addr = 3, .value = 0b00001100}; // I2C_SLV0_ADDR: Device physical address (0x0c) and write data
 struct ImuSpi :: ImuSettings s16= {.addr = 4, .value = 0x31};		// I2C_SLV0_REG: Slave control1 register
-struct ImuSpi :: ImuSettings s17 = {.addr = 6, .value = 0b00000010}; // I2C_SLV0_DO: Continuous mode 1 (10Hz)
+struct ImuSpi :: ImuSettings s17 = {.addr = 6, .value = 0b00000100}; // I2C_SLV0_DO: Continuous mode 2 (20Hz)
 	
 struct ImuSpi :: ImuSettings s18 = {.addr = 3, .value = 0b10001100}; // I2C_SLV0_ADDR: Device physical address (0x0c) and read data
 struct ImuSpi :: ImuSettings s19 = {.addr = 4, .value = 0x11};		// I2C_SLV0_REG: Slave first data register	
