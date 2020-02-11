@@ -35,7 +35,8 @@ class Sonar {
 		
 		static void InterruptHandler() {
 			uint16_t adcValue = ADCA.CH0RES;
-			distance_mm = adcValue * (5000 / 4095);
+			distance_mm = adcValue * (5000 / 4095.0f);
+			
 		}
 		
 		static uint16_t GetDistance() {

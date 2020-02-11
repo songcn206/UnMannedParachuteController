@@ -9,7 +9,7 @@
 #include "HAL/UART/ParseUart.hpp"
 
 uint16_t DataPackets :: datapointer = 0;
-DataPackets :: SavedData DataPackets :: savedData[1000];
+DataPackets :: SavedData DataPackets :: savedData[850];
 bool DataPackets :: saveData = false;
 bool DataPackets :: arrayFull = false;
 
@@ -58,7 +58,12 @@ void DataPackets :: SendOrSaveData() {
 }
 
 void DataPackets :: SaveDataFromSensors() {
-	savedData[datapointer] = {.sonar = Sonar :: GetDistance(), .absbaro = AbsoluteBaro :: GetPressure(), .diffbaro = DiffBaro :: GetPressure(), .alt = ParseGPSUart :: GetAltitude()};
+	//savedData[datapointer] = {.sonar = Sonar :: GetDistance(), .absbaro = AbsoluteBaro :: GetPressure(), .alt = ParseGPSUart :: GetAltitude()};
+	
+	savedData[datapointer] = {.ax = Imu :: GetAccXYZ()[0], .ay = Imu :: GetAccXYZ()[1], .az = Imu :: GetAccXYZ()[2],
+								.gx = Imu :: GetGyroXYZ()[0], .gy = Imu :: GetGyroXYZ()[1], .gz = Imu :: GetGyroXYZ()[2],
+								.mx = Imu :: GetMagXYZ()[0], .my = Imu :: GetMagXYZ()[1], .mz = Imu :: GetMagXYZ()[2]};
+	
 	
 	if (datapointer == sizeof(savedData) / sizeof (SavedData) - 1) {
 		saveData = false;
@@ -69,16 +74,39 @@ void DataPackets :: SaveDataFromSensors() {
 void DataPackets :: SendDataFromArray() {
 	GenTimerD0 :: StopSendStatusPackets();
 	ExtUart :: SendString("[DATA FROM ARRAY]\n");
-	for (uint16_t i = 0; i < datapointer; i++) {
+	/*for (uint16_t i = 0; i < datapointer; i++) {
 		ExtUart :: SendUInt(savedData[i].sonar);
 		ExtUart :: SendString(" ");
 		ExtUart :: SendFloat(savedData[i].absbaro);
 		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].diffbaro);
-		ExtUart :: SendString(" ");
 		ExtUart :: SendFloat(savedData[i].alt);
 		ExtUart :: SendString("\n");
+	}*/
+	
+	for (uint16_t i = 0; i < datapointer; i++) {
+		ExtUart :: SendInt(savedData[i].ax);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].ay);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].az);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].gx);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].gy);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].gz);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].mx);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].my);
+		ExtUart :: SendString(" ");
+		ExtUart :: SendInt(savedData[i].mz);
+		ExtUart :: SendString("\n");
+
 	}
+	
+	
+	
 	GenTimerD0 :: StartSendStatusPackets();
 }
 

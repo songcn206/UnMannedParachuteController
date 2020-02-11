@@ -71,6 +71,9 @@ int main(void) {
 	
 	System :: EnableAllInterrupts();
 	
+	//uint16_t i = 700;
+	//bool sign = false;
+	
     while (1) {
 		//led3 :: Toggle();
 		if (GenTimerD0 :: checkUartAndSpi) {
@@ -80,12 +83,27 @@ int main(void) {
 			AbsoluteBaro :: CheckForUpdates();
 			DiffBaro :: CheckForUpdates();
 			GenTimerD0 :: checkUartAndSpi = false;
+			
+			/*if (i >= 1300) {
+				sign = true;
+				} else if (i <= 700) {
+				sign = false;
+			}
+			
+			if (sign) {
+				i -= 5;
+				} else {
+				i += 5;
+			}
+			PwmTimer :: UpdateCCReg('A', i);
+			PwmTimer :: UpdateCCReg('D', i);*/
 		}
 		
 		if (GenTimerD0 :: sendData) {
 			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
 		}
+		
 	}
 }
 
