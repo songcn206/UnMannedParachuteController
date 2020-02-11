@@ -131,9 +131,9 @@ class Uart {
 			uint8_t data = uart -> DATA;
 
 			if (reciveArray[reciveArrayFreePos] != 0) {
-				System :: Halt("RX Buffer overflow\n");
+				System :: Halt("GPSRX Buffer overflow\n");
 			}
-			
+		
 			reciveArray[reciveArrayFreePos] = data;
 			if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
 				reciveArrayFreePos = 0;
@@ -146,7 +146,7 @@ class Uart {
 			uint8_t data = uart -> DATA;
 				
 			if (reciveArray[reciveArrayFreePos] != 0) {
-				System :: Halt("RX Buffer overflow\n");
+				System :: Halt("ExtRX Buffer overflow\n");
 			}
 			
 			// Used because removing and attaching UART dongle generated unwanted data flow.

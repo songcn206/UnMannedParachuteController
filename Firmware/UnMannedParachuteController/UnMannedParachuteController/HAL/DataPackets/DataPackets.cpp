@@ -9,7 +9,7 @@
 #include "HAL/UART/ParseUart.hpp"
 
 uint16_t DataPackets :: datapointer = 0;
-DataPackets :: SavedData DataPackets :: savedData[850];
+DataPackets :: SavedData DataPackets :: savedData[1];
 bool DataPackets :: saveData = false;
 bool DataPackets :: arrayFull = false;
 

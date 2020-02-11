@@ -133,6 +133,7 @@ class ParseGPSUart {
 	
 	public:
 		static void Parse() {
+			led2 :: Toggle();
 			while (GetDataSafe(runningPointer) != 0) {
 				uint8_t data = GetDataSafe(runningPointer);
 				parseBuffer[parseBufferPos] = data;
