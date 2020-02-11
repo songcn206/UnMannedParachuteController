@@ -237,6 +237,9 @@
     <Compile Include="HAL\DataPackets\DataPackets.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HAL\EEPROM\EEPROM.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HAL\Filters\ExpMovingFilter.hpp">
       <SubType>compile</SubType>
     </Compile>
@@ -321,6 +324,7 @@
     <Folder Include="HAL\ADC" />
     <Folder Include="HAL\I2C" />
     <Folder Include="HAL\Filters" />
+    <Folder Include="HAL\EEPROM" />
     <Folder Include="HAL\SPI" />
     <Folder Include="HAL\Timers" />
     <Folder Include="HAL\Timers\GenericTimer" />

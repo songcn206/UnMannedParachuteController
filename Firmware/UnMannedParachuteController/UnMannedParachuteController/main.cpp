@@ -23,6 +23,7 @@
 #include "Control/AbsBaro/AbsBaro.hpp"
 #include "HAL/I2C/I2C.hpp"
 #include "Control/DiffBaro/DiffBaro.hpp"
+#include "HAL/EEPROM/EEPROM.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -71,6 +72,8 @@ int main(void) {
 	
 	System :: EnableAllInterrupts();
 	
+	//Eeprom :: WriteUint16((uint16_t)Eeprom :: EepromAddress :: LastServoPWM, 1200);	
+	
 	//uint16_t i = 700;
 	//bool sign = false;
 	
@@ -102,6 +105,9 @@ int main(void) {
 		if (GenTimerD0 :: sendData) {
 			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
+			
+			//ExtUart :: SendUInt(Eeprom :: ReadUint16((uint16_t)Eeprom :: EepromAddress :: LastServoPWM));
+			//ExtUart :: SendString("\n");
 		}
 		
 	}
