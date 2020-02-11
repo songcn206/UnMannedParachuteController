@@ -23,6 +23,7 @@
 #include "Control/AbsBaro/AbsBaro.hpp"
 #include "HAL/I2C/I2C.hpp"
 #include "Control/DiffBaro/DiffBaro.hpp"
+#include "HAL/EEPROM/EEPROM.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -70,8 +71,7 @@ int main(void) {
 	I2cDiffBaro :: Init();
 	
 	System :: EnableAllInterrupts();
-	
-	
+		
 	uint16_t i = 265;
 	bool sign = false;
 	
