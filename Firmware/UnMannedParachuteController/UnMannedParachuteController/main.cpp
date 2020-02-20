@@ -72,8 +72,6 @@ int main(void) {
 	
 	System :: EnableAllInterrupts();
 		
-	//uint16_t i = 265;
-	//bool sign = false;
 	
     while (1) {
 		if (GenTimerD0 :: checkUartAndSpi) {
@@ -83,20 +81,13 @@ int main(void) {
 			AbsoluteBaro :: CheckForUpdates();
 			DiffBaro :: CheckForUpdates();
 			GenTimerD0 :: checkUartAndSpi = false;
-			/*
-			if (i >= 1180) {
 				sign = true;
 			} else if (i <= 290) {
 				sign = false;
 			}
 			
 			if (sign) {
-				i -= 1;
-			} else {
-				i += 1;
-			}
-			PwmTimer :: UpdateCCReg('A', i);
-			PwmTimer :: UpdateCCReg('D', i);*/
+				i -= 5;			} else {
 		}
 		
 		if (GenTimerD0 :: sendData) {
