@@ -98,13 +98,13 @@ class Uart {
 			SendUInt((uint16_t)value);
 		}
 		
-		static void SendFloat(float value) {	
-			asm volatile ("nop");
-			char buff[20] = {0};
+		static void SendFloat(float value) {
+			/*char buff[20] = {0};
 			sprintf(buff, "%f", (double)value);
-			SendString(buff);
-		
-			/*uint16_t beforePoint = value;
+			SendString(buff);*/
+			
+			
+			uint16_t beforePoint = value;
 			SendUInt(beforePoint);
 			SendByte('.');
 			value = value - (float)beforePoint;
@@ -122,8 +122,7 @@ class Uart {
 			SendByte((uint8_t)(value + '0'));
 			
 			value = (value-(uint8_t)value) * 10;
-			SendByte((uint8_t)(value + '0'));*/
-			asm volatile ("nop");
+			SendByte((uint8_t)(value + '0'));
 		}
 		
 		// Using cycling/running buffer

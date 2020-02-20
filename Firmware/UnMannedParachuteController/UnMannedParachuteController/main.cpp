@@ -72,11 +72,10 @@ int main(void) {
 	
 	System :: EnableAllInterrupts();
 		
-	uint16_t i = 265;
-	bool sign = false;
+	//uint16_t i = 265;
+	//bool sign = false;
 	
     while (1) {
-		//led3 :: Toggle();
 		if (GenTimerD0 :: checkUartAndSpi) {
 			ParseExtUart :: Parse();
 			ParseGPSUart :: Parse();
@@ -84,26 +83,26 @@ int main(void) {
 			AbsoluteBaro :: CheckForUpdates();
 			DiffBaro :: CheckForUpdates();
 			GenTimerD0 :: checkUartAndSpi = false;
-			
-			/*if (i >= 1225) {
+			/*
+			if (i >= 1180) {
 				sign = true;
-			} else if (i <= 265) {
+			} else if (i <= 290) {
 				sign = false;
 			}
 			
 			if (sign) {
-				i -= 5;
+				i -= 1;
 			} else {
-				i += 5;
-			}*/
-			//PwmTimer :: UpdateCCReg('A', i);
-			//PwmTimer :: UpdateCCReg('D', i);
+				i += 1;
+			}
+			PwmTimer :: UpdateCCReg('A', i);
+			PwmTimer :: UpdateCCReg('D', i);*/
 		}
 		
 		if (GenTimerD0 :: sendData) {
 			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
-			if (sign) {
+			/*if (sign) {
 				PwmTimer :: UpdateCCReg('A', 500);
 				PwmTimer :: UpdateCCReg('D', 500);
 				sign = false;
@@ -111,7 +110,7 @@ int main(void) {
 				PwmTimer :: UpdateCCReg('A', 300);
 				PwmTimer :: UpdateCCReg('D', 300);
 				sign = true;
-			}
+			}*/
 		}
 		
 	}

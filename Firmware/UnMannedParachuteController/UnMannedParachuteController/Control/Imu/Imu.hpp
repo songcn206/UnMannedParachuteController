@@ -93,7 +93,7 @@ class Imu {
 					} else {
 						discardedPackets++;
 					}
-				} 
+				}
 			} else {
 				System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 			}

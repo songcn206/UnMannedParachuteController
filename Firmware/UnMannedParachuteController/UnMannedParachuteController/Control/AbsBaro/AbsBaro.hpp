@@ -23,6 +23,7 @@ class AbsoluteBaro {
 	
 	public: 
 		static void CheckForUpdates() {
+			
 			System :: DisableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
 			if (AbsSpi :: GetState() == AbsSpi::SpiState::DataUpdated) {
 				memcpy(&data[0], (const void*)AbsSpi :: GetDataPointer(), sizeof(data));
@@ -40,6 +41,7 @@ class AbsoluteBaro {
 			} else {
 				System :: EnableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
 			}
+			
 		}
 		
 		static float GetPressure() {

@@ -133,7 +133,7 @@ class ParseGPSUart {
 	
 	public:
 		static void Parse() {
-			led2 :: Toggle();
+			//led2 :: Toggle();
 			while (GetDataSafe(runningPointer) != 0) {
 				uint8_t data = GetDataSafe(runningPointer);
 				parseBuffer[parseBufferPos] = data;
@@ -189,6 +189,7 @@ class ParseGPSUart {
 		}
 		
 		static void HandlePUBXCommand(uint8_t* bufferpointer, uint8_t parseBufferLen) {
+
 			uint8_t gpsDataStartArray[21] = {};
 			uint8_t gpsDataPosition = 0;
 			gpsDataStartArray[gpsDataPosition] = 0;
@@ -250,21 +251,22 @@ class ParseGPSUart {
 			//ExtUart :: SendString("\n");
 				
 			//dateTime = StringToFloat(tempDateTime, sizeof(tempDateTime), 6);
-			latitude = StringToFloat(tempLatitude, gpsDataStartArray[4] - 1 - latitudePos, 4);
-			longitude = StringToFloat(tempLongitude, gpsDataStartArray[6] - 1 - longitudePos, 5);
-			altitude = StringToFloat(tempAltitude, gpsDataStartArray[8] - 1 - altitudePos, altitudePointPos);
+			//latitude = StringToFloat(tempLatitude, gpsDataStartArray[4] - 1 - latitudePos, 4);
+			//longitude = StringToFloat(tempLongitude, gpsDataStartArray[6] - 1 - longitudePos, 5);
+			//altitude = StringToFloat(tempAltitude, gpsDataStartArray[8] - 1 - altitudePos, altitudePointPos);
 			gpsCount = StringToUint8(tempGpsCount, gpsDataStartArray[19] - 1 - gpsCountPos);
 			
 			
 			//latitude2 = StringToDouble(tempLatitude, sizeof(tempLatitude), 6);
 			
 			
-			/*
+			
 			latitude = atof(tempLatitude);
 			longitude = atof(tempLongitude);
 			altitude = atof(tempAltitude);
-			*/
+			
 			led1 :: Toggle();
+			
 			
 		}
 		
