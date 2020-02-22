@@ -81,27 +81,11 @@ int main(void) {
 			AbsoluteBaro :: CheckForUpdates();
 			DiffBaro :: CheckForUpdates();
 			GenTimerD0 :: checkUartAndSpi = false;
-				sign = true;
-			} else if (i <= 290) {
-				sign = false;
-			}
-			
-			if (sign) {
-				i -= 5;			} else {
 		}
 		
 		if (GenTimerD0 :: sendData) {
 			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
-			/*if (sign) {
-				PwmTimer :: UpdateCCReg('A', 500);
-				PwmTimer :: UpdateCCReg('D', 500);
-				sign = false;
-			} else {
-				PwmTimer :: UpdateCCReg('A', 300);
-				PwmTimer :: UpdateCCReg('D', 300);
-				sign = true;
-			}*/
 		}
 		
 	}
