@@ -40,18 +40,18 @@
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
-    <avrtool>com.atmel.avrdbg.tool.jtagice3plus</avrtool>
-    <avrtoolserialnumber>J30200013616</avrtoolserialnumber>
+    <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
+    <avrtoolserialnumber>J41800079210</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0x1E9842</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
-          <PdiClock>0</PdiClock>
+          <PdiClock>4000000</PdiClock>
         </InterfaceProperties>
         <InterfaceName>PDI</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber>J41800089031</ToolNumber>
+      <ToolNumber>J41800079210</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>PDI</avrtoolinterface>
@@ -59,7 +59,7 @@
     <com_atmel_avrdbg_tool_jtagice3plus>
       <ToolOptions>
         <InterfaceProperties>
-          <PdiClock>4000000</PdiClock>
+          <PdiClock>0</PdiClock>
         </InterfaceProperties>
         <InterfaceName>PDI</InterfaceName>
       </ToolOptions>
@@ -219,6 +219,12 @@
     <Compile Include="Control\Imu\Imu.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Control\Servos\Servos.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\Servos\Servos.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Control\StateMachine\StateMachine.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -318,6 +324,7 @@
     <Folder Include="Control\GPS" />
     <Folder Include="Control\AbsBaro" />
     <Folder Include="Control\DiffBaro" />
+    <Folder Include="Control\Servos" />
     <Folder Include="Control\StateMachine" />
     <Folder Include="HAL" />
     <Folder Include="HAL\DataPackets" />

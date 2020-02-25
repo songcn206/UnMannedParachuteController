@@ -14,6 +14,7 @@
 #include "HAL/Timers/GenericTimer/GenTimerD0.hpp"
 #include "HAL/Timers/GenericTimer/GenTimerE0.hpp"
 #include "HAL/DataPackets/DataPackets.hpp"
+#include "Control/Servos/Servos.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
@@ -44,6 +45,11 @@ class ParseExtUart {
 						HandleGetData();
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "cancel", sizeof("cancel"))) {
 						HandleCancelData();
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "left", sizeof("left"))) {
+						
+						HandleSetLeftMotorPosition(&parseBuffer[0], parseBufferPos);
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "right", sizeof("right"))) {
+						HandleSetRightMotorPosition(&parseBuffer[0], parseBufferPos);
 					}
 					
 					for (uint8_t i = 0; i < parseBufferPos; i++) {
@@ -84,7 +90,7 @@ class ParseExtUart {
 			if (bufferlength < commandLength - 1) {
 				return false;
 			}
-			for (uint8_t i = 0; i < bufferlength; i++) {
+			for (uint8_t i = 0; i < commandLength - 1; i++) {
 				if (*pointer != *command) {
 					return false;
 				}
@@ -110,6 +116,56 @@ class ParseExtUart {
 		
 		static void HandleCancelData() {
 			DataPackets :: CancelSavingData();
+		}
+		
+		static void HandleSetLeftMotorPosition(uint8_t* bufferpointer, uint8_t parseBufferLen) {
+			uint8_t len = 0;
+			
+			for (uint8_t i = 0; i < 100; i++) {
+				ExtUart :: SendByte(bufferpointer[i]);
+				if (bufferpointer[i] == terminatingChar) {
+					break;
+				}
+			}
+			while (bufferpointer[5 + len] != terminatingChar) {
+				len++;
+				if (len >= 4) {
+					break;
+				}
+			}
+			if (len <= 3 && len >= 0) {
+				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[5], len);
+				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+					Servos :: SetLeftMotorPosition(positionInDegrees);
+				}
+			}
+		}
+		
+		static void HandleSetRightMotorPosition(uint8_t* bufferpointer, uint8_t parseBufferLen) {
+			uint8_t len = 0;
+			while (bufferpointer[6 + len] != terminatingChar) {
+				len++;
+				if (len >= 4) {
+					break;
+				}
+			}
+			if (len <= 3 && len >= 0) {
+				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[6], len);
+				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+					Servos :: SetRightMotorPosition(positionInDegrees);
+				}
+			}
+		}
+
+		
+		static uint8_t StringToUint8(const char* pointer, uint8_t len) {
+			if (len == 3) {
+				return 100 * (pointer[0] - 0b00110000)  + 10 * (pointer[1] - 0b00110000) + (pointer[2] - 0b00110000);
+			} else if (len == 2) {
+				return 10 * (pointer[0] - 0b00110000) + (pointer[1] - 0b00110000);
+			} else {
+				return pointer[0] - 0b00110000;
+			}
 		}
 };
 
@@ -214,7 +270,7 @@ class ParseGPSUart {
 			char tempAltitude[7];
 			char tempGpsCount[2];
 			
-			uint8_t altitudePointPos = 0;
+			//uint8_t altitudePointPos = 0;
 			
 			//ExtUart :: SendString("[GPS]");
 			/*ExtUart :: SendString(" T ");
@@ -238,9 +294,9 @@ class ParseGPSUart {
 			for (uint8_t i = 0; i <  (gpsDataStartArray[8] - 1 - altitudePos); i++) {
 				//ExtUart :: SendByte((uint8_t)bufferpointer[altitudePos + i]);
 				tempAltitude[i] = bufferpointer[altitudePos + i];
-				if (bufferpointer[altitudePos + i] == '.') {
+				/*if (bufferpointer[altitudePos + i] == '.') {
 					altitudePointPos = i;
-				}
+				}*/
 			}
 			
 			//ExtUart :: SendString(" No ");
@@ -256,10 +312,7 @@ class ParseGPSUart {
 			//altitude = StringToFloat(tempAltitude, gpsDataStartArray[8] - 1 - altitudePos, altitudePointPos);
 			gpsCount = StringToUint8(tempGpsCount, gpsDataStartArray[19] - 1 - gpsCountPos);
 			
-			
 			//latitude2 = StringToDouble(tempLatitude, sizeof(tempLatitude), 6);
-			
-			
 			
 			latitude = atof(tempLatitude);
 			longitude = atof(tempLongitude);

@@ -57,7 +57,7 @@ void InitPins() {
 
 int main(void) {
 	System :: Init();
-	_delay_ms(1000);
+	//_delay_ms(1000);
 	InitPins();
 	ExtUart :: Init();
 	GpsUart :: Init();
@@ -75,6 +75,7 @@ int main(void) {
 	
     while (1) {
 		if (GenTimerD0 :: checkUartAndSpi) {
+			led2 :: Toggle();
 			ParseExtUart :: Parse();
 			ParseGPSUart :: Parse();
 			Imu :: CheckForUpdates();

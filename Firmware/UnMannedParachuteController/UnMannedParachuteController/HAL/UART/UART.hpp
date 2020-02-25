@@ -147,9 +147,15 @@ class Uart {
 			if (reciveArray[reciveArrayFreePos] != 0) {
 				System :: Halt("ExtRX Buffer overflow\n");
 			}
+			//SendString("\n");
+			//SendByte(data);
+			//SendString("\n");
 			
 			// Used because removing and attaching UART dongle generated unwanted data flow.
-			if (data == '\n' || (data > 96 && data < 123)) {
+			if (data == '\n' || data == 32 || (data > 96 && data < 123) || (data > 47 && data < 58)) {
+				//SendString("\n");
+				//SendByte(data);
+				//SendString("\n");
 				reciveArray[reciveArrayFreePos] = data;
 				if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
 					reciveArrayFreePos = 0;
