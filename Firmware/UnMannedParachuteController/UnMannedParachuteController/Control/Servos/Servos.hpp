@@ -17,6 +17,7 @@ class Servos {
 	public:
 	
 	private:
+		static constexpr uint8_t leftMotorOffset = 26; // Empirically tested
 	
 	public:
 		static void SetLeftMotorPosition(uint8_t degrees); 
@@ -24,6 +25,7 @@ class Servos {
 	
 	private:
 		static uint16_t CalculateTimerCompareMatch(uint8_t degrees);
+		static uint16_t CalculateTimerCompareMatch2(uint8_t degrees);
 };
 
 

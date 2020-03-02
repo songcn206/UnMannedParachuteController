@@ -61,6 +61,7 @@ int main(void) {
 	InitPins();
 	ExtUart :: Init();
 	GpsUart :: Init();
+	DebugUart :: Init();
 	PwmTimer :: Init();
 	GenTimerD0 :: Init();
 	GenTimerE0 :: Init();
@@ -71,7 +72,8 @@ int main(void) {
 	I2cDiffBaro :: Init();
 	
 	System :: EnableAllInterrupts();
-		
+	
+	bool side = false;
 	
     while (1) {
 		if (GenTimerD0 :: checkUartAndSpi) {
@@ -87,6 +89,17 @@ int main(void) {
 		if (GenTimerD0 :: sendData) {
 			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
+			/*if (side) {
+				Servos :: SetLeftMotorPosition(20);
+				Servos :: SetRightMotorPosition(160);
+				side = false;
+			} else {
+				Servos :: SetLeftMotorPosition(160);
+				Servos :: SetRightMotorPosition(20);
+				side = true;
+			}*/
+			
+			
 		}
 		
 	}

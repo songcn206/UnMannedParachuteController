@@ -262,13 +262,14 @@ struct GpsUartConf {
 	static constexpr uint8_t terminatingChar = '\n';
 };
 typedef Uart<GpsUartConf> GpsUart;
-/*
+
 struct DebugUartConf {
 	static constexpr uint32_t baudRate = 500000;
 	static constexpr USART_t* uart = &USARTC1;
 	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_OFF_gc;
-	static constexpr uint8_t rxArrayLength = 150;
+	static constexpr uint8_t rxArrayLength = 0;
 	static constexpr uint8_t terminatingChar = '\n';
-};*/
+};
+typedef Uart<DebugUartConf> DebugUart;
 
 #endif /* UART._H_ */

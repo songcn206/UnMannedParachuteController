@@ -46,10 +46,11 @@ class ParseExtUart {
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "cancel", sizeof("cancel"))) {
 						HandleCancelData();
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "left", sizeof("left"))) {
-						
 						HandleSetLeftMotorPosition(&parseBuffer[0], parseBufferPos);
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "right", sizeof("right"))) {
 						HandleSetRightMotorPosition(&parseBuffer[0], parseBufferPos);
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "both", sizeof("both"))) {
+						HandleSetBothMotorPosition(&parseBuffer[0], parseBufferPos);
 					}
 					
 					for (uint8_t i = 0; i < parseBufferPos; i++) {
@@ -121,12 +122,12 @@ class ParseExtUart {
 		static void HandleSetLeftMotorPosition(uint8_t* bufferpointer, uint8_t parseBufferLen) {
 			uint8_t len = 0;
 			
-			for (uint8_t i = 0; i < 100; i++) {
+			/*for (uint8_t i = 0; i < 100; i++) {
 				ExtUart :: SendByte(bufferpointer[i]);
 				if (bufferpointer[i] == terminatingChar) {
 					break;
 				}
-			}
+			}*/
 			while (bufferpointer[5 + len] != terminatingChar) {
 				len++;
 				if (len >= 4) {
@@ -152,6 +153,23 @@ class ParseExtUart {
 			if (len <= 3 && len >= 0) {
 				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[6], len);
 				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+					Servos :: SetRightMotorPosition(positionInDegrees);
+				}
+			}
+		}
+		
+		static void HandleSetBothMotorPosition(uint8_t* bufferpointer, uint8_t parseBufferLen) {
+			uint8_t len = 0;
+			while (bufferpointer[5 + len] != terminatingChar) {
+				len++;
+				if (len >= 4) {
+					break;
+				}
+			}
+			if (len <= 3 && len >= 0) {
+				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[5], len);
+				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+					Servos :: SetLeftMotorPosition(positionInDegrees);
 					Servos :: SetRightMotorPosition(positionInDegrees);
 				}
 			}
@@ -290,6 +308,7 @@ class ParseGPSUart {
 				//ExtUart :: SendByte((uint8_t)bufferpointer[longitudePos + i]);
 				tempLongitude[i] = bufferpointer[longitudePos + i];
 			}	
+			
 			//ExtUart :: SendString(" Alt ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[8] - 1 - altitudePos); i++) {
 				//ExtUart :: SendByte((uint8_t)bufferpointer[altitudePos + i]);
