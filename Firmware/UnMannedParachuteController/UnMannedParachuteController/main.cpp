@@ -87,7 +87,7 @@ int main(void) {
 		}
 		
 		if (GenTimerD0 :: sendData) {
-			//DataPackets :: SendOrSaveData();
+			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
 		}
 		Servos :: AutoControlMotors();

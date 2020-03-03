@@ -11,14 +11,23 @@
 uint8_t Servos :: leftMotorPosition = 255;
 uint8_t Servos :: rightMotorPosition = 255;
 
-void Servos :: SetLeftMotorPosition(uint8_t degrees) {
-	leftMotorPosition = degrees;
+void Servos :: SetLeftMotorPosition(int16_t degrees) {
+	leftMotorPosition = CheckDegrees(degrees);;
 	PwmTimer :: UpdateCCReg('A', CalculateTimerCompareMatch((180 - leftMotorPosition ) + CalculateLeftMotorError(180 - leftMotorPosition)));
 }
 
-void Servos :: SetRightMotorPosition(uint8_t degrees) {
-	rightMotorPosition = degrees;
+void Servos :: SetRightMotorPosition(int16_t degrees) {
+	rightMotorPosition = CheckDegrees(degrees);
 	PwmTimer :: UpdateCCReg('D', CalculateTimerCompareMatch(degrees));
+}
+
+uint8_t Servos :: CheckDegrees(int16_t value) {
+	if (value < 0) {
+		return 0;
+	} else if (value > 180) {
+		return 180;
+	}
+	return value;
 }
 
 uint16_t Servos :: CalculateTimerCompareMatch(uint8_t degrees) {
@@ -43,29 +52,12 @@ void Servos :: AutoControlMotors() {
 		SetRightMotorPosition(0);
 	} else {
 		int16_t accY = Imu :: GetAccXYZ()[1];
-		//ExtUart :: SendString("\n");
-		//ExtUart :: SendInt(accY);
-		//ExtUart :: SendString("\n");
-		if (accY > 0) {
-			SetRightMotorPosition(0);
-			SetLeftMotorPosition((uint8_t)GetPControllerDegrees(accY, false));
-		} else if (accY < 0) {
-			SetRightMotorPosition((uint8_t)GetPControllerDegrees(accY, true));
-			SetLeftMotorPosition(0);
-		}
+
+		SetRightMotorPosition(-PController(accY));
+		SetLeftMotorPosition(PController(accY));
 	}
 }
 
-uint8_t Servos :: GetPControllerDegrees(int16_t accY, bool inv) {
-	int16_t value;
-	if (inv) {
-		accY = accY * (-1);
-	}
-	value = accY / autoControlPConstant;
-	if (value < 0) {
-		value = 0;
-	} else if (value > 180) {
-		value = 180;
-	}
-	return value;
+int16_t Servos :: PController(int16_t accY) {
+	return accY * autoControlPConstant;
 }
