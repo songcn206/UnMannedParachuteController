@@ -17,15 +17,25 @@ class Servos {
 	public:
 	
 	private:
-		static constexpr uint8_t leftMotorOffset = 26; // Empirically tested
+		static constexpr uint8_t leftMotorZeroOffset = 39; 
+		static constexpr uint8_t leftMotorMaxOffset = 35;
+		static constexpr float autoControlPConstant = 5;
+		
+		static uint8_t leftMotorPosition;
+		static uint8_t rightMotorPosition;
 	
 	public:
 		static void SetLeftMotorPosition(uint8_t degrees); 
-		static void SetRightMotorPosition(uint8_t degrees); 
+		static void SetRightMotorPosition(uint8_t degrees);
+		static uint8_t GetRightMotorPosition();
+		static uint8_t GetLeftMotorPosition();
+		
+		static void AutoControlMotors();
 	
 	private:
 		static uint16_t CalculateTimerCompareMatch(uint8_t degrees);
-		static uint16_t CalculateTimerCompareMatch2(uint8_t degrees);
+		static float CalculateLeftMotorError(uint8_t degrees);
+		static uint8_t GetPControllerDegrees(int16_t accY, bool inv);
 };
 
 

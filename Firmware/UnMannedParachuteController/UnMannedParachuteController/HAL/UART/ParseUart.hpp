@@ -121,22 +121,16 @@ class ParseExtUart {
 		
 		static void HandleSetLeftMotorPosition(uint8_t* bufferpointer, uint8_t parseBufferLen) {
 			uint8_t len = 0;
-			
-			/*for (uint8_t i = 0; i < 100; i++) {
-				ExtUart :: SendByte(bufferpointer[i]);
-				if (bufferpointer[i] == terminatingChar) {
-					break;
-				}
-			}*/
 			while (bufferpointer[5 + len] != terminatingChar) {
 				len++;
 				if (len >= 4) {
 					break;
 				}
 			}
-			if (len <= 3 && len >= 0) {
-				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[5], len);
+			if (len <= 5 && len >= 0) {
+				uint16_t positionInDegrees = StringToUint16((const char*)&bufferpointer[5], len);
 				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+					//float degreesInFloat = positionInDegrees / 10;
 					Servos :: SetLeftMotorPosition(positionInDegrees);
 				}
 			}
@@ -178,6 +172,21 @@ class ParseExtUart {
 		
 		static uint8_t StringToUint8(const char* pointer, uint8_t len) {
 			if (len == 3) {
+				return 100 * (pointer[0] - 0b00110000)  + 10 * (pointer[1] - 0b00110000) + (pointer[2] - 0b00110000);
+			} else if (len == 2) {
+				return 10 * (pointer[0] - 0b00110000) + (pointer[1] - 0b00110000);
+			} else {
+				return pointer[0] - 0b00110000;
+			}
+		}
+		
+		static uint16_t StringToUint16(const char* pointer, uint8_t len) {
+			if (len == 5) {
+				return 10000 * (pointer[0] - 0b00110000) + 1000 * (pointer[1] - 0b00110000) 
+						+ 100 * (pointer[2] - 0b00110000)  + 10 * (pointer[3] - 0b00110000) + (pointer[4] - 0b00110000);
+			} else if (len == 4) {
+				return 1000 * (pointer[0] - 0b00110000) + 100 * (pointer[1] - 0b00110000)  + 10 * (pointer[2] - 0b00110000) + (pointer[3] - 0b00110000);
+			} else if (len == 3) {
 				return 100 * (pointer[0] - 0b00110000)  + 10 * (pointer[1] - 0b00110000) + (pointer[2] - 0b00110000);
 			} else if (len == 2) {
 				return 10 * (pointer[0] - 0b00110000) + (pointer[1] - 0b00110000);

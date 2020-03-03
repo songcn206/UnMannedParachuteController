@@ -24,6 +24,7 @@
 #include "HAL/I2C/I2C.hpp"
 #include "Control/DiffBaro/DiffBaro.hpp"
 #include "HAL/EEPROM/EEPROM.hpp"
+#include "Control/Servos/Servos.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -33,8 +34,8 @@ void InitPins() {
 	ExtUartRx :: SetPinConf();
 	GpsUartTx :: SetPinConf();
 	GpsUartRx :: SetPinConf();
-	//DebugUartTx :: SetPinConf();
-	//DebugUartRx :: SetPinConf();
+	DebugUartTx :: SetPinConf();
+	DebugUartRx :: SetPinConf();
 	Left2ServoPWM :: SetPinConf();
 	//Right2ServoPWM :: SetPinConf();
 	//Left1ServoPWM :: SetPinConf();
@@ -57,12 +58,13 @@ void InitPins() {
 
 int main(void) {
 	System :: Init();
-	//_delay_ms(1000);
+	PwmTimer :: Init();
 	InitPins();
+	_delay_ms(1000);
 	ExtUart :: Init();
 	GpsUart :: Init();
 	DebugUart :: Init();
-	PwmTimer :: Init();
+	
 	GenTimerD0 :: Init();
 	GenTimerE0 :: Init();
 	ExtUart :: SendString("START!\n");
@@ -72,9 +74,7 @@ int main(void) {
 	I2cDiffBaro :: Init();
 	
 	System :: EnableAllInterrupts();
-	
-	bool side = false;
-	
+
     while (1) {
 		if (GenTimerD0 :: checkUartAndSpi) {
 			led2 :: Toggle();
@@ -87,21 +87,10 @@ int main(void) {
 		}
 		
 		if (GenTimerD0 :: sendData) {
-			DataPackets :: SendOrSaveData();
+			//DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
-			/*if (side) {
-				Servos :: SetLeftMotorPosition(20);
-				Servos :: SetRightMotorPosition(160);
-				side = false;
-			} else {
-				Servos :: SetLeftMotorPosition(160);
-				Servos :: SetRightMotorPosition(20);
-				side = true;
-			}*/
-			
-			
 		}
-		
+		Servos :: AutoControlMotors();
 	}
 }
 

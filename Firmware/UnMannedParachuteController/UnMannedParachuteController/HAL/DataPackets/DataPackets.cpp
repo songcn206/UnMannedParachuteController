@@ -7,6 +7,7 @@
 
 #include "DataPackets.hpp"
 #include "HAL/UART/ParseUart.hpp"
+#include "Control/Servos/Servos.hpp"
 
 uint16_t DataPackets :: datapointer = 0;
 DataPackets :: SavedData DataPackets :: savedData[1];
@@ -46,6 +47,10 @@ void DataPackets :: SendStatus() {
 	ExtUart :: SendFloat(AbsoluteBaro :: GetPressure());
 	ExtUart :: SendString(" DPr ");
 	ExtUart :: SendInt(DiffBaro :: GetPressure());
+	ExtUart :: SendString(" RM ");
+	ExtUart :: SendUInt(Servos :: GetRightMotorPosition());
+	ExtUart :: SendString(" LM ");
+	ExtUart :: SendUInt(Servos :: GetLeftMotorPosition());
 	ExtUart :: SendString("\n");
 }
 

@@ -16,7 +16,7 @@ class GenTimerE0 {
 	public:
 		static constexpr uint16_t preScaler = 1024;
 		
-		static constexpr float compareMatchAValue_ms = 100.0f;
+		static constexpr float compareMatchAValue_ms = 100.0f; // Absolute Barometer
 		//static constexpr float compareMatchBValue_ms = 100.0f;
 		//static constexpr float compareMatchCValue_ms = 100.0f;
 		//static constexpr float compareMatchDValue_ms = 50.0f;
