@@ -294,6 +294,12 @@
     <Compile Include="HAL\Timers\GenericTimer\GenTimerE0.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\TickTimer.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\TickTimer.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HAL\Timers\PWMTimer\PWMTimer.cpp">
       <SubType>compile</SubType>
     </Compile>

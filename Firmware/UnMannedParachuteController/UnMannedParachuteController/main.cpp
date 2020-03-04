@@ -8,7 +8,6 @@
 
 #include <avr/io.h>
 
-
 #include "HAL/System/System.hpp"
 #include "HAL/System/Pins.hpp"
 #include "HAL/UART/UART.hpp"
@@ -25,6 +24,7 @@
 #include "Control/DiffBaro/DiffBaro.hpp"
 #include "HAL/EEPROM/EEPROM.hpp"
 #include "Control/Servos/Servos.hpp"
+#include "HAL/Timers/GenericTimer/TickTimer.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -67,6 +67,7 @@ int main(void) {
 	
 	GenTimerD0 :: Init();
 	GenTimerE0 :: Init();
+	TickTimer :: Init();
 	ExtUart :: SendString("START!\n");
 	Sonar :: Init();
 	AbsSpi :: Init();
@@ -84,13 +85,20 @@ int main(void) {
 			AbsoluteBaro :: CheckForUpdates();
 			DiffBaro :: CheckForUpdates();
 			GenTimerD0 :: checkUartAndSpi = false;
+			
 		}
 		
 		if (GenTimerD0 :: sendData) {
 			DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
 		}
-		Servos :: AutoControlMotors();
+		
+		if (Servos :: GetAutoControlMotors()) {
+			Servos :: AutoControlMotors();
+			ExtUart :: SendString("\n");
+			ExtUart :: SendUInt((uint16_t)TickTimer :: GetTicks());
+			ExtUart :: SendString("\n");
+		}
 	}
 }
 

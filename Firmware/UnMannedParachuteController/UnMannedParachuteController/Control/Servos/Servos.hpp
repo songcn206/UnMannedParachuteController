@@ -23,6 +23,7 @@ class Servos {
 		
 		static uint8_t leftMotorPosition;
 		static uint8_t rightMotorPosition;
+		static bool autoControlMotors;
 	
 	public:
 		static void SetLeftMotorPosition(int16_t degrees); 
@@ -31,11 +32,14 @@ class Servos {
 		static uint8_t GetLeftMotorPosition();
 		
 		static void AutoControlMotors();
+		static void SetAutoControlMotors(bool b);
+		static bool GetAutoControlMotors();
 	
 	private:
 		static uint16_t CalculateTimerCompareMatch(uint8_t degrees);
 		static float CalculateLeftMotorError(uint8_t degrees);
 		static int16_t PController(int16_t accY);
+		static int16_t PIDController(int16_t accY);
 
 		static uint8_t CheckDegrees(int16_t value);
 

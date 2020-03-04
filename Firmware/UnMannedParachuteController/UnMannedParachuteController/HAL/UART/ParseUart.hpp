@@ -51,6 +51,11 @@ class ParseExtUart {
 						HandleSetRightMotorPosition(&parseBuffer[0], parseBufferPos);
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "both", sizeof("both"))) {
 						HandleSetBothMotorPosition(&parseBuffer[0], parseBufferPos);
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "autoon", sizeof("autoon"))) {
+						HandleAutoOn();
+						led3 :: Toggle();
+					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "autooff", sizeof("autooff"))) {
+						HandleAutoOff();
 					}
 					
 					for (uint8_t i = 0; i < parseBufferPos; i++) {
@@ -167,6 +172,14 @@ class ParseExtUart {
 					Servos :: SetRightMotorPosition(positionInDegrees);
 				}
 			}
+		}
+		
+		static void HandleAutoOn() {
+			Servos :: SetAutoControlMotors(true);
+		}
+		
+		static void HandleAutoOff() {
+			Servos :: SetAutoControlMotors(false);
 		}
 
 		

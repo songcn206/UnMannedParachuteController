@@ -10,15 +10,16 @@
 
 uint8_t Servos :: leftMotorPosition = 255;
 uint8_t Servos :: rightMotorPosition = 255;
+bool Servos :: autoControlMotors =  true;
 
 void Servos :: SetLeftMotorPosition(int16_t degrees) {
-	leftMotorPosition = CheckDegrees(degrees);;
+	leftMotorPosition = CheckDegrees(degrees);
 	PwmTimer :: UpdateCCReg('A', CalculateTimerCompareMatch((180 - leftMotorPosition ) + CalculateLeftMotorError(180 - leftMotorPosition)));
 }
 
 void Servos :: SetRightMotorPosition(int16_t degrees) {
 	rightMotorPosition = CheckDegrees(degrees);
-	PwmTimer :: UpdateCCReg('D', CalculateTimerCompareMatch(degrees));
+	PwmTimer :: UpdateCCReg('D', CalculateTimerCompareMatch(rightMotorPosition));
 }
 
 uint8_t Servos :: CheckDegrees(int16_t value) {
@@ -52,12 +53,24 @@ void Servos :: AutoControlMotors() {
 		SetRightMotorPosition(0);
 	} else {
 		int16_t accY = Imu :: GetAccXYZ()[1];
-
+		int16_t value = PController(accY);
 		SetRightMotorPosition(-PController(accY));
 		SetLeftMotorPosition(PController(accY));
 	}
 }
 
+void Servos :: SetAutoControlMotors(bool b) {
+	autoControlMotors = b;
+}
+
+bool Servos :: GetAutoControlMotors() {
+	return autoControlMotors;
+}
+
 int16_t Servos :: PController(int16_t accY) {
 	return accY * autoControlPConstant;
+}
+
+int16_t Servos :: PIDController(int16_t accY) {
+	
 }
