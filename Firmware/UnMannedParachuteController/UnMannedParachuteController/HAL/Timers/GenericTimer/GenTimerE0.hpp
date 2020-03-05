@@ -17,21 +17,23 @@ class GenTimerE0 {
 		static constexpr uint16_t preScaler = 1024;
 		
 		static constexpr float compareMatchAValue_ms = 100.0f; // Absolute Barometer
-		//static constexpr float compareMatchBValue_ms = 100.0f;
+		static constexpr float compareMatchBValue_ms = 100.0f; // Auto Control 
 		//static constexpr float compareMatchCValue_ms = 100.0f;
 		//static constexpr float compareMatchDValue_ms = 50.0f;
 		
 		static volatile constexpr uint16_t compareMatchAValue = System :: CPU_CLOCK / preScaler * (compareMatchAValue_ms / 1000);
-		//static volatile constexpr uint16_t compareMatchBValue = System :: CPU_CLOCK / preScaler * (compareMatchBValue_ms / 1000);
+		static volatile constexpr uint16_t compareMatchBValue = System :: CPU_CLOCK / preScaler * (compareMatchBValue_ms / 1000);
 		//static volatile constexpr uint16_t compareMatchCValue = System :: CPU_CLOCK / preScaler * (compareMatchCValue_ms / 1000);
 		//static volatile constexpr uint16_t compareMatchDValue = System :: CPU_CLOCK / preScaler * (compareMatchDValue_ms / 1000);
 
+		static volatile bool autoControl;
+		
 	public:
 		static void Init();
 		
 		static void CompareMatchAHandler();
 		
-		//static void CompareMatchBHandler();
+		static void CompareMatchBHandler();
 		
 		//static void CompareMatchCHandler();
 		

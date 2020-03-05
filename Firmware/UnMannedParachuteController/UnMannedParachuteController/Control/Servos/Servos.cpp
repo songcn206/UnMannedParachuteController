@@ -12,13 +12,19 @@ uint8_t Servos :: leftMotorPosition = 255;
 uint8_t Servos :: rightMotorPosition = 255;
 bool Servos :: autoControlMotors =  true;
 
-void Servos :: SetLeftMotorPosition(int16_t degrees) {
-	leftMotorPosition = CheckDegrees(degrees);
+uint32_t Servos :: previousTime = 0;
+int16_t Servos :: previousAccY = 0;
+int32_t Servos :: globalIntegral = 0;
+
+void Servos :: SetLeftMotorPosition(int16_t len) {
+	//leftMotorPosition = CheckDegrees(degrees);
+	leftMotorPosition = LengthToAngle(len);
 	PwmTimer :: UpdateCCReg('A', CalculateTimerCompareMatch((180 - leftMotorPosition ) + CalculateLeftMotorError(180 - leftMotorPosition)));
 }
 
-void Servos :: SetRightMotorPosition(int16_t degrees) {
-	rightMotorPosition = CheckDegrees(degrees);
+void Servos :: SetRightMotorPosition(int16_t len) {
+	//rightMotorPosition = CheckDegrees(degrees);
+	rightMotorPosition = LengthToAngle(len);
 	PwmTimer :: UpdateCCReg('D', CalculateTimerCompareMatch(rightMotorPosition));
 }
 
@@ -48,14 +54,15 @@ uint8_t Servos :: GetRightMotorPosition() {
 }
 
 void Servos :: AutoControlMotors() {
-	if (Imu :: GetAccXYZ()[0] > 100) {
+	if (Imu :: GetAccXYZ()[0] > 1000) {
 		SetLeftMotorPosition(0);
 		SetRightMotorPosition(0);
 	} else {
 		int16_t accY = Imu :: GetAccXYZ()[1];
-		int16_t value = PController(accY);
-		SetRightMotorPosition(-PController(accY));
-		SetLeftMotorPosition(PController(accY));
+		//int16_t controllerValue = PController(accY);
+		int16_t controllerValue = PIDController(accY);
+		SetRightMotorPosition(-controllerValue);
+		SetLeftMotorPosition(controllerValue);
 	}
 }
 
@@ -72,5 +79,36 @@ int16_t Servos :: PController(int16_t accY) {
 }
 
 int16_t Servos :: PIDController(int16_t accY) {
+	uint32_t currentTime;
+	uint16_t timeDifference;
+	int16_t accYDifference;
+	static float derivative;
+	int16_t returnValue;
 	
+	// Calculating integral
+	currentTime = TickTimer :: GetTicks();
+	timeDifference = (currentTime - previousTime) / 10;
+	previousTime = currentTime;
+	int16_t integral = timeDifference * accY;
+	globalIntegral += integral;
+	
+	// Calculating derivative
+	accYDifference = accY - previousAccY;
+	previousAccY = accY;
+	derivative = accYDifference / timeDifference;
+	
+	returnValue = PidPValue * accY + PidIValue * globalIntegral + PidDValue * derivative;
+	globalIntegral *= PidIDegrade;
+	
+	return returnValue;
+}
+
+int16_t Servos :: LengthToAngle(int16_t len) {
+	if (len < 0) {
+		return 0;
+	} else if (len > (2 * Servos :: triangleSide_mm)) {
+		return 180;
+	}
+
+	return 57.29577f * acos((2 * pow(triangleSide_mm, 2) - pow(len, 2)) / (2 * pow(triangleSide_mm, 2)));
 }

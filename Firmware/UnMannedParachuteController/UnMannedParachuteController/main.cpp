@@ -93,11 +93,12 @@ int main(void) {
 			GenTimerD0 :: sendData = false;
 		}
 		
-		if (Servos :: GetAutoControlMotors()) {
+		if (Servos :: GetAutoControlMotors() && GenTimerE0 :: autoControl) {
 			Servos :: AutoControlMotors();
-			ExtUart :: SendString("\n");
-			ExtUart :: SendUInt((uint16_t)TickTimer :: GetTicks());
-			ExtUart :: SendString("\n");
+			//ExtUart :: SendString("\n");
+			//ExtUart :: SendUInt((uint16_t)TickTimer :: GetTicks());
+			//ExtUart :: SendString("\n");
+			GenTimerE0 :: autoControl = false;
 		}
 	}
 }

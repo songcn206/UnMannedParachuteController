@@ -17,7 +17,7 @@ class TickTimer {
 	
 	private:
 		static constexpr uint16_t preScaler = 1;
-		static uint32_t ticks;
+		static volatile uint32_t ticks;
 	
 	public:
 		static void Init();	

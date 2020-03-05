@@ -101,8 +101,8 @@ class Uart {
 		static void SendFloat(float value) {
 			/*char buff[20] = {0};
 			sprintf(buff, "%f", (double)value);
-			SendString(buff);*/
-			
+			SendString(buff);
+			*/
 			
 			uint16_t beforePoint = value;
 			SendUInt(beforePoint);

@@ -134,7 +134,7 @@ class ParseExtUart {
 			}
 			if (len <= 5 && len >= 0) {
 				uint16_t positionInDegrees = StringToUint16((const char*)&bufferpointer[5], len);
-				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+				if (positionInDegrees >= 0 && positionInDegrees <= 150) {
 					//float degreesInFloat = positionInDegrees / 10;
 					Servos :: SetLeftMotorPosition(positionInDegrees);
 				}
@@ -151,7 +151,7 @@ class ParseExtUart {
 			}
 			if (len <= 3 && len >= 0) {
 				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[6], len);
-				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+				if (positionInDegrees >= 0 && positionInDegrees <= 150) {
 					Servos :: SetRightMotorPosition(positionInDegrees);
 				}
 			}
@@ -167,7 +167,7 @@ class ParseExtUart {
 			}
 			if (len <= 3 && len >= 0) {
 				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[5], len);
-				if (positionInDegrees >= 0 && positionInDegrees <= 180) {
+				if (positionInDegrees >= 0 && positionInDegrees <= 150) {
 					Servos :: SetLeftMotorPosition(positionInDegrees);
 					Servos :: SetRightMotorPosition(positionInDegrees);
 				}

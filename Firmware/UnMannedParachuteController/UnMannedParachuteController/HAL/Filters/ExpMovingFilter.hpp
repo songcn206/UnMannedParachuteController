@@ -36,15 +36,15 @@ template <typename conf, typename T>
 bool ExpMovingFilter<conf, T> :: firstvalue = true;
 */
 struct AccConf {
-	static constexpr float alpha = 0.2f;
+	static constexpr float alpha = 0.1f;
 }; 
 
 struct GyroConf {
-	static constexpr float alpha = 0.2f;
+	static constexpr float alpha = 0.1f;
 };
 
 struct MagConf {
-	static constexpr float alpha = 0.2f;
+	static constexpr float alpha = 0.1f;
 };
 
 

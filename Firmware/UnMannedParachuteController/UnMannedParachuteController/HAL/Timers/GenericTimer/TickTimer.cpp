@@ -6,7 +6,7 @@
  */ 
 #include "TickTimer.hpp"
 
-uint32_t TickTimer :: ticks = 0;
+uint32_t volatile TickTimer :: ticks = 0;
 
 ISR (TCF0_CCA_vect) {
 	TickTimer :: InterruptHandler();
@@ -25,5 +25,8 @@ void TickTimer :: InterruptHandler() {
 }
 
 uint32_t TickTimer :: GetTicks() {
-	return ticks;
+	System :: DisableInterruptsByPriority(System::IntLevel::High);
+	uint32_t tempTicks = ticks;
+	System :: EnableInterruptsByPriority(System::IntLevel::High);
+	return tempTicks;
 }
