@@ -95,9 +95,6 @@ int main(void) {
 		
 		if (Servos :: GetAutoControlMotors() && GenTimerE0 :: autoControl) {
 			Servos :: AutoControlMotors();
-			//ExtUart :: SendString("\n");
-			//ExtUart :: SendUInt((uint16_t)TickTimer :: GetTicks());
-			//ExtUart :: SendString("\n");
 			GenTimerE0 :: autoControl = false;
 		}
 	}

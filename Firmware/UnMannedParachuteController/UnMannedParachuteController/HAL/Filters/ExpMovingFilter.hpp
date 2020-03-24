@@ -18,7 +18,6 @@ class ExpMovingFilter {
 	
 	public:
 		T UpdateAndReturn(T value) {
-			//accumulator = (alpha * new_value) + (1.0 - alpha) * accumulator
 			if (firstvalue) {
 				average = value;
 				firstvalue = false;
@@ -28,13 +27,7 @@ class ExpMovingFilter {
 			return average;
 		}
 };
-/*
-template <typename conf, typename T>
-uint16_t ExpMovingFilter<conf, T> :: average;
 
-template <typename conf, typename T>
-bool ExpMovingFilter<conf, T> :: firstvalue = true;
-*/
 struct AccConf {
 	static constexpr float alpha = 0.1f;
 }; 

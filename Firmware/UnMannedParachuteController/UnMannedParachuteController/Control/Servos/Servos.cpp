@@ -54,7 +54,7 @@ uint8_t Servos :: GetRightMotorPosition() {
 }
 
 void Servos :: AutoControlMotors() {
-	if (Imu :: GetAccXYZ()[0] > 1000) {
+	if (Imu :: GetAccXYZ()[0] > 100) {
 		SetLeftMotorPosition(0);
 		SetRightMotorPosition(0);
 	} else {
