@@ -6,3 +6,6 @@
 5) EEPROM +
 6) Battery charger +
 7) GPS 3v3 diood +
+
+
+lisada pin header, et lahti ühendada powerOn enable signaal 5V dc-dcle
