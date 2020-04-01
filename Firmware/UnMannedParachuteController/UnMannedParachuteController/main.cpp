@@ -6,15 +6,7 @@
  */ 
 
 
-// ===================================================
-// 1) Kas praegune viis kuidas kontrollitakse uartrx täituvust on okei, just katkestuste värk?
-// 2) Kuidas toimetada IMU-st tulevate andmetega nii, et uuendamine ja nende küsimine ei teeks andmeid katki
-// 3) IMU magnetomeeter
-// ====================================================
-
-
 #include <avr/io.h>
-
 
 #include "HAL/System/System.hpp"
 #include "HAL/System/Pins.hpp"
@@ -24,6 +16,15 @@
 #include "HAL/Timers/PWMTimer/PWMTimer.hpp"
 #include "HAL/Timers/GenericTimer/GenTimerD0.hpp"
 #include "HAL/SPI/ImuSPI.hpp"
+#include "HAL/DataPackets/DataPackets.hpp"
+#include "HAL/ADC/ADC.hpp"
+#include "HAL/SPI/AbsSpi.hpp"
+#include "Control/AbsBaro/AbsBaro.hpp"
+#include "HAL/I2C/I2C.hpp"
+#include "Control/DiffBaro/DiffBaro.hpp"
+#include "HAL/EEPROM/EEPROM.hpp"
+#include "Control/Servos/Servos.hpp"
+#include "HAL/Timers/GenericTimer/TickTimer.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -33,44 +34,69 @@ void InitPins() {
 	ExtUartRx :: SetPinConf();
 	GpsUartTx :: SetPinConf();
 	GpsUartRx :: SetPinConf();
-	//DebugUartTx :: SetPinConf();
-	//DebugUartRx :: SetPinConf();
+	DebugUartTx :: SetPinConf();
+	DebugUartRx :: SetPinConf();
 	Left2ServoPWM :: SetPinConf();
 	//Right2ServoPWM :: SetPinConf();
 	//Left1ServoPWM :: SetPinConf();
 	Right1ServoPWM :: SetPinConf();
-	//AbsBaroCS :: SetPinConf();
-	//AbsBaroMOSI :: SetPinConf();
-	//AbsBaroMISO :: SetPinConf();
-	//AbsBaroCK :: SetPinConf();
+	AbsBaroCS :: SetPinConf();
+	AbsBaroMOSI :: SetPinConf();
+	AbsBaroMISO :: SetPinConf();
+	AbsBaroCK :: SetPinConf();
 	ImuCS :: SetPinConf();
 	ImuMOSI :: SetPinConf();
-	//ImuMISO :: SetPinConf();
+	ImuMISO :: SetPinConf();
 	ImuCK :: SetPinConf();
-	//DiffBaroSDA :: SetPinConf();
-	//DiffBaroSCL :: SetPinConf();
+	DiffBaroSDA :: SetPinConf();
+	DiffBaroSCL :: SetPinConf();
 	//AbsBaroInt :: SetPinConf();
 	ImuInt :: SetPinConf();
 	//ImuInt :: ConfigInterrupt();
-	//SonarIn :: SetPinConf();
+	SonarIn :: SetPinConf();
 }
 
 int main(void) {
 	System :: Init();
+	PwmTimer :: Init();
 	InitPins();
+	_delay_ms(1000);
 	ExtUart :: Init();
 	GpsUart :: Init();
-	PwmTimer :: Init();
+	DebugUart :: Init();
+	
 	GenTimerD0 :: Init();
+	GenTimerE0 :: Init();
+	TickTimer :: Init();
 	ExtUart :: SendString("START!\n");
-
+	Sonar :: Init();
+	AbsSpi :: Init();
 	ImuSpi :: Init();
+	I2cDiffBaro :: Init();
 	
 	System :: EnableAllInterrupts();
-	
+
     while (1) {
-		led3 :: Toggle();
-		_delay_ms(50);
+		if (GenTimerD0 :: checkUartAndSpi) {
+			led2 :: Toggle();
+			ParseExtUart :: Parse();
+			ParseGPSUart :: Parse();
+			Imu :: CheckForUpdates();
+			AbsoluteBaro :: CheckForUpdates();
+			DiffBaro :: CheckForUpdates();
+			GenTimerD0 :: checkUartAndSpi = false;
+			
+		}
+		
+		if (GenTimerD0 :: sendData) {
+			DataPackets :: SendOrSaveData();
+			GenTimerD0 :: sendData = false;
+		}
+		
+		if (Servos :: GetAutoControlMotors() && GenTimerE0 :: autoControl) {
+			Servos :: AutoControlMotors();
+			GenTimerE0 :: autoControl = false;
+		}
     }
 }
 

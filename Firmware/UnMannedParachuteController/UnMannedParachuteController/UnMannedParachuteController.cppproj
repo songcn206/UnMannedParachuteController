@@ -41,7 +41,7 @@
 </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
-    <avrtoolserialnumber>J41800079136</avrtoolserialnumber>
+    <avrtoolserialnumber>J41800079210</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0x1E9842</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
@@ -51,11 +51,33 @@
         <InterfaceName>PDI</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber>J41800079136</ToolNumber>
+      <ToolNumber>J41800079210</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>PDI</avrtoolinterface>
     <avrtoolinterfaceclock>4000000</avrtoolinterfaceclock>
+    <com_atmel_avrdbg_tool_jtagice3plus>
+      <ToolOptions>
+        <InterfaceProperties>
+          <PdiClock>0</PdiClock>
+        </InterfaceProperties>
+        <InterfaceName>PDI</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.jtagice3plus</ToolType>
+      <ToolNumber>J30200013616</ToolNumber>
+      <ToolName>JTAGICE3</ToolName>
+    </com_atmel_avrdbg_tool_jtagice3plus>
+    <com_atmel_avrdbg_tool_simulator>
+      <ToolOptions>
+        <InterfaceProperties>
+        </InterfaceProperties>
+        <InterfaceName>PDI</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolNumber>
+      </ToolNumber>
+      <ToolName>Simulator</ToolName>
+    </com_atmel_avrdbg_tool_simulator>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -114,7 +136,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGccCpp>
-  <avrgcc.common.Device>-mmcu=atxmega256a3u -B "%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.63\gcc\dev\atxmega256a3u"</avrgcc.common.Device>
+  <avrgcc.common.Device>-mmcu=atxmega256a3u -B "%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.68\gcc\dev\atxmega256a3u"</avrgcc.common.Device>
   <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
   <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
@@ -129,7 +151,7 @@
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
-      <Value>%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.63\include</Value>
+      <Value>%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.68\include</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
@@ -146,24 +168,27 @@
   </avrgcccpp.compiler.symbols.DefSymbols>
   <avrgcccpp.compiler.directories.IncludePaths>
     <ListValues>
+      <Value>%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.68\include</Value>
       <Value>..</Value>
-      <Value>%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.63\include</Value>
     </ListValues>
   </avrgcccpp.compiler.directories.IncludePaths>
-        <avrgcccpp.compiler.optimization.level>Optimize for size (-Os)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.level>Optimize most (-O3)</avrgcccpp.compiler.optimization.level>
   <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
   <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
   <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
   <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
   <avrgcccpp.compiler.miscellaneous.OtherFlags>-std=c++17</avrgcccpp.compiler.miscellaneous.OtherFlags>
+  <avrgcccpp.linker.general.UseVprintfLibrary>True</avrgcccpp.linker.general.UseVprintfLibrary>
   <avrgcccpp.linker.libraries.Libraries>
     <ListValues>
       <Value>libm</Value>
+      <Value>libm.a</Value>
     </ListValues>
   </avrgcccpp.linker.libraries.Libraries>
+  <avrgcccpp.linker.miscellaneous.LinkerFlags>-lprintf_flt</avrgcccpp.linker.miscellaneous.LinkerFlags>
   <avrgcccpp.assembler.general.IncludePaths>
     <ListValues>
-      <Value>%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.63\include</Value>
+      <Value>%24(PackRepoDir)\atmel\XMEGAA_DFP\1.1.68\include</Value>
     </ListValues>
   </avrgcccpp.assembler.general.IncludePaths>
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
@@ -171,16 +196,73 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Control\AbsBaro\AbsBaro.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\AbsBaro\AbsBaro.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\DiffBaro\DiffBaro.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\DiffBaro\DiffBaro.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\GPS\Gps.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\GPS\Gps.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Control\Imu\Imu.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Control\Imu\Imu.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Control\Servos\Servos.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Control\Servos\Servos.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Control\StateMachine\StateMachine.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Control\StateMachine\StateMachine.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\ADC\ADC.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\ADC\ADC.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\DataPackets\DataPackets.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\DataPackets\DataPackets.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\EEPROM\EEPROM.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Filters\ExpMovingFilter.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Filters\MovingAverageFilter.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\I2C\I2C.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\I2C\I2C.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\SPI\AbsSpi.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\SPI\AbsSpi.hpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\SPI\ImuSPI.cpp">
@@ -207,6 +289,18 @@
     <Compile Include="HAL\Timers\GenericTimer\GenTimerD0.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\GenTimerE0.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\GenTimerE0.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\TickTimer.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\Timers\GenericTimer\TickTimer.hpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HAL\Timers\PWMTimer\PWMTimer.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -214,6 +308,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\Timers\Timers.hpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HAL\UART\ParseUart.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\UART\ParseUart.hpp">
@@ -231,8 +328,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Control\Imu" />
+    <Folder Include="Control\GPS" />
+    <Folder Include="Control\AbsBaro" />
+    <Folder Include="Control\DiffBaro" />
+    <Folder Include="Control\Servos" />
     <Folder Include="Control\StateMachine" />
     <Folder Include="HAL" />
+    <Folder Include="HAL\DataPackets" />
+    <Folder Include="HAL\ADC" />
+    <Folder Include="HAL\I2C" />
+    <Folder Include="HAL\Filters" />
+    <Folder Include="HAL\EEPROM" />
     <Folder Include="HAL\SPI" />
     <Folder Include="HAL\Timers" />
     <Folder Include="HAL\Timers\GenericTimer" />

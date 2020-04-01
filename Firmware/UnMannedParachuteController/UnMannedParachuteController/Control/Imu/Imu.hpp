@@ -8,14 +8,40 @@
 
 #ifndef IMU_HPP_
 #define IMU_HPP_
-#include "HAL/SPI/ImuSPI.hpp"
 
+#include "HAL/SPI/ImuSPI.hpp"
+#include "HAL/Filters/ExpMovingFilter.hpp"
+
+#include <stdio.h>
+#include <string.h>
 
 class Imu {
-	public:
+	private:
+		static constexpr uint8_t allowedFalsePackets = 5;
+		static uint8_t discardedPackets;
+		
 		static int16_t acc[3];
 		static int16_t gyro[3];
 		static int16_t mag[3];
+		
+		static uint8_t rawData[18];
+		static uint8_t dataPointer;
+		
+		typedef ExpMovingFilter<AccConf, int16_t> AccFilter;
+		typedef ExpMovingFilter<GyroConf, int16_t> GyroFilter;
+		typedef ExpMovingFilter<MagConf, int16_t> MagFilter;
+		
+		static AccFilter AccXFilter;
+		static AccFilter AccYFilter;
+		static AccFilter AccZFilter;
+		
+		static GyroFilter GyroXFilter;
+		static GyroFilter GyroYFilter;
+		static GyroFilter GyroZFilter;
+		
+		static MagFilter MagXFilter;
+		static MagFilter MagYFilter;
+		static MagFilter MagZFilter;
 		
 	public:
 		static int16_t* GetAccXYZ() {
@@ -31,33 +57,46 @@ class Imu {
 		}
 		
 		static void CheckForUpdates() {
-			//ExtUart :: SendString("CheckUpdates\n");
 			System :: DisableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 			if (ImuSpi :: GetState() == ImuSpi::SpiState::DataUpdated) {
-				volatile uint8_t* pointer = ImuSpi :: GetData();
-				uint8_t highByte;
-				uint8_t lowByte;
-				for (uint8_t i = 0; i < 3; i++) {
-					highByte = *pointer;
-					lowByte = *(pointer+1);
-					acc[i] = (highByte << 8) | lowByte;
-					pointer += 2;
-				}
-				for (uint8_t i = 0; i < 3; i++) {
-					highByte = *pointer;
-					lowByte = *(pointer+1);
-					gyro[i] = (highByte << 8) | lowByte;
-					pointer += 2;
-				}
-				for (uint8_t i = 0; i < 3; i++) {
-					lowByte = *pointer;
-					highByte = *(pointer+1);
-					mag[i] = (highByte << 8) | lowByte;
-					pointer += 2;
-				}
+				memcpy(&rawData[0], (const void*)ImuSpi :: GetData(), sizeof(rawData));
+				System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
+								
+				acc[0] = AccXFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				acc[1] = AccYFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				acc[2] = AccZFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				
+				gyro[0] = GyroXFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				gyro[1] = GyroYFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				gyro[2] = GyroZFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				
+				mag[0] = MagXFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				mag[1] = MagYFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+				mag[2] = MagZFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
+				dataPointer += 2;
+	
+				dataPointer = 0;
 				ImuSpi :: DataTransferCompleted();
+				if (mag[0] == 0 && mag[1] == 0 && mag[2] == 0) {
+					if (allowedFalsePackets <= discardedPackets) {
+						ImuSpi :: InitConnection();
+						discardedPackets = 0;
+						//led2 :: Toggle();
+					} else {
+						discardedPackets++;
+					}
+				}
+			} else {
+				System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 			}
-			System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 		}
 };
 

@@ -8,5 +8,10 @@
 #include "UART.hpp"
 
 ISR(USARTF0_RXC_vect) {
-	ExtUart :: RxInterruptHandler();
+	ExtUart :: ExtRxInterruptHandler();
+}
+
+ISR(USARTD0_RXC_vect) {
+	
+	GpsUart :: GPSRxInterruptHandler();	
 }

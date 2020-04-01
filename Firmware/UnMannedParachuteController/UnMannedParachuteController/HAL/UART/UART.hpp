@@ -13,6 +13,10 @@
 #include "HAL/System/Pins.hpp"
 #include <avr/interrupt.h>
 
+
+
+#include <stdio.h>
+
 template <typename conf>
 class Uart {
 	public:
@@ -25,6 +29,7 @@ class Uart {
 		static volatile uint8_t reciveArray[conf :: rxArrayLength]; 
 		static volatile uint8_t reciveArrayFreePos;
 		static uint8_t reciveArrayOccupiedPos;
+
 		
 	public:
 		static void Init() {
@@ -74,6 +79,17 @@ class Uart {
 			SendByte((uint8_t)(value % 10) + '0');
 		}
 		
+		static void SendUIntWithZeros(uint16_t value ) {
+			SendByte((uint8_t)(value / 10000) + '0');
+			value = value % 10000;
+			SendByte((uint8_t)(value / 1000) + '0');
+			value = value % 1000;
+			SendByte((uint8_t)(value / 100) + '0');
+			value = value % 100;
+			SendByte((uint8_t)(value / 10) + '0');
+			SendByte((uint8_t)(value % 10) + '0');
+		}
+		
 		static void SendInt(int16_t value) {
 			if (value < 0) {
 				SendByte('-');
@@ -82,23 +98,73 @@ class Uart {
 			SendUInt((uint16_t)value);
 		}
 		
-		// Using cycling/running buffer
-		static void RxInterruptHandler() {
-			led1 :: Toggle();
-			uint8_t data = uart -> DATA;
+		static void SendFloat(float value) {
+			/*char buff[20] = {0};
+			sprintf(buff, "%f", (double)value);
+			SendString(buff);
+			*/
 			
-			if (reciveArray[reciveArrayFreePos] != 0) {
-				//System :: Halt("RX Buffer overflow\n");
-			}
+			uint16_t beforePoint = value;
+			SendUInt(beforePoint);
+			SendByte('.');
+			value = value - (float)beforePoint;
+			
+			value = value * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
+			
+			value = (value-(uint8_t)value) * 10;
+			SendByte((uint8_t)(value + '0'));
+		}
+		
+		// Using cycling/running buffer
+		static void GPSRxInterruptHandler() {
+			uint8_t data = uart -> DATA;
 
+			if (reciveArray[reciveArrayFreePos] != 0) {
+				System :: Halt("GPSRX Buffer overflow\n");
+			}
+		
 			reciveArray[reciveArrayFreePos] = data;
 			if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
 				reciveArrayFreePos = 0;
 			} else {
 				reciveArrayFreePos++;
 			}
-			
 		}
+		
+		static void ExtRxInterruptHandler() {
+			uint8_t data = uart -> DATA;
+				
+			if (reciveArray[reciveArrayFreePos] != 0) {
+				System :: Halt("ExtRX Buffer overflow\n");
+			}
+			//SendString("\n");
+			//SendByte(data);
+			//SendString("\n");
+			
+			// Used because removing and attaching UART dongle generated unwanted data flow.
+			if (data == '\n' || data == 32 || (data > 96 && data < 123) || (data > 47 && data < 58)) {
+				//SendString("\n");
+				//SendByte(data);
+				//SendString("\n");
+				reciveArray[reciveArrayFreePos] = data;
+				if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
+					reciveArrayFreePos = 0;
+				} else {
+					reciveArrayFreePos++;
+				}
+			}
+		}
+
 
 		static volatile uint8_t* GetRxBufferStart() {
 			return &reciveArray[0]; 
@@ -120,6 +186,14 @@ class Uart {
 					System :: Halt("Wrong UARTRX Prio\n");
 					return System :: IntLevel :: Low;
 			}
+		}
+		
+		static void DisableRX() {
+			uart -> CTRLB &= (0xff ^ USART_RXEN_bm);
+		}
+		
+		static void EnableRX() {
+			uart -> CTRLB |= USART_RXEN_bm;
 		}
 		
 	private:
@@ -160,6 +234,8 @@ class Uart {
 		}
 		
 		
+		
+		
 };
 
 template<typename conf>
@@ -168,19 +244,20 @@ uint8_t volatile Uart<conf> :: reciveArray[conf :: rxArrayLength] = {};
 template<typename conf>
 uint8_t volatile Uart<conf> :: reciveArrayFreePos = 0;
 
+
 struct ExtUartConf {
 	static constexpr uint32_t baudRate = 500000;
 	static constexpr USART_t* uart = &USARTF0;
-	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_LO_gc;
-	static constexpr uint8_t rxArrayLength = 150;
+	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_HI_gc;
+	static constexpr uint8_t rxArrayLength = 50;
 	static constexpr uint8_t terminatingChar = '\n';
 };
 typedef Uart<ExtUartConf> ExtUart;
 
 struct GpsUartConf {
-	static constexpr uint32_t baudRate = 500000;
+	static constexpr uint32_t baudRate = 115200;
 	static constexpr USART_t* uart = &USARTD0;
-	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_MED_gc;
+	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_HI_gc;
 	static constexpr uint8_t rxArrayLength = 150;
 	static constexpr uint8_t terminatingChar = '\n';
 };
@@ -190,8 +267,9 @@ struct DebugUartConf {
 	static constexpr uint32_t baudRate = 500000;
 	static constexpr USART_t* uart = &USARTC1;
 	static constexpr uint8_t RxInterrupt = USART_RXCINTLVL_OFF_gc;
-	static constexpr uint8_t rxArrayLength = 150;
+	static constexpr uint8_t rxArrayLength = 0;
 	static constexpr uint8_t terminatingChar = '\n';
 };
+typedef Uart<DebugUartConf> DebugUart;
 
 #endif /* UART._H_ */

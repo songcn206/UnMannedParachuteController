@@ -1,0 +1,8 @@
+1) Pull-up takistid mootorite pwm signaalidele +
+2) Diff paro VSS jalg ühendada GND +
+3) DC-DC2 toide eraldi akult
+3) Abs paro ja pwm level shifter footprint suuremaks (abs paro -> least, PWM level shifter suurem footprint) +
+4) GPS jalad paika ???
+5) EEPROM +
+6) Battery charger +
+7) GPS 3v3 diood +

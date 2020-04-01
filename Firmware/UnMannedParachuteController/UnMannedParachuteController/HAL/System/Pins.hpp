@@ -115,8 +115,8 @@ typedef Pins<IOPorts :: E, 6, PortDirection :: Input, PortOutputState :: PullUp>
 typedef Pins<IOPorts :: E, 7, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> ImuCK;
 
 // I2C
-typedef Pins<IOPorts :: E, 0, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> DiffBaroSDA;
-typedef Pins<IOPorts :: E, 1, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> DiffBaroSCL;
+typedef Pins<IOPorts :: E, 0, PortDirection :: Output, PortOutputState :: TotemPole> DiffBaroSDA;
+typedef Pins<IOPorts :: E, 1, PortDirection :: Output, PortOutputState :: TotemPole> DiffBaroSCL;
 
 // Interrupt pins
 typedef Pins<IOPorts :: D, 0, PortDirection :: Input> AbsBaroInt;

@@ -17,19 +17,25 @@ class PwmTimer {
 		static constexpr float pwmFrequency_Hz = 50.0f;
 		static constexpr float pwmTime_ms = 1000 / pwmFrequency_Hz;
 		static constexpr uint16_t preScaler = 64;
-		static constexpr float motorMaxLeft_ms = 2.0f;
-		static constexpr float motorMaxRight_ms = 1.0f;
+		static constexpr float rightMotorMax_ms = 2.50f;
+		static constexpr float rightMotorMin_ms = 0.74f;
+		//static constexpr float leftMotorMin_ms = 2.4f;
+		//static constexpr float leftMotorMax_ms = 0.78f;
 		
 		static constexpr uint16_t timerTopValue = (System :: CPU_CLOCK / (pwmFrequency_Hz * preScaler)) - 1;
-		static constexpr uint16_t motorMaxLeft = timerTopValue / pwmTime_ms * motorMaxLeft_ms;
-		static constexpr uint16_t motorMaxRight = timerTopValue / pwmTime_ms * motorMaxLeft_ms;
+		
+	public:
+		static constexpr uint16_t rightMotorMax = timerTopValue / pwmTime_ms * rightMotorMax_ms;
+		static constexpr uint16_t rightMotorMin = timerTopValue / pwmTime_ms * rightMotorMin_ms;
+		//static constexpr uint16_t leftMotorMax = timerTopValue / pwmTime_ms * leftMotorMax_ms;
+		//static constexpr uint16_t leftMotorMin = timerTopValue / pwmTime_ms * leftMotorMin_ms;
 		
 	public:
 		static void Init() {
 			TCC0.CTRLB = TC0_CCDEN_bm | TC0_CCAEN_bm | TC_TC0_WGMODE_SINGLESLOPE_gc; // Add more if needed to
 			TCC0.PER = timerTopValue;
-			TCC0.CCD = 1000; 
-			TCC0.CCA = 1000;
+			//TCC0.CCD = rightMotorMin;
+			//TCC0.CCA = leftMotorMin;
 			
 			TCC0.CTRLA = Timers :: GetPreScaler(preScaler);
 		}
@@ -37,16 +43,16 @@ class PwmTimer {
 		static void UpdateCCReg(char reg, uint16_t value) {
 			switch (reg) {
 				case 'A':
-					TCC0.CCA = value;
+					TCC0.CCA = value; // Left2
 					break;
 				case 'B':
-					TCC0.CCB = value;
+					TCC0.CCB = value; // Right2
 					break;
 				case 'C':
-					TCC0.CCC = value;
+					TCC0.CCC = value; // Left1
 					break;
-				case 'D':
-					TCC0.CCD = value;
+				case 'D': 
+					TCC0.CCD = value; // Right1
 					break;
 			}
 		}
