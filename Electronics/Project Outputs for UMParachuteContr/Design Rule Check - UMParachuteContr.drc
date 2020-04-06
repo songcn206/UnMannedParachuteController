@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : D:\Documents\UnMannedParachuteController\Electronics\UMParachuteContr.PcbDoc
-Date     : 21.12.2019
-Time     : 15:37:54
+Date     : 06.04.2020
+Time     : 16:45:00
 
 Processing Rule : Clearance Constraint (Gap=0.2mm) (All),(All)
 Rule Violations :0
@@ -15,7 +15,7 @@ Rule Violations :0
 Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
 Rule Violations :0
 
-Processing Rule : Width Constraint (Min=0.15mm) (Max=1mm) (Preferred=0.2mm) (All)
+Processing Rule : Width Constraint (Min=0.15mm) (Max=2mm) (Preferred=0.2mm) (All)
 Rule Violations :0
 
 Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)
@@ -35,27 +35,36 @@ Processing Rule : Hole To Hole Clearance (Gap=0.254mm) (All),(All)
 Rule Violations :0
 
 Processing Rule : Minimum Solder Mask Sliver (Gap=0.1mm) (All),(All)
-Rule Violations :0
+   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-1(31.95mm,10.4mm) on Top Layer And Pad IC4-12(31.7mm,9.7mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-2(31.95mm,10.8mm) on Top Layer And Pad IC4-3(31.7mm,11.5mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-6(30.5mm,11.5mm) on Top Layer And Pad IC4-7(30.25mm,10.8mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-8(30.25mm,10.4mm) on Top Layer And Pad IC4-9(30.5mm,9.7mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
+   Violation between Minimum Solder Mask Sliver Constraint: (0.049mm < 0.1mm) Between Via (58.15mm,51.1mm) from Top Layer to Bottom Layer And Via (58.775mm,50.525mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.049mm] / [Bottom Solder] Mask Sliver [0.049mm]
+Rule Violations :5
 
 Processing Rule : Silk To Solder Mask (Clearance=0.1mm) (IsPad),(All)
-   Violation between Silk To Solder Mask Clearance Constraint: (0.096mm < 0.1mm) Between Arc (54.9mm,35.3mm) on Top Overlay And Pad C24-1(53.9mm,35.5mm) on Top Layer [Top Overlay] to [Top Solder] clearance [0.096mm]
-Rule Violations :1
+Rule Violations :0
 
 Processing Rule : Silk to Silk (Clearance=0.1mm) (All),(All)
-Rule Violations :0
+   Violation between Silk To Silk Clearance Constraint: (0.081mm < 0.1mm) Between Text "IC8" (37.075mm,19.825mm) on Top Overlay And Track (39.33mm,19.63mm)(39.33mm,24.97mm) on Top Overlay Silk Text to Silk Clearance [0.081mm]
+Rule Violations :1
 
 Processing Rule : Net Antennae (Tolerance=0mm) (All)
 Rule Violations :0
 
 Processing Rule : Board Clearance Constraint (Gap=0mm) (All)
-   Violation between Board Outline Clearance(Outline Edge): (0.246mm < 0.4mm) Between Board Edge And Text "C16" (28.3mm,0.5mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.346mm < 0.4mm) Between Board Edge And Text "Right1" (0.6mm,14.8mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,14.15mm)(6mm,14.15mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,6.53mm)(0.2mm,14.15mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,6.53mm)(6mm,6.53mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.1mm < 0.4mm) Between Board Edge And Track (19.39mm,0.227mm)(19.39mm,6.027mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.1mm < 0.4mm) Between Board Edge And Track (19.39mm,0.227mm)(27.01mm,0.227mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.1mm < 0.4mm) Between Board Edge And Track (27.01mm,0.227mm)(27.01mm,6.027mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.25mm < 0.4mm) Between Board Edge And Text "C16" (26.95mm,0.4mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.35mm < 0.4mm) Between Board Edge And Text "D19" (17.8mm,0.5mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.3mm < 0.4mm) Between Board Edge And Text "LED4" (63.175mm,63.75mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.15mm < 0.4mm) Between Board Edge And Text "R16" (42.275mm,0.3mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.15mm < 0.4mm) Between Board Edge And Text "R17" (52.975mm,0.3mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.225mm < 0.4mm) Between Board Edge And Text "Right1" (0.375mm,15.425mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,14.75mm)(6mm,14.75mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,7.13mm)(0.2mm,14.75mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,7.13mm)(6mm,7.13mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.273mm < 0.4mm) Between Board Edge And Track (18.19mm,0.4mm)(18.19mm,6.2mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.273mm < 0.4mm) Between Board Edge And Track (18.19mm,0.4mm)(25.81mm,0.4mm) on Top Overlay 
+   Violation between Board Outline Clearance(Outline Edge): (0.273mm < 0.4mm) Between Board Edge And Track (25.81mm,0.4mm)(25.81mm,6.2mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (33.73mm,0.2mm)(33.73mm,6mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (33.73mm,0.2mm)(41.35mm,0.2mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (41.35mm,0.2mm)(41.35mm,6mm) on Top Overlay 
@@ -65,12 +74,12 @@ Processing Rule : Board Clearance Constraint (Gap=0mm) (All)
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (55.39mm,0.2mm)(55.39mm,6mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (55.39mm,0.2mm)(63.01mm,0.2mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (63.01mm,0.2mm)(63.01mm,6mm) on Top Overlay 
-Rule Violations :17
+Rule Violations :21
 
 Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)
 Rule Violations :0
 
 
-Violations Detected : 22
+Violations Detected : 31
 Waived Violations : 0
-Time Elapsed        : 00:00:01
+Time Elapsed        : 00:00:02
