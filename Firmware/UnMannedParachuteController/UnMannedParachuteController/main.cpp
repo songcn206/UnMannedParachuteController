@@ -97,6 +97,6 @@ int main(void) {
 			Servos :: AutoControlMotors();
 			GenTimerE0 :: autoControl = false;
 		}
-	}
+    }
 }
 

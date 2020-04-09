@@ -32,17 +32,23 @@ class GenTimerD0 {
 		static volatile bool sendData;
 		
 	public:
-		static void Init();
-		
+		static void Init() {
+			TCD0.CTRLB = TC_TC0_WGMODE_NORMAL_gc;
+			TCD0.INTCTRLB = TC_TC0_CCAINTLVL_LO_gc | TC_TC0_CCBINTLVL_LO_gc;
+			TCD0.PER = 65535;
+			TCD0.CCA = compareMatchAValue;
+			TCD0.CCB = compareMatchBValue;
+			
 		static void CompareMatchAHandler();
 		
-		static void CompareMatchBHandler();
+
 		
-		static void CompareMatchCHandler();
-		
+		static void CompareMatchCHandler() {
+
 		static void CompareMatchDHandler();
 		
 		static void StartImuDataCommunication();
+}
 
 		static void StopImuSonarDiffBaro();
 		
