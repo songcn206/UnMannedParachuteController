@@ -41,7 +41,7 @@ class DataPackets {
 		};
 	
 	private:
-		static SavedData savedData[1]; // max ~14KB
+		static SavedData savedData[300]; // max ~14KB
 		static uint16_t datapointer;
 		static bool saveData;
 		static bool arrayFull;

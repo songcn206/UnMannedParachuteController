@@ -91,11 +91,11 @@ typedef Pins<IOPorts :: A, 5, PortDirection :: Output, PortOutputState :: TotemP
 
 // UARTs
 typedef Pins<IOPorts :: F, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> ExtUartTx;
-typedef Pins<IOPorts :: F, 2, PortDirection :: Input> ExtUartRx;
+typedef Pins<IOPorts :: F, 2, PortDirection :: Input, PortOutputState :: PullUp, StartingValue :: High> ExtUartRx;
 typedef Pins<IOPorts :: D, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> GpsUartTx;
-typedef Pins<IOPorts :: D, 2, PortDirection :: Input> GpsUartRx;
+typedef Pins<IOPorts :: D, 2, PortDirection :: Input, PortOutputState :: PullUp, StartingValue :: High> GpsUartRx;
 typedef Pins<IOPorts :: C, 7, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> DebugUartTx;
-typedef Pins<IOPorts :: C, 6, PortDirection :: Input> DebugUartRx;
+typedef Pins<IOPorts :: C, 6, PortDirection :: Input, PortOutputState :: PullUp, StartingValue :: High> DebugUartRx;
 
 // Servos
 typedef Pins<IOPorts :: C, 0, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Left2ServoPWM;

@@ -10,7 +10,7 @@
 #include "Control/Servos/Servos.hpp"
 
 uint16_t DataPackets :: datapointer = 0;
-DataPackets :: SavedData DataPackets :: savedData[1];
+DataPackets :: SavedData DataPackets :: savedData[300];
 bool DataPackets :: saveData = false;
 bool DataPackets :: arrayFull = false;
 
@@ -21,7 +21,7 @@ void DataPackets :: SendStatus() {
 	ExtUart :: SendInt(Imu :: GetAccXYZ()[1]);
 	ExtUart :: SendString(" AZ ");
 	ExtUart :: SendInt(Imu :: GetAccXYZ()[2]);
-	/*ExtUart :: SendString(" GX ");
+	ExtUart :: SendString(" GX ");
 	ExtUart :: SendInt(Imu :: GetGyroXYZ()[0]);
 	ExtUart :: SendString(" GY ");
 	ExtUart :: SendInt(Imu :: GetGyroXYZ()[1]);
@@ -47,7 +47,7 @@ void DataPackets :: SendStatus() {
 	ExtUart :: SendFloat(AbsoluteBaro :: GetPressure());
 	ExtUart :: SendString(" DPr ");
 	ExtUart :: SendInt(DiffBaro :: GetPressure());
-	*/ExtUart :: SendString(" RM ");
+	ExtUart :: SendString(" RM ");
 	ExtUart :: SendUInt(Servos :: GetRightMotorPosition());
 	ExtUart :: SendString(" LM ");
 	ExtUart :: SendUInt(Servos :: GetLeftMotorPosition());
