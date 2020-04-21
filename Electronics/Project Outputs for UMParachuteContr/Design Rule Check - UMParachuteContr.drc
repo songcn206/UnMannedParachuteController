@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : D:\Documents\UnMannedParachuteController\Electronics\UMParachuteContr.PcbDoc
-Date     : 09.04.2020
-Time     : 22:40:10
+Date     : 14.04.2020
+Time     : 16:19:06
 
 Processing Rule : Clearance Constraint (Gap=0.2mm) (All),(All)
 Rule Violations :0
@@ -35,26 +35,18 @@ Processing Rule : Hole To Hole Clearance (Gap=0.254mm) (All),(All)
 Rule Violations :0
 
 Processing Rule : Minimum Solder Mask Sliver (Gap=0.1mm) (All),(All)
-   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-1(31.95mm,10.4mm) on Top Layer And Pad IC4-12(31.7mm,9.7mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
-   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-2(31.95mm,10.8mm) on Top Layer And Pad IC4-3(31.7mm,11.5mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
-   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-6(30.5mm,11.5mm) on Top Layer And Pad IC4-7(30.25mm,10.8mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
-   Violation between Minimum Solder Mask Sliver Constraint: (0.075mm < 0.1mm) Between Pad IC4-8(30.25mm,10.4mm) on Top Layer And Pad IC4-9(30.5mm,9.7mm) on Top Layer [Top Solder] Mask Sliver [0.075mm]
-Rule Violations :4
+Rule Violations :0
 
 Processing Rule : Silk To Solder Mask (Clearance=0.1mm) (IsPad),(All)
-   Violation between Silk To Solder Mask Clearance Constraint: (0.085mm < 0.1mm) Between Arc (52.6mm,47.575mm) on Top Overlay And Pad R31-2(53.35mm,47.6mm) on Top Layer [Top Overlay] to [Top Solder] clearance [0.085mm]
-Rule Violations :1
+Rule Violations :0
 
 Processing Rule : Silk to Silk (Clearance=0.1mm) (All),(All)
-   Violation between Silk To Silk Clearance Constraint: (0.075mm < 0.1mm) Between Text "C30" (46.1mm,46mm) on Top Overlay And Text "R33" (46.1mm,47.025mm) on Top Overlay Silk Text to Silk Clearance [0.075mm]
-Rule Violations :1
+Rule Violations :0
 
 Processing Rule : Net Antennae (Tolerance=0mm) (All)
 Rule Violations :0
 
 Processing Rule : Board Clearance Constraint (Gap=0mm) (All)
-   Violation between Board Outline Clearance(Outline Edge): (0.2mm < 0.4mm) Between Board Edge And Text "R16" (42.125mm,0.35mm) on Top Overlay 
-   Violation between Board Outline Clearance(Outline Edge): (0.15mm < 0.4mm) Between Board Edge And Text "R17" (52.975mm,0.3mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,14.75mm)(6mm,14.75mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,7.13mm)(0.2mm,14.75mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (0.2mm,7.13mm)(6mm,7.13mm) on Top Overlay 
@@ -70,12 +62,12 @@ Processing Rule : Board Clearance Constraint (Gap=0mm) (All)
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (55.39mm,0.2mm)(55.39mm,6mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (55.39mm,0.2mm)(63.01mm,0.2mm) on Top Overlay 
    Violation between Board Outline Clearance(Outline Edge): (0.073mm < 0.4mm) Between Board Edge And Track (63.01mm,0.2mm)(63.01mm,6mm) on Top Overlay 
-Rule Violations :17
+Rule Violations :15
 
 Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)
 Rule Violations :0
 
 
-Violations Detected : 27
+Violations Detected : 19
 Waived Violations : 0
 Time Elapsed        : 00:00:01

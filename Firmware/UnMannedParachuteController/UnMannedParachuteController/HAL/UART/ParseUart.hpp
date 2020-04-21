@@ -133,10 +133,10 @@ class ParseExtUart {
 				}
 			}
 			if (len <= 5 && len >= 0) {
-				uint16_t positionInDegrees = StringToUint16((const char*)&bufferpointer[5], len);
-				if (positionInDegrees >= 0 && positionInDegrees <= 150) {
+				uint16_t position_mm = StringToUint16((const char*)&bufferpointer[5], len);
+				if (position_mm >= 0 && position_mm <= 150) {
 					//float degreesInFloat = positionInDegrees / 10;
-					Servos :: SetLeftMotorPosition(positionInDegrees);
+					Servos :: SetLeftMotorPosition(position_mm);
 				}
 			}
 		}
@@ -150,9 +150,9 @@ class ParseExtUart {
 				}
 			}
 			if (len <= 3 && len >= 0) {
-				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[6], len);
-				if (positionInDegrees >= 0 && positionInDegrees <= 150) {
-					Servos :: SetRightMotorPosition(positionInDegrees);
+				uint8_t position_mm = StringToUint8((const char*)&bufferpointer[6], len);
+				if (position_mm >= 0 && position_mm <= 150) {
+					Servos :: SetRightMotorPosition(position_mm);
 				}
 			}
 		}
@@ -166,10 +166,10 @@ class ParseExtUart {
 				}
 			}
 			if (len <= 3 && len >= 0) {
-				uint8_t positionInDegrees = StringToUint8((const char*)&bufferpointer[5], len);
-				if (positionInDegrees >= 0 && positionInDegrees <= 150) {
-					Servos :: SetLeftMotorPosition(positionInDegrees);
-					Servos :: SetRightMotorPosition(positionInDegrees);
+				uint8_t position_mm = StringToUint8((const char*)&bufferpointer[5], len);
+				if (position_mm >= 0 && position_mm <= 150) {
+					Servos :: SetLeftMotorPosition(position_mm);
+					Servos :: SetRightMotorPosition(position_mm);
 				}
 			}
 		}

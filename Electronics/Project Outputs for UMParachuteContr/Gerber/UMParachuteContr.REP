@@ -65,6 +65,7 @@ Used DCodes :
     D51
     D52
     D53
+    D54
 *************************************************************
 
 *************************************************************
@@ -75,58 +76,6 @@ Generating : Mechanical 2
 
 
 Used DCodes :
-    D14
-*************************************************************
-
-*************************************************************
-Generating : Bottom Overlay
-      File : UMParachuteContr.GBO
-
-    Adding Layer      : Bottom Overlay
-
-
-Used DCodes :
-    D15
-*************************************************************
-
-*************************************************************
-Generating : Bottom Solder
-      File : UMParachuteContr.GBS
-
-    Adding Layer      : Bottom Solder
-
-    Adding Layer      : Bottom Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D92
-    D93
-    D94
-    D95
-    D96
-    D97
-    D98
-    D99
-    D100
-    D101
-    D102
-*************************************************************
-
-*************************************************************
-Generating : Top Overlay
-      File : UMParachuteContr.GTO
-
-    Adding Layer      : Top Overlay
-
-
-Used DCodes :
-    D10
-    D11
-    D12
-    D13
-    D14
     D15
 *************************************************************
 
@@ -142,7 +91,6 @@ Generating : Top Solder
 
 
 Used DCodes :
-    D54
     D55
     D56
     D57
@@ -191,6 +139,7 @@ Used DCodes :
     D100
     D101
     D102
+    D103
 *************************************************************
 
 *************************************************************
@@ -203,19 +152,21 @@ Generating : Bottom Layer
 
 
 Used DCodes :
-    D12
-    D92
+    D13
     D94
     D96
-    D103
+    D98
     D104
-    D108
-    D109
-    D110
+    D105
+    D106
     D111
     D112
     D113
     D114
+    D115
+    D116
+    D117
+    D118
 *************************************************************
 
 *************************************************************
@@ -228,8 +179,8 @@ Generating : Top Layer
 
 
 Used DCodes :
-    D12
-    D15
+    D13
+    D14
     D16
     D17
     D18
@@ -268,10 +219,10 @@ Used DCodes :
     D51
     D52
     D53
-    D92
+    D54
     D94
     D96
-    D103
+    D98
     D104
     D105
     D106
@@ -283,5 +234,60 @@ Used DCodes :
     D112
     D113
     D114
+    D115
+    D116
+    D117
+    D118
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : UMParachuteContr.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+    D14
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder
+      File : UMParachuteContr.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D94
+    D95
+    D96
+    D97
+    D98
+    D99
+    D100
+    D101
+    D102
+    D103
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay
+      File : UMParachuteContr.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+    D13
+    D14
+    D15
 *************************************************************
 
