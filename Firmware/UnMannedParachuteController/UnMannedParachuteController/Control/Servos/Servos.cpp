@@ -19,13 +19,13 @@ int32_t Servos :: globalIntegral = 0;
 void Servos :: SetLeftMotorPosition(int16_t len) {
 	//leftMotorPosition = CheckDegrees(degrees);
 	leftMotorPosition = LengthToAngle(len);
-	PwmTimer :: UpdateCCReg('A', CalculateTimerCompareMatch((180 - leftMotorPosition ) + CalculateLeftMotorError(180 - leftMotorPosition)));
+	PwmTimer :: UpdateCCReg('B', CalculateTimerCompareMatch((180 - leftMotorPosition ) + CalculateLeftMotorError(180 - leftMotorPosition)));
 }
 
 void Servos :: SetRightMotorPosition(int16_t len) {
 	//rightMotorPosition = CheckDegrees(degrees);
 	rightMotorPosition = LengthToAngle(len);
-	PwmTimer :: UpdateCCReg('D', CalculateTimerCompareMatch(rightMotorPosition));
+	PwmTimer :: UpdateCCReg('A', CalculateTimerCompareMatch(rightMotorPosition));
 }
 
 uint8_t Servos :: CheckDegrees(int16_t value) {

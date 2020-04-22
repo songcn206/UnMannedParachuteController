@@ -113,7 +113,7 @@ class ImuSpi {
 					}
 					break;
 				case SpiState::Uninited:
-					ExtUart :: SendString("Asking IMU ID\n");
+					//ExtUart :: SendString("Asking IMU ID\n");
 					if (DataWritten) {
 						ImuCS :: SetHigh();
 						if (SPIE.DATA == imuID) {

@@ -32,7 +32,7 @@ class PwmTimer {
 		
 	public:
 		static void Init() {
-			TCC0.CTRLB = TC0_CCDEN_bm | TC0_CCAEN_bm | TC_TC0_WGMODE_SINGLESLOPE_gc; // Add more if needed to
+			TCC0.CTRLB = TC0_CCAEN_bm | TC0_CCBEN_bm | TC_WGMODE_SINGLESLOPE_gc; // Add more if needed to
 			TCC0.PER = timerTopValue;
 			//TCC0.CCD = rightMotorMin;
 			//TCC0.CCA = leftMotorMin;
@@ -43,16 +43,16 @@ class PwmTimer {
 		static void UpdateCCReg(char reg, uint16_t value) {
 			switch (reg) {
 				case 'A':
-					TCC0.CCA = value; // Left2
+					TCC0.CCA = value; // Right1
 					break;
 				case 'B':
-					TCC0.CCB = value; // Right2
+					TCC0.CCB = value; // Left2
 					break;
 				case 'C':
-					TCC0.CCC = value; // Left1
+					TCC0.CCC = value; // Right2
 					break;
 				case 'D': 
-					TCC0.CCD = value; // Right1
+					TCC0.CCD = value; // Left1
 					break;
 			}
 		}

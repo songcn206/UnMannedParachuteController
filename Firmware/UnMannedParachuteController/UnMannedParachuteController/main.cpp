@@ -36,10 +36,10 @@ void InitPins() {
 	GpsUartRx :: SetPinConf();
 	DebugUartTx :: SetPinConf();
 	DebugUartRx :: SetPinConf();
-	Left2ServoPWM :: SetPinConf();
+	//Left2ServoPWM :: SetPinConf();
 	//Right2ServoPWM :: SetPinConf();
 	//Left1ServoPWM :: SetPinConf();
-	Right1ServoPWM :: SetPinConf();
+	//Right1ServoPWM :: SetPinConf();
 	AbsBaroCS :: SetPinConf();
 	AbsBaroMOSI :: SetPinConf();
 	AbsBaroMISO :: SetPinConf();
@@ -51,9 +51,15 @@ void InitPins() {
 	DiffBaroSDA :: SetPinConf();
 	DiffBaroSCL :: SetPinConf();
 	//AbsBaroInt :: SetPinConf();
-	ImuInt :: SetPinConf();
-	//ImuInt :: ConfigInterrupt();
+	//ImuInt :: SetPinConf();
 	SonarIn :: SetPinConf();
+	BatteryLevel :: SetPinConf();
+	EepromCS :: SetPinConf();
+	EepromMISO :: SetPinConf();
+	EepromMOSI :: SetPinConf();
+	EepromCK :: SetPinConf();
+	EepromnHold :: SetPinConf();
+	EepromnWrite :: SetPinConf();
 }
 
 int main(void) {
@@ -69,6 +75,7 @@ int main(void) {
 	GenTimerE0 :: Init();
 	TickTimer :: Init();
 	ExtUart :: SendString("START!\n");
+	DebugUart :: SendString("START!\n");
 	Sonar :: Init();
 	AbsSpi :: Init();
 	ImuSpi :: Init();
@@ -78,6 +85,7 @@ int main(void) {
 
     while (1) {
 		if (GenTimerD0 :: checkUartAndSpi) {
+
 			led2 :: Toggle();
 			ParseExtUart :: Parse();
 			ParseGPSUart :: Parse();
@@ -85,7 +93,6 @@ int main(void) {
 			AbsoluteBaro :: CheckForUpdates();
 			DiffBaro :: CheckForUpdates();
 			GenTimerD0 :: checkUartAndSpi = false;
-			
 		}
 		
 		if (GenTimerD0 :: sendData) {

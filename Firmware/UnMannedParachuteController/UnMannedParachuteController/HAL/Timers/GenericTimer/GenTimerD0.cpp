@@ -59,10 +59,8 @@ void GenTimerD0 :: CompareMatchAHandler() {
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
 
-// IMU start comm TODO: maybe should not use diffbaro and imu together
 void  GenTimerD0 :: CompareMatchBHandler() {
 	ImuSpi :: UpdateMagnetometerRegisters();
-	I2cDiffBaro :: GetData();
 	TCD0.CCB +=  GenTimerD0 :: compareMatchBValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
@@ -83,13 +81,16 @@ void  GenTimerD0 :: StartImuDataCommunication() {
 	TCD0.INTCTRLB |= TC_CCBINTLVL_MED_gc;
 }
 
-void GenTimerD0 :: StopImuSonarDiffBaro() {
-	TCD0.INTCTRLB &= (0xff ^ ((3 << 2) | (3 << 6)));
+void GenTimerD0 :: StartSonarMeasurements() {
+	TCD0.INTCTRLB |= TC_CCDINTLVL_LO_gc;
 }
 
-void GenTimerD0 :: StartImuSonarDiffBaro() {
-	StartImuDataCommunication(); // imu and Diff baro
-	TCD0.INTCTRLB |= TC_CCDINTLVL_LO_gc;
+void GenTimerD0 :: StopImuDataCommunication() {
+	TCD0.INTCTRLB &= (0xff ^ (3 << 2));
+}
+
+void GenTimerD0 :: StopSonarMeasurements() {
+	TCD0.INTCTRLB &= (0xff ^ (3 << 6));
 }
 
 void GenTimerD0 :: StopSendStatusPackets() {

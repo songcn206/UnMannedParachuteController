@@ -52,6 +52,10 @@ void DataPackets :: SendStatus() {
 	ExtUart :: SendString(" LM ");
 	ExtUart :: SendUInt(Servos :: GetLeftMotorPosition());
 	ExtUart :: SendString("\n");
+	
+	DebugUart :: SendString("Data Sent");
+	DebugUart :: SendUInt(Sonar :: GetDistance());
+	DebugUart :: SendString("\n");
 }
 
 void DataPackets :: SendOrSaveData() {

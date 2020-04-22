@@ -24,7 +24,7 @@ class Sonar {
 			ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc;
 			ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc | ADC_CH_INTLVL_MED_gc;
 			
-			ADCA.REFCTRL = ADC_REFSEL_AREFA_gc;
+			ADCA.REFCTRL = ADC_REFSEL_INTVCC_gc;
 			ADCA.PRESCALER = ADC_PRESCALER_DIV32_gc;
 			ADCA.CTRLA = ADC_ENABLE_bm;
 		}
@@ -35,7 +35,8 @@ class Sonar {
 		
 		static void InterruptHandler() {
 			uint16_t adcValue = ADCA.CH0RES;
-			distance_mm = adcValue * (5000 / 4095.0f);
+			distance_mm = adcValue * (5000 / 3276.8f);
+			//distance_mm = adcValue;
 			
 		}
 		

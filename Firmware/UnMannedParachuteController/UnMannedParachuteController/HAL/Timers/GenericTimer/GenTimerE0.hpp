@@ -18,12 +18,12 @@ class GenTimerE0 {
 		
 		static constexpr float compareMatchAValue_ms = 100.0f; // Absolute Barometer
 		static constexpr float compareMatchBValue_ms = 100.0f; // Auto Control 
-		//static constexpr float compareMatchCValue_ms = 100.0f;
+		static constexpr float compareMatchCValue_ms = 100.0f; // Differential barometer
 		//static constexpr float compareMatchDValue_ms = 50.0f;
 		
 		static volatile constexpr uint16_t compareMatchAValue = System :: CPU_CLOCK / preScaler * (compareMatchAValue_ms / 1000);
 		static volatile constexpr uint16_t compareMatchBValue = System :: CPU_CLOCK / preScaler * (compareMatchBValue_ms / 1000);
-		//static volatile constexpr uint16_t compareMatchCValue = System :: CPU_CLOCK / preScaler * (compareMatchCValue_ms / 1000);
+		static volatile constexpr uint16_t compareMatchCValue = System :: CPU_CLOCK / preScaler * (compareMatchCValue_ms / 1000);
 		//static volatile constexpr uint16_t compareMatchDValue = System :: CPU_CLOCK / preScaler * (compareMatchDValue_ms / 1000);
 
 		static volatile bool autoControl;
@@ -35,13 +35,17 @@ class GenTimerE0 {
 		
 		static void CompareMatchBHandler();
 		
-		//static void CompareMatchCHandler();
+		static void CompareMatchCHandler();
 		
 		//static void CompareMatchDHandler();
 		
 		static void StartAbsBaroCommunication();
 		
 		static void StopAbsBaroCommunication();
+		
+		static void StartDiffBaroCommunication();
+
+		static void StopDiffBaroCommunication();
 
 };
 

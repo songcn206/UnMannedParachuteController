@@ -107,13 +107,17 @@ class ParseExtUart {
 		}
 		
 		static void HandleGetData() {
-			GenTimerD0 :: StopImuSonarDiffBaro();
+			GenTimerD0 :: StopImuDataCommunication();
+			GenTimerD0 :: StopSonarMeasurements();
 			GenTimerE0 :: StopAbsBaroCommunication();
+			GenTimerE0 :: StopDiffBaroCommunication();
 			GpsUart :: DisableRX();
 			DataPackets :: SendDataFromArray();
 			GpsUart :: EnableRX();
+			GenTimerD0 :: StartImuDataCommunication();
+			GenTimerD0 :: StartSonarMeasurements();
 			GenTimerE0 :: StartAbsBaroCommunication();
-			GenTimerD0 :: StartImuSonarDiffBaro();
+			GenTimerE0 :: StartDiffBaroCommunication();
 		}
 		
 		static void HandleSaveData() {

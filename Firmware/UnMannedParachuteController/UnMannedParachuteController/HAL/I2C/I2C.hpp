@@ -11,6 +11,7 @@
 
 #include "HAL/System/System.hpp"
 #include "HAL/UART/UART.hpp"
+#include "HAL/Timers/GenericTimer/GenTimerE0.hpp"
 
 class I2cDiffBaro {
 	public:
@@ -42,6 +43,8 @@ class I2cDiffBaro {
 			TWIE.MASTER.STATUS = TWI_MASTER_BUSSTATE_IDLE_gc;
 
 			TWIE.SLAVE.CTRLA = 0;
+			
+			GenTimerE0 :: StartDiffBaroCommunication();
 		}
 		
 		static void InterruptHandler() {

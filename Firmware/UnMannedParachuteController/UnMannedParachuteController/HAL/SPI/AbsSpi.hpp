@@ -77,10 +77,12 @@ class AbsSpi {
 					if (dataWritten) {
 						AbsBaroCS :: SetHigh();
 						uint8_t ID = SPID.DATA;
+
 						if (ID == 0b10110001) {
 							ExtUart :: SendString("Got AbsBaro ID\n");
 							StartApplyingSettings();
 						} else {
+							//ExtUart :: SendString("Asking AbsBaro ID\n");
 							CheckCommunication();	
 						}
 					} else {

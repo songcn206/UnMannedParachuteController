@@ -90,18 +90,18 @@ typedef Pins<IOPorts :: A, 4, PortDirection :: Output, PortOutputState :: TotemP
 typedef Pins<IOPorts :: A, 5, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> led3;
 
 // UARTs
-typedef Pins<IOPorts :: F, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> ExtUartTx;
 typedef Pins<IOPorts :: F, 2, PortDirection :: Input, PortOutputState :: PullUp, StartingValue :: High> ExtUartRx;
-typedef Pins<IOPorts :: D, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> GpsUartTx;
+typedef Pins<IOPorts :: F, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> ExtUartTx;
 typedef Pins<IOPorts :: D, 2, PortDirection :: Input, PortOutputState :: PullUp, StartingValue :: High> GpsUartRx;
-typedef Pins<IOPorts :: C, 7, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> DebugUartTx;
-typedef Pins<IOPorts :: C, 6, PortDirection :: Input, PortOutputState :: PullUp, StartingValue :: High> DebugUartRx;
+typedef Pins<IOPorts :: D, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> GpsUartTx;
+typedef Pins<IOPorts :: E, 2, PortDirection :: Input, PortOutputState :: PullUp, StartingValue :: High> DebugUartRx;
+typedef Pins<IOPorts :: E, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> DebugUartTx;
 
 // Servos
-typedef Pins<IOPorts :: C, 0, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Left2ServoPWM;
-typedef Pins<IOPorts :: C, 1, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Right2ServoPWM;
-typedef Pins<IOPorts :: C, 2, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Left1ServoPWM;
-typedef Pins<IOPorts :: C, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Right1ServoPWM;
+typedef Pins<IOPorts :: C, 0, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Right1ServoPWM;
+typedef Pins<IOPorts :: C, 1, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Left2ServoPWM;
+typedef Pins<IOPorts :: C, 2, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Right2ServoPWM;
+typedef Pins<IOPorts :: C, 3, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: Low> Left1ServoPWM;
 
 // SPIs
 typedef Pins<IOPorts :: D, 4, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> AbsBaroCS;
@@ -114,6 +114,14 @@ typedef Pins<IOPorts :: E, 5, PortDirection :: Output, PortOutputState :: TotemP
 typedef Pins<IOPorts :: E, 6, PortDirection :: Input, PortOutputState :: PullUp> ImuMISO;
 typedef Pins<IOPorts :: E, 7, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> ImuCK;
 
+typedef Pins<IOPorts :: C, 4, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> EepromCS;
+typedef Pins<IOPorts :: C, 5, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> EepromMOSI;
+typedef Pins<IOPorts :: C, 6, PortDirection :: Input, PortOutputState :: PullUp> EepromMISO;
+typedef Pins<IOPorts :: C, 7, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> EepromCK;
+
+typedef Pins<IOPorts :: B, 7, PortDirection :: Output, PortOutputState :: TotemPole> EepromnWrite;
+typedef Pins<IOPorts :: D, 1, PortDirection :: Output, PortOutputState :: TotemPole> EepromnHold;
+
 // I2C
 typedef Pins<IOPorts :: E, 0, PortDirection :: Output, PortOutputState :: TotemPole> DiffBaroSDA;
 typedef Pins<IOPorts :: E, 1, PortDirection :: Output, PortOutputState :: TotemPole> DiffBaroSCL;
@@ -122,7 +130,8 @@ typedef Pins<IOPorts :: E, 1, PortDirection :: Output, PortOutputState :: TotemP
 typedef Pins<IOPorts :: D, 0, PortDirection :: Input> AbsBaroInt;
 typedef Pins<IOPorts :: F, 0, PortDirection :: Input> ImuInt;
 
-// Sonar
+// Analog 
 typedef Pins<IOPorts :: A, 1, PortDirection :: Input> SonarIn;
+typedef Pins<IOPorts :: A, 2, PortDirection :: Input> BatteryLevel;
 
 #endif /* PORT_H_ */

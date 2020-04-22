@@ -7,9 +7,11 @@
 
 #include "GenTimerE0.hpp"
 #include "HAL/SPI/AbsSpi.hpp"
+#include "HAL/I2C/I2C.hpp"
 
 volatile constexpr uint16_t GenTimerE0 :: compareMatchAValue;
 volatile constexpr uint16_t GenTimerE0 :: compareMatchBValue;
+volatile constexpr uint16_t GenTimerE0 :: compareMatchCValue;
 
 volatile bool GenTimerE0 :: autoControl = false;
 
@@ -21,6 +23,10 @@ ISR(TCE0_CCB_vect) {
 	GenTimerE0 :: CompareMatchBHandler();
 }
 
+ISR(TCE0_CCC_vect) {
+	GenTimerE0 :: CompareMatchCHandler();
+}
+
 void  GenTimerE0 :: Init() {
 	//ExtUart :: SendString("timer init\n");
 	TCE0.CTRLB = TC_WGMODE_NORMAL_gc;
@@ -28,6 +34,7 @@ void  GenTimerE0 :: Init() {
 	TCE0.PER = 65535;
 	TCE0.CCA = GenTimerE0 :: compareMatchAValue;
 	TCE0.CCB = GenTimerE0 :: compareMatchBValue;
+	TCE0.CCC = GenTimerE0 :: compareMatchCValue;
 	
 	TCE0.INTCTRLB = TC_CCBINTLVL_LO_gc;
 	
@@ -46,10 +53,24 @@ void GenTimerE0 :: CompareMatchBHandler() {
 	TCE0.CTRLFSET = TC_CMD_UPDATE_gc;
 }
 
+void GenTimerE0 :: CompareMatchCHandler() {
+	I2cDiffBaro :: GetData();
+	TCE0.CCC += GenTimerE0 :: compareMatchCValue;
+	TCE0.CTRLFSET = TC_CMD_UPDATE_gc;
+}
+
 void GenTimerE0 :: StartAbsBaroCommunication() {
 	TCE0.INTCTRLB |= TC_CCAINTLVL_MED_gc;
 }
 
 void GenTimerE0 :: StopAbsBaroCommunication() {
 	TCE0.INTCTRLB &= (0xff ^ (3 << 0));
+}
+
+void GenTimerE0 :: StartDiffBaroCommunication() {
+	TCE0.INTCTRLB |= TC_CCCINTLVL_MED_gc;
+}
+
+void GenTimerE0 :: StopDiffBaroCommunication() {
+	TCE0.INTCTRLB &= (0xff ^ (3 << 4));
 }
