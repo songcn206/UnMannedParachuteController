@@ -44,7 +44,7 @@ class AbsSpi {
 	
 	public:
 		static void Init() {
-			SPID.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV16_gc;
+			SPID.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV128_gc;
 			SPID.INTCTRL = SPI_INTLVL_MED_gc;
 			SPID.STATUS = SPI_IF_bm;
 			CheckCommunication();

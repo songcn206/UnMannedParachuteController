@@ -36,10 +36,10 @@ void InitPins() {
 	GpsUartRx :: SetPinConf();
 	DebugUartTx :: SetPinConf();
 	DebugUartRx :: SetPinConf();
-	//Left2ServoPWM :: SetPinConf();
+	Left2ServoPWM :: SetPinConf();
 	//Right2ServoPWM :: SetPinConf();
 	//Left1ServoPWM :: SetPinConf();
-	//Right1ServoPWM :: SetPinConf();
+	Right1ServoPWM :: SetPinConf();
 	AbsBaroCS :: SetPinConf();
 	AbsBaroMOSI :: SetPinConf();
 	AbsBaroMISO :: SetPinConf();

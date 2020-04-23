@@ -51,7 +51,7 @@ class ImuSpi {
 	
 	public:
 		static void Init() {
-			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV128_gc;
+			SPIE.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV64_gc;
 			SPIE.INTCTRL = SPI_INTLVL_MED_gc;
 			SPIE.STATUS = SPI_IF_bm;
 			InitConnection();	
