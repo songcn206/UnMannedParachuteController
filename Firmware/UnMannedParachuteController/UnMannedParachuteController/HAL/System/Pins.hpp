@@ -119,8 +119,8 @@ typedef Pins<IOPorts :: C, 5, PortDirection :: Output, PortOutputState :: TotemP
 typedef Pins<IOPorts :: C, 6, PortDirection :: Input, PortOutputState :: PullUp> EepromMISO;
 typedef Pins<IOPorts :: C, 7, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> EepromCK;
 
-typedef Pins<IOPorts :: B, 7, PortDirection :: Output, PortOutputState :: TotemPole> EepromnWrite;
-typedef Pins<IOPorts :: D, 1, PortDirection :: Output, PortOutputState :: TotemPole> EepromnHold;
+typedef Pins<IOPorts :: B, 7, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> EepromnWrite;
+typedef Pins<IOPorts :: D, 1, PortDirection :: Output, PortOutputState :: TotemPole, StartingValue :: High> EepromnHold;
 
 // I2C
 typedef Pins<IOPorts :: E, 0, PortDirection :: Output, PortOutputState :: TotemPole> DiffBaroSDA;

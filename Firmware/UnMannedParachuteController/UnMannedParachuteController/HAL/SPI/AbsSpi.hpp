@@ -25,7 +25,7 @@ class AbsSpi {
 			Wait	
 		};
 		
-		struct ImuSettings {
+		struct BaroSettings {
 			uint8_t addr;
 			uint8_t value;
 		};
@@ -39,7 +39,7 @@ class AbsSpi {
 		static volatile uint8_t data[3];
 		static volatile uint8_t dataPointer;
 		static volatile uint8_t DataAddr[3];
-		static volatile ImuSettings settings[1];
+		static volatile BaroSettings settings[1];
 		static volatile uint8_t settingsPointer;
 	
 	public:
@@ -55,7 +55,7 @@ class AbsSpi {
 				case SpiState::ApplyingSettings:
 					if (dataWritten) {
 						AbsBaroCS :: SetHigh();
-						if (settingsPointer >= (sizeof(settings) / sizeof(ImuSettings))) {
+						if (settingsPointer >= (sizeof(settings) / sizeof(BaroSettings))) {
 							state = SpiState::Wait;
 							GenTimerE0 :: StartAbsBaroCommunication();
 							settingsPointer = 0;

@@ -25,6 +25,7 @@
 #include "HAL/EEPROM/EEPROM.hpp"
 #include "Control/Servos/Servos.hpp"
 #include "HAL/Timers/GenericTimer/TickTimer.hpp"
+#include "HAL/SPI/EepromSPI.hpp"
 
 void InitPins() {
 	led1 :: SetPinConf();
@@ -64,11 +65,11 @@ void InitPins() {
 
 int main(void) {
 	System :: Init();
-	PwmTimer :: Init();
+	//PwmTimer :: Init();
 	InitPins();
 	_delay_ms(1000);
 	ExtUart :: Init();
-	GpsUart :: Init();
+	//GpsUart :: Init();
 	DebugUart :: Init();
 	
 	GenTimerD0 :: Init();
@@ -76,10 +77,11 @@ int main(void) {
 	TickTimer :: Init();
 	ExtUart :: SendString("START!\n");
 	DebugUart :: SendString("START!\n");
-	Sonar :: Init();
+	//Sonar :: Init();
 	AbsSpi :: Init();
-	ImuSpi :: Init();
-	I2cDiffBaro :: Init();
+	//ImuSpi :: Init();
+	//I2cDiffBaro :: Init();
+	EepromSpi :: Init();
 	
 	System :: EnableAllInterrupts();
 
@@ -96,7 +98,7 @@ int main(void) {
 		}
 		
 		if (GenTimerD0 :: sendData) {
-			DataPackets :: SendOrSaveData();
+			//DataPackets :: SendOrSaveData();
 			GenTimerD0 :: sendData = false;
 		}
 		
