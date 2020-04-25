@@ -86,8 +86,8 @@ int main(void) {
 	System :: EnableAllInterrupts();
 
     while (1) {
+		
 		if (GenTimerD0 :: checkUartAndSpi) {
-
 			led2 :: Toggle();
 			ParseExtUart :: Parse();
 			ParseGPSUart :: Parse();
