@@ -45,7 +45,7 @@ class EepromSpi {
 	
 	public:
 		static void Init() {
-			SPIC.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV128_gc;
+			SPIC.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV16_gc;
 			SPIC.INTCTRL = SPI_INTLVL_MED_gc;
 			SPIC.STATUS = SPI_IF_bm;
 			CheckCommunication();
@@ -55,7 +55,7 @@ class EepromSpi {
 			switch(state) {
 				case SpiState::ApplyingSettings:
 					EepromCS :: SetHigh();
-					state = SpiState :: Wait;
+					StartWriteData();
 					break;
 				case SpiState::Wait:
 				case SpiState::DataUpdated:
@@ -70,7 +70,7 @@ class EepromSpi {
 							uint8_t ID = SPIC.DATA;
 							if (ID == 0b00100000) {
 								ExtUart :: SendString("Got EEPROM ID\n");
-								StartApplyingSettings();
+								state = SpiState :: Wait;
 							} else {
 								CheckCommunication();
 							}
@@ -83,19 +83,20 @@ class EepromSpi {
 				case SpiState :: ReadData:
 					if (!(bool)addressWrites) {
 						if (sendDummyData) {
-							SPIC.DATA = 0x00;
+							SPIC.DATA = 0x10;
 							sendDummyData = false;
 						} else {
-							if (byteCount > 0) {
-								*arrayPointer = SPIC.DATA;
-								arrayPointer++;
-								SPIC.DATA = 0x00;
-								byteCount--;
-							} else {
+							if (byteCount == 1) {
 								EepromCS :: SetHigh();
 								state = SpiState :: DataUpdated;
+								*arrayPointer = SPIC.DATA;
+							} else {
+								*arrayPointer = SPIC.DATA;
+								arrayPointer++;
+								byteCount--;
+								SPIC.DATA = 0x00;
 							}
-						}	
+						}		
 					} else {
 						SPIC.DATA = (uint8_t)(startAddress >> (8 * (addressWrites - 1)));
 						addressWrites--;
@@ -106,6 +107,7 @@ class EepromSpi {
 						if (byteCount > 0) {
 							SPIC.DATA = *arrayPointer;
 							arrayPointer++;
+							ExtUart :: SendUInt(byteCount);
 							byteCount--;
 						} else {
 							EepromCS :: SetHigh();
@@ -121,6 +123,7 @@ class EepromSpi {
 						SPIC.DATA = 0x00;
 						sendDummyData = false;
 					} else {
+						EepromCS :: SetHigh();
 						if (SPIC.DATA & 0x01) {
 							state = SpiState::WriteInProgress;
 						} else {
@@ -146,8 +149,7 @@ class EepromSpi {
 			EepromCS :: SetLow();
 			SPIC.DATA = 0b00000110;	// Write enable		
 		}
-		
-		
+	
 		static bool ReadDataFromMemory(uint32_t start, uint8_t* array, uint8_t bytes) {
 			if (state == SpiState :: Wait) {
 				state = SpiState :: ReadData;
@@ -165,29 +167,37 @@ class EepromSpi {
 		
 		static bool WriteDataToMemory(uint32_t start, uint8_t* array, uint8_t bytes) {
 			if (state == SpiState :: Wait) {
-				state = SpiState :: WriteData;
+				StartApplyingSettings();
 				startAddress = start;
 				byteCount = bytes;
+				arrayPointer = array;
 				addressWrites = 3;
-				EepromCS :: SetLow();
-				SPIC.DATA = 0b00000010; // write to memory array
 				return true;
 			}
 			return false;
 		}
 		
-		static void CheckWriteProgress() {
-			state = SpiState :: CheckingWriteProgress;
-			sendDummyData = true;
+		static void StartWriteData() {
+			state = SpiState :: WriteData;
 			EepromCS :: SetLow();
-			SPIC.DATA = 0b00000101;	// read status register
+			SPIC.DATA = 0b00000010; // write to memory array
+		}
+		
+		static bool CheckWriteProgress() {
+			if (state == SpiState :: Wait || state == SpiState::WriteInProgress) {
+				state = SpiState :: CheckingWriteProgress;
+				sendDummyData = true;
+				EepromCS :: SetLow();
+				SPIC.DATA = 0b00000101;	// read status register
+				return true;
+			}
+			return false;
 		}
 	
 		/*static volatile uint8_t* GetDataPointer() {
 			return &data[0];
-		}
+		}*/
 		
-		*/
 		static SpiState GetState() {
 			return state;
 		}
@@ -196,7 +206,5 @@ class EepromSpi {
 			state = SpiState::Wait;
 		}
 };
-
-
 
 #endif /* EEPROMSPI_H_ */

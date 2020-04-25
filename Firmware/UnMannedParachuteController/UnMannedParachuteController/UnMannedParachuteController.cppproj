@@ -244,6 +244,9 @@
     <Compile Include="HAL\DataPackets\DataPackets.hpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="HAL\EEPROM\EEPROM.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="HAL\EEPROM\EEPROM.hpp">
       <SubType>compile</SubType>
     </Compile>

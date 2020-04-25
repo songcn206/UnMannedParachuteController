@@ -401,7 +401,7 @@ class ParseGPSUart {
 			return result;		
 		}
 		
-		static double GetLatitude() {
+		static float GetLatitude() {
 			return latitude;
 		}
 		

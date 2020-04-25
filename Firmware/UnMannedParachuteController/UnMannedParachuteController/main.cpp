@@ -78,10 +78,14 @@ int main(void) {
 	ExtUart :: SendString("START!\n");
 	DebugUart :: SendString("START!\n");
 	//Sonar :: Init();
-	AbsSpi :: Init();
+	//AbsSpi :: Init();
 	//ImuSpi :: Init();
 	//I2cDiffBaro :: Init();
 	EepromSpi :: Init();
+	
+	bool write = true;
+	bool retry = false;
+	uint8_t arv[42];
 	
 	System :: EnableAllInterrupts();
 
@@ -106,6 +110,49 @@ int main(void) {
 			Servos :: AutoControlMotors();
 			GenTimerE0 :: autoControl = false;
 		}
+		
+		if (EepromSpi :: GetState() == EepromSpi::SpiState :: WriteInProgress) {
+			EepromSpi :: CheckWriteProgress();
+		}
+		
+		/*if (write) {
+			write = !ExternalEeprom :: SaveData(-20, -20, -20, 50, 50, 50, 100, 100, 100, 125.0, 125.0, 125.0, 5, 1234, 125.0, 200, 128, 127, retry);
+			if (write) {
+				retry = true;
+			}
+		}
+		*/
+		/*if (EepromSpi :: GetState() == EepromSpi::SpiState::Wait && write) {
+			EepromSpi :: WriteDataToMemory(0, &arv[0], 1);
+			write = false;
+		} 
+		
+		if (EepromSpi :: GetState() == EepromSpi::SpiState::WriteInProgress) {
+			EepromSpi :: CheckWriteProgress();
+		}
+		*/
+		
+		/*_delay_ms(200);
+		if (EepromSpi :: GetState() == EepromSpi::SpiState::Wait && write) {
+			write = false;
+			EepromSpi :: ReadDataFromMemory(0, &arv[0], 42);
+		}
+		
+		if (EepromSpi :: GetState() == EepromSpi::SpiState::DataUpdated) {
+			ExtUart :: SendByte(arv[0]);
+			ExtUart :: SendByte(arv[1]);
+			ExtUart :: SendByte(arv[2]);
+			ExtUart :: SendByte(arv[3]);
+			ExtUart :: SendByte(arv[4]);
+			ExtUart :: SendByte(arv[5]);
+			ExtUart :: SendByte(arv[6]);
+			ExtUart :: SendByte(arv[7]);
+			ExtUart :: SendByte(arv[8]);
+			ExtUart :: SendByte(arv[9]);
+			ExtUart :: SendByte(arv[40]);
+			ExtUart :: SendByte(arv[41]);
+			EepromSpi :: ChangeStateToWait();
+		}*/
     }
 }
 
