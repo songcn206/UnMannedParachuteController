@@ -20,12 +20,13 @@ class GenTimerD0 {
 		
 		static constexpr float compareMatchAValue_ms = 1.0f; // Check for updates (uart, imu, etc)
 		static constexpr float compareMatchBValue_ms = 5.0f; // Imu 
-		static constexpr float compareMatchCValue_ms = 20.0f; // Save/send data
+		static constexpr float compareMatchCValue_ms = 200.0f; // Send data
+		static constexpr float compareMatchCValueFaster_ms = 20.0; // Save data
 		static constexpr float compareMatchDValue_ms = 50.0f; // Sonar
 		
 		static volatile constexpr uint16_t compareMatchAValue = System :: CPU_CLOCK / preScaler * (compareMatchAValue_ms / 1000);
 		static volatile constexpr uint16_t compareMatchBValue = System :: CPU_CLOCK / preScaler * (compareMatchBValue_ms / 1000);
-		static volatile constexpr uint16_t compareMatchCValue = System :: CPU_CLOCK / preScaler * (compareMatchCValue_ms / 1000);
+		static volatile uint16_t compareMatchCValue;
 		static volatile constexpr uint16_t compareMatchDValue = System :: CPU_CLOCK / preScaler * (compareMatchDValue_ms / 1000);
 		
 		static volatile bool checkUartAndSpi;
@@ -53,7 +54,8 @@ class GenTimerD0 {
 		static void StopSendStatusPackets();
 		
 		static void StartSendStatusPackets();
-			
+		
+		static void ChangeStatusPacketToFaster(bool b);	
 };
 
 

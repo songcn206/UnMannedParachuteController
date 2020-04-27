@@ -31,7 +31,7 @@ class EepromSpi {
 			uint8_t value;
 		};
 	
-		static constexpr uint8_t EepromSpiInterruptLevel = (uint8_t)System :: IntLevel :: Med;
+		static constexpr uint8_t EepromSpiInterruptLevel = (uint8_t)System :: IntLevel :: Low;
 	
 	
 	private:
@@ -107,7 +107,6 @@ class EepromSpi {
 						if (byteCount > 0) {
 							SPIC.DATA = *arrayPointer;
 							arrayPointer++;
-							ExtUart :: SendUInt(byteCount);
 							byteCount--;
 						} else {
 							EepromCS :: SetHigh();
@@ -150,7 +149,7 @@ class EepromSpi {
 			SPIC.DATA = 0b00000110;	// Write enable		
 		}
 	
-		static bool ReadDataFromMemory(uint32_t start, uint8_t* array, uint8_t bytes) {
+		static bool ReadDataFromMemory(uint32_t start, volatile uint8_t* array, uint8_t bytes) {
 			if (state == SpiState :: Wait) {
 				state = SpiState :: ReadData;
 				startAddress = start;

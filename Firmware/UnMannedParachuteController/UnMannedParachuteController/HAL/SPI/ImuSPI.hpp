@@ -117,6 +117,7 @@ class ImuSpi {
 					if (DataWritten) {
 						ImuCS :: SetHigh();
 						if (SPIE.DATA == imuID) {
+							ExtUart :: SendString("Got IMU ID\n");
 							state = SpiState :: ApplyingSettings;
 							SetSettings();
 						} else {

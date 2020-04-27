@@ -7,6 +7,7 @@
 #include "ADC.hpp"
 
 uint16_t volatile Sonar :: distance_mm;
+Sonar :: SonarFilter Sonar :: filter;
 
 ISR(ADCA_CH0_vect) {
 	Sonar :: InterruptHandler();

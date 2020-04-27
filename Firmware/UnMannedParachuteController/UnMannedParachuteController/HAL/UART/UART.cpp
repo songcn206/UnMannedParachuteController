@@ -11,7 +11,10 @@ ISR(USARTF0_RXC_vect) {
 	ExtUart :: ExtRxInterruptHandler();
 }
 
+ISR(USARTE0_RXC_vect) {
+	DebugUart :: ExtRxInterruptHandler();
+}
+
 ISR(USARTD0_RXC_vect) {
-	
 	GpsUart :: GPSRxInterruptHandler();	
 }

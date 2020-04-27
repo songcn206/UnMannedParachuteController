@@ -8,14 +8,13 @@
 #include "DataPackets.hpp"
 #include "HAL/UART/ParseUart.hpp"
 #include "Control/Servos/Servos.hpp"
+#include "HAL/EEPROM/EEPROM.hpp"
 
-uint16_t DataPackets :: datapointer = 0;
-DataPackets :: SavedData DataPackets :: savedData[300];
 bool DataPackets :: saveData = false;
-bool DataPackets :: arrayFull = false;
 
 void DataPackets :: SendStatus() {
-	ExtUart :: SendString("[DATA] AX ");
+	/*ExtUart :: SendString("[DATA]");
+	ExtUart :: SendString(" AX ")
 	ExtUart :: SendInt(Imu :: GetAccXYZ()[0]); // 2
 	ExtUart :: SendString(" AY ");
 	ExtUart :: SendInt(Imu :: GetAccXYZ()[1]); // 2
@@ -51,80 +50,69 @@ void DataPackets :: SendStatus() {
 	ExtUart :: SendUInt(Servos :: GetRightMotorPosition()); // 1
 	ExtUart :: SendString(" LM ");
 	ExtUart :: SendUInt(Servos :: GetLeftMotorPosition()); // 1
-	ExtUart :: SendString("\n");
+	ExtUart :: SendString("\n");*/
 	
-	/*
-	DebugUart :: SendString("Data Sent");
+	DebugUart :: SendString("[DATA]");
+	DebugUart :: SendString(" MX ");
+	DebugUart :: SendInt(Imu :: GetMagXYZ()[0]);
+	DebugUart :: SendString(" No ");
+	DebugUart :: SendUInt(ParseGPSUart :: GetGPSCount());
+	DebugUart :: SendString(" D ");
 	DebugUart :: SendUInt(Sonar :: GetDistance());
-	DebugUart :: SendString("\n");*/
+	DebugUart :: SendString(" RM ");
+	DebugUart :: SendUInt(Servos :: GetRightMotorPosition()); // 1
+	DebugUart :: SendString(" LM ");
+	DebugUart :: SendUInt(Servos :: GetLeftMotorPosition()); // 1
+	DebugUart :: SendString("\n");
+	
 }
 
-void DataPackets :: SendOrSaveData() {
+bool DataPackets :: SendOrSaveData(bool retry) {
 	if (saveData) {
-		SaveDataFromSensors();
+		return SaveDataFromSensors(retry);
 	} else {
 		SendStatus();
+		return true;
 	}
 }
 
-void DataPackets :: SaveDataFromSensors() {
-	//savedData[datapointer] = {.sonar = Sonar :: GetDistance(), .absbaro = AbsoluteBaro :: GetPressure(), .alt = ParseGPSUart :: GetAltitude()};
-	
-	savedData[datapointer] = {.ax = Imu :: GetAccXYZ()[0], .ay = Imu :: GetAccXYZ()[1], .az = Imu :: GetAccXYZ()[2],
-								.gx = Imu :: GetGyroXYZ()[0], .gy = Imu :: GetGyroXYZ()[1], .gz = Imu :: GetGyroXYZ()[2],
-								.mx = Imu :: GetMagXYZ()[0], .my = Imu :: GetMagXYZ()[1], .mz = Imu :: GetMagXYZ()[2]};
-	
-	
-	if (datapointer == sizeof(savedData) / sizeof (SavedData) - 1) {
-		saveData = false;
+bool DataPackets :: SaveDataFromSensors(bool retry) {
+	if (ExternalEeprom :: IsMemoryFull()) {
+		DebugUart :: SendString("Eeprom memory full\n");
+		CancelSavingData();
+		return true;
+	} else {
+		return ExternalEeprom :: SaveData(Imu :: GetAccXYZ()[0], Imu :: GetAccXYZ()[1], Imu :: GetAccXYZ()[2],
+					Imu :: GetGyroXYZ()[0], Imu :: GetGyroXYZ()[1],  Imu :: GetGyroXYZ()[2],
+					Imu :: GetMagXYZ()[0], Imu :: GetMagXYZ()[1], Imu :: GetMagXYZ()[2],
+					ParseGPSUart :: GetLatitude(), ParseGPSUart :: GetLongitude(), ParseGPSUart :: GetAltitude(),
+					ParseGPSUart :: GetGPSCount(), Sonar :: GetDistance(), AbsoluteBaro :: GetPressure(), 
+					DiffBaro :: GetPressure(), Servos :: GetRightMotorPosition(), Servos :: GetLeftMotorPosition(), retry);
 	}
-	datapointer++;
 }
 
 void DataPackets :: SendDataFromArray() {
 	GenTimerD0 :: StopSendStatusPackets();
-	ExtUart :: SendString("[DATA FROM ARRAY]\n");
-	/*for (uint16_t i = 0; i < datapointer; i++) {
-		ExtUart :: SendUInt(savedData[i].sonar);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendFloat(savedData[i].absbaro);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendFloat(savedData[i].alt);
-		ExtUart :: SendString("\n");
-	}*/
-	
-	for (uint16_t i = 0; i < datapointer; i++) {
-		ExtUart :: SendInt(savedData[i].ax);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].ay);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].az);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].gx);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].gy);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].gz);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].mx);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].my);
-		ExtUart :: SendString(" ");
-		ExtUart :: SendInt(savedData[i].mz);
-		ExtUart :: SendString("\n");
-
-	}
-	
-	
-	
+	ExtUart :: SendString("[DATA FROM MEMORY ARRAY START]\n");
+	ExternalEeprom :: SendData();
+	ExtUart :: SendString("[DATA FROM MEMORY ARRAY END]\n");
 	GenTimerD0 :: StartSendStatusPackets();
 }
 
 void DataPackets :: StartSavingData() {
-	saveData = true;
-	datapointer = 0;
+	if (ExternalEeprom :: InitSaving()) {
+		saveData = true;
+		GenTimerD0 :: ChangeStatusPacketToFaster(true);
+		led3 :: SetHigh();
+	} else {
+		DebugUart :: SendString("EEPROM not Ready for saving\n");
+	} 
 }
 
 void DataPackets :: CancelSavingData() {
 	saveData = false;
+	GenTimerD0 :: ChangeStatusPacketToFaster(false);
+	led3 :: SetLow();
+	uint16_t lastPacketNr = ExternalEeprom :: GetLastPacketNr();
+	InternalEeprom :: WriteUint16((uint16_t)InternalEeprom :: EepromAddress :: LastSavedPacket, lastPacketNr);
 }

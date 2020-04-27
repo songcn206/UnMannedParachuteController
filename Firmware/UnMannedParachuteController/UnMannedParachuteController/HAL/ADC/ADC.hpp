@@ -11,12 +11,15 @@
 
 #include "HAL/UART/UART.hpp"
 #include "HAL/System/System.hpp"
+#include "HAL/Filters/ExpMovingFilter.hpp"
 
 class Sonar {
 	public:
 	
 	private:
 		static volatile uint16_t distance_mm;
+		typedef ExpMovingFilter<SonarConf, uint16_t> SonarFilter;
+		static SonarFilter filter;
 		
 	public:
 		static void Init() {
@@ -35,9 +38,7 @@ class Sonar {
 		
 		static void InterruptHandler() {
 			uint16_t adcValue = ADCA.CH0RES;
-			distance_mm = adcValue * (5000 / 3276.8f);
-			//distance_mm = adcValue;
-			
+			distance_mm = filter.UpdateAndReturn(adcValue * (5000 / 3276.8f));
 		}
 		
 		static uint16_t GetDistance() {

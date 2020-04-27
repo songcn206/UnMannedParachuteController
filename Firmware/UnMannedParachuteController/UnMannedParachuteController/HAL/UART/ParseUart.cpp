@@ -9,8 +9,8 @@
 
 uint8_t ParseExtUart :: parseBufferPos = 0;
 uint8_t ParseExtUart :: parseBuffer[ParseExtUart :: parseBufferSize] = {};
-volatile uint8_t* ParseExtUart :: arrayStartPointer = ExtUart :: GetRxBufferStart();
-volatile uint8_t* ParseExtUart :: arrayEndPointer = ExtUart :: GetRxBufferEnd();
+volatile uint8_t* ParseExtUart :: arrayStartPointer = DebugUart :: GetRxBufferStart();
+volatile uint8_t* ParseExtUart :: arrayEndPointer = DebugUart :: GetRxBufferEnd();
 volatile uint8_t* ParseExtUart :: runningPointer = ParseExtUart :: arrayStartPointer;
 
 uint8_t ParseGPSUart :: parseBufferPos = 0;

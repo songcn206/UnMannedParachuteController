@@ -25,7 +25,7 @@ class ParseExtUart {
 		static volatile uint8_t* arrayEndPointer;
 		static volatile uint8_t* runningPointer;
 
-		static constexpr char terminatingChar = ExtUart :: terminatingChar;
+		static constexpr char terminatingChar = DebugUart :: terminatingChar;
 		static constexpr uint8_t parseBufferSize = 50;	
 		
 		static uint8_t parseBuffer[parseBufferSize];
@@ -53,7 +53,6 @@ class ParseExtUart {
 						HandleSetBothMotorPosition(&parseBuffer[0], parseBufferPos);
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "autoon", sizeof("autoon"))) {
 						HandleAutoOn();
-						led3 :: Toggle();
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "autooff", sizeof("autooff"))) {
 						HandleAutoOff();
 					}
@@ -80,16 +79,16 @@ class ParseExtUart {
 		}
 
 		static uint8_t GetDataSafe(volatile uint8_t* pointer) {
-			System :: DisableInterruptsByPriority(ExtUart :: GetInterruptLevel());
+			System :: DisableInterruptsByPriority(DebugUart :: GetInterruptLevel());
 			uint8_t tempData = *pointer;
-			System :: EnableInterruptsByPriority(ExtUart :: GetInterruptLevel());
+			System :: EnableInterruptsByPriority(DebugUart :: GetInterruptLevel());
 			return tempData;
 		}
 
 		static void SetDataSafe(volatile uint8_t* pointer, uint8_t data) {
-			System :: DisableInterruptsByPriority(ExtUart :: GetInterruptLevel());
+			System :: DisableInterruptsByPriority(DebugUart :: GetInterruptLevel());
 			*pointer = data;
-			System :: EnableInterruptsByPriority(ExtUart :: GetInterruptLevel());
+			System :: EnableInterruptsByPriority(DebugUart :: GetInterruptLevel());
 		}
 
 		static bool MatchCommands(uint8_t* pointer, uint8_t bufferlength, const char* command, uint8_t commandLength) {

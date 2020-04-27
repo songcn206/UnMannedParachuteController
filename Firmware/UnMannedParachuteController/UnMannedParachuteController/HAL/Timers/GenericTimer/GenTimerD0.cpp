@@ -14,7 +14,7 @@
 
 volatile constexpr uint16_t GenTimerD0 :: compareMatchAValue;
 volatile constexpr uint16_t GenTimerD0 :: compareMatchBValue;
-volatile constexpr uint16_t GenTimerD0 :: compareMatchCValue;
+volatile uint16_t GenTimerD0 :: compareMatchCValue = System :: CPU_CLOCK / GenTimerD0 :: preScaler * (compareMatchCValue_ms / 1000);
 volatile constexpr uint16_t GenTimerD0 :: compareMatchDValue;
 
 volatile bool GenTimerD0 :: checkUartAndSpi = false;
@@ -99,4 +99,14 @@ void GenTimerD0 :: StopSendStatusPackets() {
 
 void GenTimerD0 :: StartSendStatusPackets() {
 	TCD0.INTCTRLB |= TC_CCCINTLVL_LO_gc;
+}
+
+void GenTimerD0 :: ChangeStatusPacketToFaster(bool b) {
+	System :: DisableInterruptsByPriority(System::IntLevel::Low);
+	if (b) {
+		compareMatchCValue = System :: CPU_CLOCK / GenTimerD0 :: preScaler * (compareMatchCValueFaster_ms / 1000);
+	} else {
+		compareMatchCValue = System :: CPU_CLOCK / GenTimerD0 :: preScaler * (compareMatchCValue_ms / 1000);
+	}
+	System :: EnableInterruptsByPriority(System::IntLevel::Low);
 }

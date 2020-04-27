@@ -15,15 +15,19 @@
 
 
 class Servos {
-	public:
-	
 	private:
-		static constexpr uint8_t leftMotorZeroOffset = 39; 
-		static constexpr uint8_t leftMotorMaxOffset = 35;
+		static constexpr uint8_t leftMotorZeroOffset = 32;
+		static constexpr uint8_t leftMotorMaxOffset = 27;
+		static constexpr float offsetConstant =  (float) (leftMotorZeroOffset - leftMotorMaxOffset) / 180.0;
 		static constexpr uint8_t triangleSide_mm = 75;
+		static constexpr uint16_t breakingDistance_mm = 2000;
+		static constexpr uint16_t automaticTurnOffDistance = 600;
+		static constexpr float breakingConstant = (float) 150 / ((int16_t)automaticTurnOffDistance - breakingDistance_mm);
 		
-		static uint8_t leftMotorPosition;
-		static uint8_t rightMotorPosition;
+		static uint8_t leftMotorPosition_mm;
+		static uint8_t rightMotorPosition_mm;
+		static uint8_t leftMotorPosition_degrees;
+		static uint8_t rightMotorPosition_degrees;
 		static bool autoControlMotors;
 		
 		// P variables
@@ -34,13 +38,13 @@ class Servos {
 		static int16_t previousAccY;
 		static int32_t globalIntegral;
 		static constexpr float PidPValue = 0.2f;
-		static constexpr float PidIValue = 0.00075f;
-		static constexpr float PidDValue = 0.000125f;
-		static constexpr float PidIDegrade = 0.97;
+		static constexpr float PidIValue = 0.001f; // Empirically tested
+		static constexpr float PidDValue = 0.0001f; // Empirically tested
+		static constexpr float PidIDegrade = 0.999;  // Empirically tested
 		
 	public:	
-		static void SetLeftMotorPosition(int16_t degrees); 
-		static void SetRightMotorPosition(int16_t degrees);
+		static void SetLeftMotorPosition(int16_t len); 
+		static void SetRightMotorPosition(int16_t len);
 		static uint8_t GetRightMotorPosition();
 		static uint8_t GetLeftMotorPosition();
 		
@@ -53,7 +57,7 @@ class Servos {
 		static float CalculateLeftMotorError(uint8_t degrees);
 		static int16_t PController(int16_t accY);
 		static int16_t PIDController(int16_t accY);
-		static uint8_t CheckDegrees(int16_t value);
+		static uint8_t ClipLength(int16_t value);
 		static int16_t LengthToAngle(int16_t len);
 };
 

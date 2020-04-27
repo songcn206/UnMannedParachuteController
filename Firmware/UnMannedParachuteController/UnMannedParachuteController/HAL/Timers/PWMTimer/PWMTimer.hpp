@@ -17,8 +17,8 @@ class PwmTimer {
 		static constexpr float pwmFrequency_Hz = 50.0f;
 		static constexpr float pwmTime_ms = 1000 / pwmFrequency_Hz;
 		static constexpr uint16_t preScaler = 64;
-		static constexpr float rightMotorMax_ms = 2.50f;
-		static constexpr float rightMotorMin_ms = 0.74f;
+		static constexpr float rightMotorMax_ms = 2.5f;
+		static constexpr float rightMotorMin_ms = 0.76f;
 		//static constexpr float leftMotorMin_ms = 2.4f;
 		//static constexpr float leftMotorMax_ms = 0.78f;
 		

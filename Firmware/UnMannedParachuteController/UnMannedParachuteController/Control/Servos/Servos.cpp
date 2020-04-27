@@ -7,32 +7,35 @@
 
 #include "Servos.hpp"
 #include "Control/Imu/Imu.hpp"
+#include "HAL/ADC/ADC.hpp"
 
-uint8_t Servos :: leftMotorPosition = 255;
-uint8_t Servos :: rightMotorPosition = 255;
-bool Servos :: autoControlMotors =  true;
+uint8_t Servos :: leftMotorPosition_mm = 0;
+uint8_t Servos :: rightMotorPosition_mm = 0;
+uint8_t Servos :: leftMotorPosition_degrees;
+uint8_t Servos :: rightMotorPosition_degrees;
+bool Servos :: autoControlMotors =  false;
 
 uint32_t Servos :: previousTime = 0;
 int16_t Servos :: previousAccY = 0;
 int32_t Servos :: globalIntegral = 0;
 
 void Servos :: SetLeftMotorPosition(int16_t len) {
-	//leftMotorPosition = CheckDegrees(degrees);
-	leftMotorPosition = LengthToAngle(len);
-	PwmTimer :: UpdateCCReg('B', CalculateTimerCompareMatch((180 - leftMotorPosition ) + CalculateLeftMotorError(180 - leftMotorPosition)));
+	leftMotorPosition_mm = ClipLength(len);
+	leftMotorPosition_degrees = LengthToAngle(leftMotorPosition_mm);
+	PwmTimer :: UpdateCCReg('A', CalculateTimerCompareMatch((180 - leftMotorPosition_degrees) + CalculateLeftMotorError(180 - leftMotorPosition_degrees)));
 }
 
 void Servos :: SetRightMotorPosition(int16_t len) {
-	//rightMotorPosition = CheckDegrees(degrees);
-	rightMotorPosition = LengthToAngle(len);
-	PwmTimer :: UpdateCCReg('A', CalculateTimerCompareMatch(rightMotorPosition));
+	rightMotorPosition_mm = ClipLength(len);
+	rightMotorPosition_degrees = LengthToAngle(rightMotorPosition_mm);
+	PwmTimer :: UpdateCCReg('B', CalculateTimerCompareMatch(rightMotorPosition_degrees));
 }
 
-uint8_t Servos :: CheckDegrees(int16_t value) {
+uint8_t Servos :: ClipLength(int16_t value) {
 	if (value < 0) {
 		return 0;
-	} else if (value > 180) {
-		return 180;
+	} else if (value > 150) {
+		return 150;
 	}
 	return value;
 }
@@ -42,21 +45,34 @@ uint16_t Servos :: CalculateTimerCompareMatch(uint8_t degrees) {
 }
 
 float Servos :: CalculateLeftMotorError(uint8_t degrees) {
-	return 0.0222f * degrees + 35; // Maybe add long format of linear interpolation. COnstants in hpp
+	return leftMotorMaxOffset + degrees * offsetConstant;
 }
 
 uint8_t Servos :: GetLeftMotorPosition() {
-	return leftMotorPosition;
+	return leftMotorPosition_mm;
 }
 
 uint8_t Servos :: GetRightMotorPosition() {
-	return rightMotorPosition;
+	return rightMotorPosition_mm;
 }
 
 void Servos :: AutoControlMotors() {
-	if (Imu :: GetAccXYZ()[0] > 100) {
+	/*if (Imu :: GetAccXYZ()[0] > 150) {
 		SetLeftMotorPosition(0);
 		SetRightMotorPosition(0);
+	} else if (Sonar :: GetDistance() < automaticTurnOffDistance) {
+		autoControlMotors = false;
+	} */if (Sonar :: GetDistance() < breakingDistance_mm) {
+		uint16_t motorBreaking = (Sonar :: GetDistance() - automaticTurnOffDistance) * (breakingConstant) + 150;
+		
+		if (leftMotorPosition_mm < motorBreaking) {
+			SetLeftMotorPosition(motorBreaking);
+		} 
+		
+		if (rightMotorPosition_mm < motorBreaking) {
+			SetRightMotorPosition(motorBreaking);
+		}
+		
 	} else {
 		int16_t accY = Imu :: GetAccXYZ()[1];
 		//int16_t controllerValue = PController(accY);
@@ -104,9 +120,9 @@ int16_t Servos :: PIDController(int16_t accY) {
 }
 
 int16_t Servos :: LengthToAngle(int16_t len) {
-	if (len < 0) {
+	if (len <= 0) {
 		return 0;
-	} else if (len > (2 * Servos :: triangleSide_mm)) {
+	} else if (len >= (2 * Servos :: triangleSide_mm)) {
 		return 180;
 	}
 
