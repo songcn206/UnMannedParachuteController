@@ -6,7 +6,3 @@
  */ 
 #include "Pins.hpp"
 #include "System.hpp"
-
-ISR(PORTF_INT0_vect) {
-	led2 :: SetHigh();
-}

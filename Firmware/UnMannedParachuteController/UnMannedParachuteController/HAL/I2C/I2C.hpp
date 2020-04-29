@@ -33,15 +33,11 @@ class I2cDiffBaro {
 		
 	public:
 		static void Init() {
-			//PR.PRPC	&= ~PR_TWI_bm;
-			TWIE.CTRL = TWI_SDAHOLD_50NS_gc; // või 50ns viivitust
+			TWIE.CTRL = TWI_SDAHOLD_50NS_gc;
 			TWIE.MASTER.BAUD = baud;
-			 // kas kõik
-			TWIE.MASTER.CTRLB = TWI_MASTER_TIMEOUT_DISABLED_gc; // quick command
+			TWIE.MASTER.CTRLB = TWI_MASTER_TIMEOUT_DISABLED_gc;
 			TWIE.MASTER.CTRLA = TWI_MASTER_INTLVL_MED_gc | TWI_MASTER_RIEN_bm | TWI_MASTER_WIEN_bm | TWI_MASTER_ENABLE_bm;
-			//TWIE.MASTER.CTRLC = ... Ack ja cmd
 			TWIE.MASTER.STATUS = TWI_MASTER_BUSSTATE_IDLE_gc;
-
 			TWIE.SLAVE.CTRLA = 0;
 			
 			GenTimerE0 :: StartDiffBaroCommunication();
@@ -56,9 +52,11 @@ class I2cDiffBaro {
 		}
 		
 		static void GetData() {
+			System :: DisableInterruptsByPriority((System :: IntLevel)I2cDiffBaroInterruptLevel);
 			TWIE.MASTER.ADDR = 0x6c << 1;
 			action = Action :: Write;
 			dataCounter = 0;
+			System :: EnableInterruptsByPriority((System :: IntLevel)I2cDiffBaroInterruptLevel);
 		}
 		
 		static void WriteInterruptHandler() {
@@ -87,16 +85,17 @@ class I2cDiffBaro {
 			}
 		}
 		
+		
 		static bool GetMeasureReady() {
-			return measureReady;
+			return measureReady; // Interrupts disabled at reading
 		}
 		
 		static void SetMeasureReady(bool b) {
-			measureReady = b;
+			measureReady = b; // Interrupts disabled at writing
 		}
 		
 		static volatile uint8_t* GetPointer() {
-			return &pressure[0];
+			return &pressure[0]; // Interrupts disabled at reading
 		}
 };
 

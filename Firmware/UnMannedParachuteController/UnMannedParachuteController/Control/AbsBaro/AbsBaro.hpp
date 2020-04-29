@@ -23,10 +23,11 @@ class AbsoluteBaro {
 	
 	public: 
 		static void CheckForUpdates() {
-			
 			System :: DisableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
+			
 			if (AbsSpi :: GetState() == AbsSpi::SpiState::DataUpdated) {
 				memcpy(&data[0], (const void*)AbsSpi :: GetDataPointer(), sizeof(data));
+				AbsSpi :: ChangeStateToWait();
 				System :: EnableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
 
 				uint32_t highByte = data[2];
@@ -37,11 +38,9 @@ class AbsoluteBaro {
 				uint32_t tempPressure = (highByte << 16) | middle | ultraLowByte;
 				pressure = tempPressure / 4096.0f;
 				
-				AbsSpi :: ChangeStateToWait();
 			} else {
 				System :: EnableInterruptsByPriority((System :: IntLevel)AbsSpi :: AbsSpiInterruptLevel);
 			}
-			
 		}
 		
 		static float GetPressure() {

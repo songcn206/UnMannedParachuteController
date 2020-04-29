@@ -25,22 +25,20 @@ class System {
 			Low,
 			Med,
 			High
-			};
-		
-	private:
-	
+		};
+
 	public:
 		static void Init();
-		static void EnableAllInterrupts();
-		static void DisableAllInterrupts();
-		static void EnableInterruptsByPriority(IntLevel level);
-		static void DisableInterruptsByPriority(IntLevel level);
-		static void Halt(const char* msg);
 		
-	private:
-	
+		static void EnableAllInterrupts();
+		
+		static void DisableAllInterrupts();
+		
+		static void EnableInterruptsByPriority(IntLevel level);
+		
+		static void DisableInterruptsByPriority(IntLevel level);
+		
+		static void Halt(const char* msg);
 };
-
-
 
 #endif /* SYSTEM_H_ */

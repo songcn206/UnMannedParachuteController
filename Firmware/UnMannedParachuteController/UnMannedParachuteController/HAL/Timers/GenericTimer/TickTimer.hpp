@@ -13,15 +13,15 @@
 #include "HAL/Timers/Timers.hpp"
 
 class TickTimer {
-	public:
-	
 	private:
 		static constexpr uint16_t preScaler = 1;
 		static volatile uint32_t ticks;
 	
 	public:
 		static void Init();	
+		
 		static void InterruptHandler();
+		
 		static uint32_t GetTicks();
 };
 

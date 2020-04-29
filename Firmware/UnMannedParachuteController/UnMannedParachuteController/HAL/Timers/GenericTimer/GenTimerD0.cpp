@@ -7,7 +7,6 @@
 #include "GenTimerD0.hpp"
 #include "HAL/SPI/ImuSPI.hpp"
 #include "Control/Imu/Imu.hpp"
-#include "Control/StateMachine/StateMachine.hpp"
 #include "HAL/ADC/ADC.hpp"
 #include "HAL/I2C/I2C.hpp"
 #include "HAL/UART/ParseUart.hpp"
@@ -37,7 +36,6 @@ ISR(TCD0_CCD_vect) {
 }
 
 void  GenTimerD0 :: Init() {
-	//ExtUart :: SendString("timer init\n");
 	TCD0.CTRLB = TC_WGMODE_NORMAL_gc;
 	TCD0.INTCTRLB = TC_CCAINTLVL_LO_gc | TC_CCCINTLVL_LO_gc | TC_CCDINTLVL_LO_gc;
 	TCD0.PER = 65535;
@@ -45,16 +43,11 @@ void  GenTimerD0 :: Init() {
 	TCD0.CCB = GenTimerD0 :: compareMatchBValue;
 	TCD0.CCC = GenTimerD0 :: compareMatchCValue;
 	TCD0.CCD = GenTimerD0 :: compareMatchDValue;
-	
 	TCD0.CTRLA = Timers :: GetPreScaler(GenTimerD0 :: preScaler);
 }
 
 void GenTimerD0 :: CompareMatchAHandler() {
 	checkUartAndSpi = true;
-	/*ExtUart :: SendUInt(TCD0.CCA);
-	ExtUart :: SendString(" ");
-	ExtUart :: SendUInt(TCD0.CNT);
-	ExtUart :: SendString("\n");*/
 	TCD0.CCA +=  GenTimerD0 :: compareMatchAValue;
 	TCD0.CTRLFSET = TC_CMD_UPDATE_gc;
 }

@@ -38,16 +38,15 @@ class Sonar {
 		
 		static void InterruptHandler() {
 			uint16_t adcValue = ADCA.CH0RES;
-			distance_mm = filter.UpdateAndReturn(adcValue * (5000 / 3276.8f));
+			distance_mm = filter.UpdateAndReturn(adcValue * (5000 / 3276.8f)); // Calculating distance based on ADC value. Using Exp filter to smoothen data.
 		}
 		
 		static uint16_t GetDistance() {
-			System :: DisableInterruptsByPriority(System::IntLevel::Med);
+			System :: DisableInterruptsByPriority(System :: IntLevel :: Med);
 			uint16_t tempDistance = distance_mm;
-			System :: EnableInterruptsByPriority(System::IntLevel::Med);
+			System :: EnableInterruptsByPriority(System :: IntLevel :: Med);
 			return tempDistance;
 		}
-		
 };
 
 

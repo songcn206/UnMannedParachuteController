@@ -99,11 +99,6 @@ class Uart {
 		}
 		
 		static void SendFloat(float value) {
-			/*char buff[20] = {0};
-			sprintf(buff, "%f", (double)value);
-			SendString(buff);
-			*/
-			
 			uint16_t beforePoint = value;
 			SendUInt(beforePoint);
 			SendByte('.');
@@ -147,15 +142,9 @@ class Uart {
 			if (reciveArray[reciveArrayFreePos] != 0) {
 				System :: Halt("ExtRX Buffer overflow\n");
 			}
-			//SendString("\n");
-			//SendByte(data);
-			//SendString("\n");
-			
+
 			// Used because removing and attaching UART dongle generated unwanted data flow.
 			if (data == '\n' || data == 32 || (data > 96 && data < 123) || (data > 47 && data < 58)) {
-				//SendString("\n");
-				//SendByte(data);
-				//SendString("\n");
 				reciveArray[reciveArrayFreePos] = data;
 				if (reciveArrayFreePos == conf :: rxArrayLength - 1) {
 					reciveArrayFreePos = 0;
@@ -164,7 +153,6 @@ class Uart {
 				}
 			}
 		}
-
 
 		static volatile uint8_t* GetRxBufferStart() {
 			return &reciveArray[0]; 
@@ -232,10 +220,6 @@ class Uart {
 			uart -> BAUDCTRLB = (uint8_t) (((div >> 8) & 0x0f) | (exp << 4));
 			uart -> BAUDCTRLA = (uint8_t) div;
 		}
-		
-		
-		
-		
 };
 
 template<typename conf>

@@ -7,8 +7,6 @@
 
 #include "ImuSPI.hpp"
 
-#include <avr/pgmspace.h>
-
 volatile ImuSpi :: SpiState ImuSpi :: state = ImuSpi :: SpiState :: Uninited;
 volatile uint8_t ImuSpi :: data[18];
 volatile uint8_t ImuSpi :: dataPointer = 0;
@@ -54,11 +52,11 @@ struct ImuSpi :: ImuSettings s10 = {.addr = 2, .value = 0b00000001}; // I2C_MST_
 struct ImuSpi :: ImuSettings s11 = {.addr = 5, .value = 0b10001000}; // I2C_SLV0_CTRL: slave 0 enable and bytes read from slave
 
 struct ImuSpi :: ImuSettings s12 = {.addr = 3, .value = 0b00001100}; // I2C_SLV0_ADDR: Physical address (0x0c) and write data
-struct ImuSpi :: ImuSettings s13= {.addr = 4, .value = 0x32};		// I2C_SLV0_REG: Slave control2 register
+struct ImuSpi :: ImuSettings s13 = {.addr = 4, .value = 0x32};		// I2C_SLV0_REG: Slave control2 register
 struct ImuSpi :: ImuSettings s14 = {.addr = 6, .value = 0b00000001}; // I2C_SLV0_DO: Restart
 
 struct ImuSpi :: ImuSettings s15 = {.addr = 3, .value = 0b00001100}; // I2C_SLV0_ADDR: Device physical address (0x0c) and write data
-struct ImuSpi :: ImuSettings s16= {.addr = 4, .value = 0x31};		// I2C_SLV0_REG: Slave control1 register
+struct ImuSpi :: ImuSettings s16 = {.addr = 4, .value = 0x31};		// I2C_SLV0_REG: Slave control1 register
 struct ImuSpi :: ImuSettings s17 = {.addr = 6, .value = 0b00000100}; // I2C_SLV0_DO: Continuous mode 2 (20Hz)
 	
 struct ImuSpi :: ImuSettings s18 = {.addr = 3, .value = 0b10001100}; // I2C_SLV0_ADDR: Device physical address (0x0c) and read data

@@ -41,18 +41,25 @@ class ParseExtUart {
 					
 					if (MatchCommands(&parseBuffer[0], parseBufferPos, "save", sizeof("save"))) {
 						HandleSaveData();
+						
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "get", sizeof("get"))) {
 						HandleGetData();
+						
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "cancel", sizeof("cancel"))) {
 						HandleCancelData();
+						
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "left", sizeof("left"))) {
 						HandleSetLeftMotorPosition(&parseBuffer[0], parseBufferPos);
+						
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "right", sizeof("right"))) {
 						HandleSetRightMotorPosition(&parseBuffer[0], parseBufferPos);
+						
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "both", sizeof("both"))) {
 						HandleSetBothMotorPosition(&parseBuffer[0], parseBufferPos);
+						
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "autoon", sizeof("autoon"))) {
 						HandleAutoOn();
+						
 					} else if (MatchCommands(&parseBuffer[0], parseBufferPos, "autooff", sizeof("autooff"))) {
 						HandleAutoOff();
 					}
@@ -105,6 +112,7 @@ class ParseExtUart {
 			return true;
 		}
 		
+		// Turning off all sensor communication
 		static void HandleGetData() {
 			GenTimerD0 :: StopImuDataCommunication();
 			GenTimerD0 :: StopSonarMeasurements();
@@ -138,7 +146,6 @@ class ParseExtUart {
 			if (len <= 5 && len >= 0) {
 				uint16_t position_mm = StringToUint16((const char*)&bufferpointer[5], len);
 				if (position_mm >= 0 && position_mm <= 150) {
-					//float degreesInFloat = positionInDegrees / 10;
 					Servos :: SetLeftMotorPosition(position_mm);
 				}
 			}
@@ -184,8 +191,8 @@ class ParseExtUart {
 		static void HandleAutoOff() {
 			Servos :: SetAutoControlMotors(false);
 		}
-
 		
+		// just using basic math to convert ASCII string to number
 		static uint8_t StringToUint8(const char* pointer, uint8_t len) {
 			if (len == 3) {
 				return 100 * (pointer[0] - 0b00110000)  + 10 * (pointer[1] - 0b00110000) + (pointer[2] - 0b00110000);
@@ -196,6 +203,7 @@ class ParseExtUart {
 			}
 		}
 		
+		// just using basic math to convert ASCII string to number
 		static uint16_t StringToUint16(const char* pointer, uint8_t len) {
 			if (len == 5) {
 				return 10000 * (pointer[0] - 0b00110000) + 1000 * (pointer[1] - 0b00110000) 
@@ -223,8 +231,7 @@ class ParseGPSUart {
 		
 		static uint8_t parseBuffer[parseBufferSize];
 		static uint8_t parseBufferPos;
-		
-		//float volatile dateTime;
+
 		static float volatile latitude;
 		static float volatile longitude;
 		static float volatile altitude;
@@ -232,7 +239,6 @@ class ParseGPSUart {
 	
 	public:
 		static void Parse() {
-			//led2 :: Toggle();
 			while (GetDataSafe(runningPointer) != 0) {
 				uint8_t data = GetDataSafe(runningPointer);
 				parseBuffer[parseBufferPos] = data;
@@ -288,7 +294,6 @@ class ParseGPSUart {
 		}
 		
 		static void HandlePUBXCommand(uint8_t* bufferpointer, uint8_t parseBufferLen) {
-
 			uint8_t gpsDataStartArray[21] = {};
 			uint8_t gpsDataPosition = 0;
 			gpsDataStartArray[gpsDataPosition] = 0;
@@ -301,54 +306,31 @@ class ParseGPSUart {
 				}
 			}
 
-			//uint8_t dateTimePos = gpsDataStartArray[2];
 			uint8_t latitudePos = gpsDataStartArray[3];
 			uint8_t longitudePos = gpsDataStartArray[5];
 			uint8_t altitudePos = gpsDataStartArray[7];
 			uint8_t gpsCountPos = gpsDataStartArray[18];
 			
-			//char tempDateTime[9];
 			char tempLatitude[10];
 			char tempLongitude[11];
 			char tempAltitude[7];
 			char tempGpsCount[2];
 			
-			//uint8_t altitudePointPos = 0;
-			
-			//ExtUart :: SendString("[GPS]");
-			/*ExtUart :: SendString(" T ");
-			for (uint8_t i = 0; i < (gpsDataStartArray[3] - 1 - dateTimePos); i++) {
-				ExtUart :: SendByte((uint8_t)bufferpointer[dateTimePos + i]);
-				tempDateTime[i] = bufferpointer[dateTimePos + i];	
-			}*/
-			
-			//ExtUart :: SendString(" La ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[4] - 1 - latitudePos); i++) {
-				//ExtUart :: SendByte((uint8_t)bufferpointer[latitudePos + i]);
 				tempLatitude[i] = bufferpointer[latitudePos + i];
 			}
 
-			//ExtUart :: SendString(" Lo ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[6] - 1 - longitudePos); i++) {
-				//ExtUart :: SendByte((uint8_t)bufferpointer[longitudePos + i]);
 				tempLongitude[i] = bufferpointer[longitudePos + i];
 			}	
 			
-			//ExtUart :: SendString(" Alt ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[8] - 1 - altitudePos); i++) {
-				//ExtUart :: SendByte((uint8_t)bufferpointer[altitudePos + i]);
 				tempAltitude[i] = bufferpointer[altitudePos + i];
-				/*if (bufferpointer[altitudePos + i] == '.') {
-					altitudePointPos = i;
-				}*/
 			}
 			
-			//ExtUart :: SendString(" No ");
 			for (uint8_t i = 0; i <  (gpsDataStartArray[19] - 1 - gpsCountPos); i++) {
-				//ExtUart :: SendByte((uint8_t)bufferpointer[gpsCountPos + i]);
 				tempGpsCount[i] = bufferpointer[gpsCountPos + i];
 			}		
-			//ExtUart :: SendString("\n");
 				
 			//dateTime = StringToFloat(tempDateTime, sizeof(tempDateTime), 6);
 			//latitude = StringToFloat(tempLatitude, gpsDataStartArray[4] - 1 - latitudePos, 4);
@@ -363,8 +345,6 @@ class ParseGPSUart {
 			altitude = atof(tempAltitude);
 			
 			led1 :: Toggle();
-			
-			
 		}
 		
 		static uint8_t StringToUint8(const char* pointer, uint8_t len) {
@@ -377,6 +357,7 @@ class ParseGPSUart {
 			}
 		}
 		
+		// Based on tests it is slower than atof
 		static float StringToFloat(const char* pointer, uint8_t len, uint8_t pointPos) {
 			float result = 0.0f;
 			

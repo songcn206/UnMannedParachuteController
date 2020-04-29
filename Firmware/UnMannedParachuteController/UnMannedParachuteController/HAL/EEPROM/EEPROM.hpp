@@ -52,8 +52,6 @@ class InternalEeprom {
 };
 
 class ExternalEeprom {
-	public:
-	
 	private:
 		static constexpr uint16_t pagesCount = 1024;
 		static constexpr uint8_t maxWritesPerPage = 6;
@@ -69,9 +67,8 @@ class ExternalEeprom {
 		static bool firstPacket;
 		
 	public:	
-		
 		static bool InitSaving() {
-			if (EepromSpi :: GetState() == EepromSpi::SpiState::Wait) {
+			if (EepromSpi :: GetState() == EepromSpi :: SpiState :: Wait) {
 				firstPacket = true;
 				dataPacketNr = 0;
 				currentAddress = 0;
@@ -93,7 +90,9 @@ class ExternalEeprom {
 			if (retry) {
 				return EepromSpi :: WriteDataToMemory(currentAddress, &dataToBeSaved[0], bytesPerPacket);
 			} else {
-				CalculateStartingAddress();
+				CalculateStartingAddress(); // Calculating packet starting address in EEPROM
+				
+				// Writing data to array
 				Write16(0, accx);
 				Write16(2, accy);
 				Write16(4, accz);
@@ -116,12 +115,14 @@ class ExternalEeprom {
 				dataPacketNr++;
 				writesWithinPage++;
 				lastPacketNr = dataPacketNr;
+				
+				// Writing array to EEPROM
 				return EepromSpi :: WriteDataToMemory(currentAddress, &dataToBeSaved[0], bytesPerPacket);
 			}
 		}
 		
 		static void SendData() {
-			if (lastPacketNr == 0) {
+			if (lastPacketNr == 0) { // If we have had power cycle between saving and recovering data from EEPROM
 				lastPacketNr = InternalEeprom :: ReadUint16((uint16_t)InternalEeprom :: EepromAddress :: LastSavedPacket);
 			}
 			
@@ -135,22 +136,28 @@ class ExternalEeprom {
 			// Wait writing cycle to finish
 			while (true) {
 				if (EepromSpi :: GetState() == EepromSpi :: SpiState :: WriteInProgress) {
-					EepromSpi :: CheckWriteProgress();
+					EepromSpi :: CheckWriteProgress(); // Asking EEPROM if it's ready
+					
 				} else if (EepromSpi :: GetState() == EepromSpi :: SpiState :: WriteData ||
 					EepromSpi :: GetState() == EepromSpi :: SpiState :: ApplyingSettings || 
-					EepromSpi :: GetState() == EepromSpi::SpiState::Initing || 
-					EepromSpi :: GetState() == EepromSpi::SpiState::Uninited) {
-					for (uint8_t i = 0; i < 255; i++) {
-						asm volatile("nop");
-					}
+					EepromSpi :: GetState() == EepromSpi :: SpiState :: Initing || 
+					EepromSpi :: GetState() == EepromSpi :: SpiState :: Uninited) {
+					asm volatile("nop"); // Eeprom should recover by itselt from these states
+					
 				} else {
 					break;
+				}
+				
+				for (uint8_t i = 0; i < 255; i++) {
+					asm volatile("nop"); // For slowing down while loop
 				}
 			}
 			
 			while(nAllSent) {
 				CalculateStartingAddress();
 				EepromSpi :: ReadDataFromMemory(currentAddress, &dataToBeSent[0], bytesPerPacket);
+				
+				// Waiting one packet from EEPROM
 				while(true) {
 					if (EepromSpi :: GetState() == EepromSpi :: SpiState :: DataUpdated) {
 						break;
@@ -161,6 +168,7 @@ class ExternalEeprom {
 					}
 				}
 				
+				// Sending data to UART
 				ExtUart :: SendString("AX ");
 				ExtUart :: SendInt(Read16(0));
 				ExtUart :: SendString(" AY ");
@@ -235,6 +243,7 @@ class ExternalEeprom {
 			}
 		}
 		
+		// For saving float value to EEPROM array
 		static void WriteFloat(uint8_t index, float value) {
 			uint8_t temp[sizeof(float)];
 			memcpy(temp, &value, sizeof value);
@@ -244,6 +253,7 @@ class ExternalEeprom {
 			}
 		}
 		
+		// Retrieve float value from EEPROM array
 		static float ReadFloat(uint8_t index) {
 			uint8_t temp[sizeof(float)];
 			float ret;

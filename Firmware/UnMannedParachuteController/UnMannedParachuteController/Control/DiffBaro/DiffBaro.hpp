@@ -22,14 +22,15 @@ class DiffBaro {
 	
 	public:
 		static void CheckForUpdates() {
+			
 			System :: DisableInterruptsByPriority((System :: IntLevel)I2cDiffBaro :: I2cDiffBaroInterruptLevel);
 			if (I2cDiffBaro :: GetMeasureReady()) {
 				memcpy(&data[0], (const void*)I2cDiffBaro :: GetPointer(), sizeof(data));
+				I2cDiffBaro :: SetMeasureReady(false);
 				System :: EnableInterruptsByPriority((System :: IntLevel)I2cDiffBaro :: I2cDiffBaroInterruptLevel);	
 				
 				pressure = (data[1] << 8) | data[0];
-				
-				I2cDiffBaro :: SetMeasureReady(false);
+
 			} else {
 				System :: EnableInterruptsByPriority((System :: IntLevel)I2cDiffBaro :: I2cDiffBaroInterruptLevel);	
 			}

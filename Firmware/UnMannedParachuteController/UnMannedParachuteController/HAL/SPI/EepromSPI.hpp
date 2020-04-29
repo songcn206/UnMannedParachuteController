@@ -26,13 +26,7 @@ class EepromSpi {
 			WriteInProgress
 		};
 	
-		struct EepromSettings {
-			uint8_t addr;
-			uint8_t value;
-		};
-	
-		static constexpr uint8_t EepromSpiInterruptLevel = (uint8_t)System :: IntLevel :: Low;
-	
+		static constexpr uint8_t EepromSpiInterruptLevel = (uint8_t)System :: IntLevel :: Med;
 	
 	private:
 		static volatile uint8_t addressWrites;
@@ -42,7 +36,6 @@ class EepromSpi {
 		static volatile uint8_t byteCount;
 		static volatile uint8_t* arrayPointer;
 		
-	
 	public:
 		static void Init() {
 			SPIC.CTRL =  SPI_ENABLE_bm | SPI_MASTER_bm | SPI_MODE_3_gc | SPI_PRESCALER_DIV16_gc;
@@ -53,14 +46,14 @@ class EepromSpi {
 	
 		static void InterruptHandler() {
 			switch(state) {
-				case SpiState::ApplyingSettings:
+				case SpiState :: ApplyingSettings:
 					EepromCS :: SetHigh();
 					StartWriteData();
 					break;
-				case SpiState::Wait:
-				case SpiState::DataUpdated:
+				case SpiState :: Wait:
+				case SpiState :: DataUpdated:
 					break;
-				case SpiState::Initing:
+				case SpiState :: Initing:
 					if (!(bool)addressWrites) {
 						if (sendDummyData) {
 							SPIC.DATA = 0x00;
@@ -68,7 +61,7 @@ class EepromSpi {
 						} else {
 							EepromCS :: SetHigh();
 							uint8_t ID = SPIC.DATA;
-							if (ID == 0b00100000) {
+							if (ID == 0b00100000) { // ID from datasheet
 								ExtUart :: SendString("Got EEPROM ID\n");
 								state = SpiState :: Wait;
 							} else {
@@ -124,14 +117,14 @@ class EepromSpi {
 					} else {
 						EepromCS :: SetHigh();
 						if (SPIC.DATA & 0x01) {
-							state = SpiState::WriteInProgress;
+							state = SpiState :: WriteInProgress;
 						} else {
-							state = SpiState::Wait;
+							state = SpiState :: Wait;
 						}
 					}
 					break;
 				default:
-					System :: Halt("Unhandeled state in Eeprom\n");
+					System :: Halt("Unhandeled state in EepromSpi\n");
 			}
 		}
 	
@@ -150,6 +143,7 @@ class EepromSpi {
 		}
 	
 		static bool ReadDataFromMemory(uint32_t start, volatile uint8_t* array, uint8_t bytes) {
+			System :: DisableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 			if (state == SpiState :: Wait) {
 				state = SpiState :: ReadData;
 				startAddress = start;
@@ -159,20 +153,25 @@ class EepromSpi {
 				sendDummyData = true;
 				EepromCS :: SetLow();
 				SPIC.DATA = 0b00000011; // Read from memory array
+				System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 				return true;
 			}
+			System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 			return false;
 		}
 		
 		static bool WriteDataToMemory(uint32_t start, uint8_t* array, uint8_t bytes) {
+			System :: DisableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 			if (state == SpiState :: Wait) {
 				StartApplyingSettings();
 				startAddress = start;
 				byteCount = bytes;
 				arrayPointer = array;
 				addressWrites = 3;
+				System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 				return true;
 			}
+			System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 			return false;
 		}
 		
@@ -183,26 +182,30 @@ class EepromSpi {
 		}
 		
 		static bool CheckWriteProgress() {
+			System :: DisableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 			if (state == SpiState :: Wait || state == SpiState::WriteInProgress) {
 				state = SpiState :: CheckingWriteProgress;
 				sendDummyData = true;
 				EepromCS :: SetLow();
 				SPIC.DATA = 0b00000101;	// read status register
+				System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 				return true;
 			}
+			System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 			return false;
 		}
-	
-		/*static volatile uint8_t* GetDataPointer() {
-			return &data[0];
-		}*/
 		
 		static SpiState GetState() {
-			return state;
+			System :: DisableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
+			SpiState tempState = state;
+			System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
+			return tempState;
 		}
 	
 		static void ChangeStateToWait() {
-			state = SpiState::Wait;
+			System :: DisableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
+			state = SpiState :: Wait;
+			System :: EnableInterruptsByPriority((System :: IntLevel)EepromSpiInterruptLevel);
 		}
 };
 

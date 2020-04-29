@@ -60,6 +60,7 @@ class Imu {
 			System :: DisableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 			if (ImuSpi :: GetState() == ImuSpi::SpiState::DataUpdated) {
 				memcpy(&rawData[0], (const void*)ImuSpi :: GetData(), sizeof(rawData));
+				ImuSpi :: DataTransferCompleted();
 				System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpi :: ImuSpiInterruptLevel);
 								
 				acc[0] = AccXFilter.UpdateAndReturn((rawData[dataPointer] << 8) | rawData[dataPointer + 1]);
@@ -84,12 +85,11 @@ class Imu {
 				dataPointer += 2;
 	
 				dataPointer = 0;
-				ImuSpi :: DataTransferCompleted();
+				
 				if (mag[0] == 0 && mag[1] == 0 && mag[2] == 0) {
 					if (allowedFalsePackets <= discardedPackets) {
 						ImuSpi :: InitConnection();
 						discardedPackets = 0;
-						//led2 :: Toggle();
 					} else {
 						discardedPackets++;
 					}

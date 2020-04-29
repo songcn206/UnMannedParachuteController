@@ -10,7 +10,6 @@
 #define DATAPACKETS_HPP_
 
 #include "Control/Imu/Imu.hpp"
-
 #include "HAL/UART/UART.hpp"
 #include "HAL/ADC/ADC.hpp"
 #include "Control/AbsBaro/AbsBaro.hpp"

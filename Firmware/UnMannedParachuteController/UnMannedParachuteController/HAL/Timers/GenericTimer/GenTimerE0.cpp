@@ -28,16 +28,13 @@ ISR(TCE0_CCC_vect) {
 }
 
 void  GenTimerE0 :: Init() {
-	//ExtUart :: SendString("timer init\n");
 	TCE0.CTRLB = TC_WGMODE_NORMAL_gc;
 	TCE0.INTCTRLB = 0;
 	TCE0.PER = 65535;
 	TCE0.CCA = GenTimerE0 :: compareMatchAValue;
 	TCE0.CCB = GenTimerE0 :: compareMatchBValue;
 	TCE0.CCC = GenTimerE0 :: compareMatchCValue;
-	
 	TCE0.INTCTRLB = TC_CCBINTLVL_LO_gc;
-	
 	TCE0.CTRLA = Timers :: GetPreScaler(GenTimerE0 :: preScaler);
 }
 

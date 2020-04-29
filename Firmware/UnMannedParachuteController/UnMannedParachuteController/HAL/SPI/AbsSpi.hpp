@@ -1,5 +1,5 @@
 /*
- * AbsImu.h
+ * Abs.h
  *
  * Created: 28.01.2020 18:38:11
  *  Author: timot
@@ -31,8 +31,7 @@ class AbsSpi {
 		};
 		
 		static constexpr uint8_t AbsSpiInterruptLevel = (uint8_t)System :: IntLevel :: Med;
-		
-		
+			
 	private:
 		static volatile bool dataWritten;
 		static volatile SpiState state;
@@ -52,7 +51,7 @@ class AbsSpi {
 		
 		static void InterruptHandler() {
 			switch(state) {
-				case SpiState::ApplyingSettings:
+				case SpiState :: ApplyingSettings:
 					if (dataWritten) {
 						AbsBaroCS :: SetHigh();
 						if (settingsPointer >= (sizeof(settings) / sizeof(BaroSettings))) {
@@ -70,19 +69,17 @@ class AbsSpi {
 						dataWritten = true;
 					}
 					break;
-				case SpiState::DataUpdated:
-				case SpiState::Wait:
+				case SpiState :: DataUpdated:
+				case SpiState :: Wait:
 					break;
-				case SpiState::Initing:
+				case SpiState :: Initing:
 					if (dataWritten) {
 						AbsBaroCS :: SetHigh();
 						uint8_t ID = SPID.DATA;
-
-						if (ID == 0b10110001) {
+						if (ID == 0b10110001) { // ID from datasheet
 							ExtUart :: SendString("Got AbsBaro ID\n");
 							StartApplyingSettings();
 						} else {
-							//ExtUart :: SendString("Asking AbsBaro ID\n");
 							CheckCommunication();	
 						}
 					} else {
@@ -90,7 +87,7 @@ class AbsSpi {
 						dataWritten = true;
 					}
 					break;
-				case SpiState::ReadData:
+				case SpiState :: ReadData:
 					data[dataPointer] = SPID.DATA;
 					AbsBaroCS :: SetHigh();
 					if (dataPointer >= (sizeof(DataAddr) - 1)) {
@@ -103,24 +100,20 @@ class AbsSpi {
 						state = SpiState::SendDummyData;
 					}
 					break;
-				case SpiState::SendDummyData:
+				case SpiState :: SendDummyData:
 					SPID.DATA = 0xff;
-					state = SpiState::ReadData;
+					state = SpiState :: ReadData;
 					break;
 				default:
 					System :: Halt("Unhandeled state in AbsBaro\n");
 			}
-			
-			
 		}
 		
 		static void CheckCommunication() {
-			//System :: DisableInterruptsByPriority(ImuSpiInterruptLevel);
 			state = SpiState :: Initing;
 			AbsBaroCS :: SetLow();
 			SPID.DATA = 0x0f | (1 << 7);
 			dataWritten = false;
-			//System :: EnableInterruptsByPriority(ImuSpiInterruptLevel);
 		}
 		
 		static void StartApplyingSettings() {
@@ -131,23 +124,25 @@ class AbsSpi {
 		}
 		
 		static void StartDataCommunication() {
+			System :: DisableInterruptsByPriority((System :: IntLevel)AbsSpiInterruptLevel);
 			state = SpiState::SendDummyData;
 			AbsBaroCS :: SetLow();
 			SPID.DATA = DataAddr[0] | (1 << 7);
+			System :: EnableInterruptsByPriority((System :: IntLevel)AbsSpiInterruptLevel);
 		}
 		
-		static volatile uint8_t* GetDataPointer() {
+		static volatile uint8_t* GetDataPointer() { // Interrupts disabled when calling
 			return &data[0];
 		}
 		
-		static SpiState GetState() {
+		static SpiState GetState() { // Interrupts disabled when calling
 			return state;
 		}
 		
-		static void ChangeStateToWait() {
-			state = SpiState::Wait;
+		static void ChangeStateToWait() { // Interrupts disabled when calling
+			state = SpiState :: Wait;
 		}
 };
 
 
-#endif /* ABSIMU_H_ */
+#endif /* ABS_H_ */

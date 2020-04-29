@@ -7,11 +7,9 @@
 
 
 #include <avr/io.h>
-
 #include "HAL/System/System.hpp"
 #include "HAL/System/Pins.hpp"
 #include "HAL/UART/UART.hpp"
-#include "Control/StateMachine/StateMachine.hpp"
 #include "HAL/UART/ParseUart.hpp"
 #include "HAL/Timers/PWMTimer/PWMTimer.hpp"
 #include "HAL/Timers/GenericTimer/GenTimerD0.hpp"
@@ -96,7 +94,7 @@ int main(void) {
 			AbsoluteBaro :: CheckForUpdates();
 			DiffBaro :: CheckForUpdates();
 			
-			if (EepromSpi :: GetState() == EepromSpi::SpiState :: WriteInProgress) {
+			if (EepromSpi :: GetState() == EepromSpi :: SpiState :: WriteInProgress) {
 				EepromSpi :: CheckWriteProgress();
 			}
 			

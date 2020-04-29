@@ -33,7 +33,6 @@ class ImuSpi {
 		static constexpr uint8_t ImuSpiInterruptLevel = (uint8_t)System :: IntLevel :: Med;
 		
 	private:
-
 		static volatile SpiState state;
 		static volatile uint8_t data[18];
 		static volatile uint8_t dataPointer;
@@ -45,7 +44,7 @@ class ImuSpi {
 		static volatile uint8_t magnetometerPointer;
 		static volatile bool gotIDFirstTime;
 		
-		static constexpr uint8_t imuID = 0xea;
+		static constexpr uint8_t imuID = 0xea; // ID from datasheet
 		static constexpr uint8_t imuIDAddr = 0x00;
 		static constexpr uint8_t dummyData = 0xff;
 	
@@ -59,26 +58,25 @@ class ImuSpi {
 		
 		static void InterruptHandler() {
 			switch(state) {
-				case SpiState::SendDummyData:
+				case SpiState :: SendDummyData:
 					SPIE.DATA = dummyData;
-					state = SpiState::ReadDataFromRegister;
+					state = SpiState :: ReadDataFromRegister;
 					break;
-				case SpiState::ReadDataFromRegister:
+				case SpiState :: ReadDataFromRegister:
 					data[dataPointer] = SPIE.DATA;
 					ImuCS :: SetHigh();
 					if (dataPointer >= (sizeof(DataAddr) - 1)) {
 						dataPointer = 0;
-						state = SpiState::DataUpdated;
+						state = SpiState :: DataUpdated;
 					} else {
 						dataPointer++;
 						ImuCS :: SetLow();
 						SPIE.DATA = (1 << 7) | DataAddr[dataPointer];
-						state = SpiState::SendDummyData;
+						state = SpiState :: SendDummyData;
 					}
 					break;
-				case SpiState::ApplyingSettings:
+				case SpiState :: ApplyingSettings:
 					if (DataWritten) {
-						//ExtUart :: SendString("Set\n");
 						ImuCS :: SetHigh();
 						if (settingsPointer >= (sizeof(settings) / sizeof(ImuSettings))) {
 							GenTimerD0 :: StartImuDataCommunication();
@@ -95,7 +93,7 @@ class ImuSpi {
 						DataWritten = true;
 					}
 					break;
-				case SpiState::UpdatingMagnetometer:
+				case SpiState :: UpdatingMagnetometer:
 					if (DataWritten) {
 						ImuCS :: SetHigh();
 						if (magnetometerPointer >= (sizeof(magnetometer) / sizeof(ImuSettings))) {
@@ -113,7 +111,6 @@ class ImuSpi {
 					}
 					break;
 				case SpiState::Uninited:
-					//ExtUart :: SendString("Asking IMU ID\n");
 					if (DataWritten) {
 						ImuCS :: SetHigh();
 						if (SPIE.DATA == imuID) {
@@ -137,11 +134,9 @@ class ImuSpi {
 		
 		
 		static void SetSettings() {
-			//ExtUart :: SendString("Start settings\n");
 			ImuCS :: SetLow();
 			SPIE.DATA = settings[0].addr;
 			DataWritten = false;
-			//ExtUart :: SendString("Send addr\n");
 		}
 		
 		static SpiState GetState() {
@@ -168,16 +163,17 @@ class ImuSpi {
 		}
 		
 		static void DataTransferCompleted() {
-			state = SpiState::Wait;			
+			state = SpiState :: Wait;			
 		}
 		
 		static void InitConnection() {
+			System :: DisableInterruptsByPriority((System :: IntLevel)ImuSpiInterruptLevel);
 			state = SpiState :: Uninited;
 			ImuCS :: SetLow();
 			SPIE.DATA = (1 << 7 | imuIDAddr);
 			DataWritten = false;
+			System :: EnableInterruptsByPriority((System :: IntLevel)ImuSpiInterruptLevel);
 		}
-		
 };
 
 

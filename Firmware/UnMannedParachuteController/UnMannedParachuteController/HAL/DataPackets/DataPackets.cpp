@@ -15,41 +15,41 @@ bool DataPackets :: saveData = false;
 void DataPackets :: SendStatus() {
 	/*ExtUart :: SendString("[DATA]");
 	ExtUart :: SendString(" AX ")
-	ExtUart :: SendInt(Imu :: GetAccXYZ()[0]); // 2
+	ExtUart :: SendInt(Imu :: GetAccXYZ()[0]);
 	ExtUart :: SendString(" AY ");
-	ExtUart :: SendInt(Imu :: GetAccXYZ()[1]); // 2
+	ExtUart :: SendInt(Imu :: GetAccXYZ()[1]); 
 	ExtUart :: SendString(" AZ ");
-	ExtUart :: SendInt(Imu :: GetAccXYZ()[2]); // 2
+	ExtUart :: SendInt(Imu :: GetAccXYZ()[2]); 
 	ExtUart :: SendString(" GX ");
-	ExtUart :: SendInt(Imu :: GetGyroXYZ()[0]); // 2
+	ExtUart :: SendInt(Imu :: GetGyroXYZ()[0]);
 	ExtUart :: SendString(" GY ");
-	ExtUart :: SendInt(Imu :: GetGyroXYZ()[1]); // 2
+	ExtUart :: SendInt(Imu :: GetGyroXYZ()[1]);
 	ExtUart :: SendString(" GZ ");
-	ExtUart :: SendInt(Imu :: GetGyroXYZ()[2]); // 2
+	ExtUart :: SendInt(Imu :: GetGyroXYZ()[2]); 
 	ExtUart :: SendString(" MX ");
-	ExtUart :: SendInt(Imu :: GetMagXYZ()[0]); // 2
+	ExtUart :: SendInt(Imu :: GetMagXYZ()[0]);
 	ExtUart :: SendString(" MY ");
-	ExtUart :: SendInt(Imu :: GetMagXYZ()[1]); // 2
+	ExtUart :: SendInt(Imu :: GetMagXYZ()[1]);
 	ExtUart :: SendString(" MZ ");
-	ExtUart :: SendInt(Imu :: GetMagXYZ()[2]); // 18 IMU
+	ExtUart :: SendInt(Imu :: GetMagXYZ()[2]);
 	ExtUart :: SendString(" La ");
-	ExtUart :: SendFloat(ParseGPSUart :: GetLatitude()); // 4
+	ExtUart :: SendFloat(ParseGPSUart :: GetLatitude());
 	ExtUart :: SendString(" Lo ");
-	ExtUart :: SendFloat(ParseGPSUart :: GetLongitude()); // 4
+	ExtUart :: SendFloat(ParseGPSUart :: GetLongitude());
 	ExtUart :: SendString(" Alt ");
-	ExtUart :: SendFloat(ParseGPSUart :: GetAltitude()); // 12 GPS
+	ExtUart :: SendFloat(ParseGPSUart :: GetAltitude());
 	ExtUart :: SendString(" No ");
-	ExtUart :: SendUInt(ParseGPSUart :: GetGPSCount()); // 1
+	ExtUart :: SendUInt(ParseGPSUart :: GetGPSCount());
 	ExtUart :: SendString(" D ");
-	ExtUart :: SendUInt(Sonar :: GetDistance()); // 2
+	ExtUart :: SendUInt(Sonar :: GetDistance());
 	ExtUart :: SendString(" APr ");
-	ExtUart :: SendFloat(AbsoluteBaro :: GetPressure()); // 4
+	ExtUart :: SendFloat(AbsoluteBaro :: GetPressure());
 	ExtUart :: SendString(" DPr ");
-	ExtUart :: SendInt(DiffBaro :: GetPressure()); // 2
+	ExtUart :: SendInt(DiffBaro :: GetPressure());
 	ExtUart :: SendString(" RM ");
-	ExtUart :: SendUInt(Servos :: GetRightMotorPosition()); // 1
+	ExtUart :: SendUInt(Servos :: GetRightMotorPosition());
 	ExtUart :: SendString(" LM ");
-	ExtUart :: SendUInt(Servos :: GetLeftMotorPosition()); // 1
+	ExtUart :: SendUInt(Servos :: GetLeftMotorPosition());
 	ExtUart :: SendString("\n");*/
 	
 	DebugUart :: SendString("[DATA]");
@@ -60,9 +60,9 @@ void DataPackets :: SendStatus() {
 	DebugUart :: SendString(" D ");
 	DebugUart :: SendUInt(Sonar :: GetDistance());
 	DebugUart :: SendString(" RM ");
-	DebugUart :: SendUInt(Servos :: GetRightMotorPosition()); // 1
+	DebugUart :: SendUInt(Servos :: GetRightMotorPosition()); 
 	DebugUart :: SendString(" LM ");
-	DebugUart :: SendUInt(Servos :: GetLeftMotorPosition()); // 1
+	DebugUart :: SendUInt(Servos :: GetLeftMotorPosition()); 
 	DebugUart :: SendString("\n");
 	
 }
@@ -92,17 +92,17 @@ bool DataPackets :: SaveDataFromSensors(bool retry) {
 }
 
 void DataPackets :: SendDataFromArray() {
-	GenTimerD0 :: StopSendStatusPackets();
+	GenTimerD0 :: StopSendStatusPackets(); // Stopping status packets while sending saved data to UART
 	ExtUart :: SendString("[DATA FROM MEMORY ARRAY START]\n");
 	ExternalEeprom :: SendData();
 	ExtUart :: SendString("[DATA FROM MEMORY ARRAY END]\n");
 	GenTimerD0 :: StartSendStatusPackets();
 }
 
-void DataPackets :: StartSavingData() {
+void DataPackets :: StartSavingData() { // Initializing data saving to external EEPROM
 	if (ExternalEeprom :: InitSaving()) {
 		saveData = true;
-		GenTimerD0 :: ChangeStatusPacketToFaster(true);
+		GenTimerD0 :: ChangeStatusPacketToFaster(true); // Using different speed for saving data than sending data
 		led3 :: SetHigh();
 	} else {
 		DebugUart :: SendString("EEPROM not Ready for saving\n");
@@ -114,5 +114,5 @@ void DataPackets :: CancelSavingData() {
 	GenTimerD0 :: ChangeStatusPacketToFaster(false);
 	led3 :: SetLow();
 	uint16_t lastPacketNr = ExternalEeprom :: GetLastPacketNr();
-	InternalEeprom :: WriteUint16((uint16_t)InternalEeprom :: EepromAddress :: LastSavedPacket, lastPacketNr);
+	InternalEeprom :: WriteUint16((uint16_t)InternalEeprom :: EepromAddress :: LastSavedPacket, lastPacketNr); // saving last EEPROM packet value to internal EEPROM to recover data after power cycle
 }
