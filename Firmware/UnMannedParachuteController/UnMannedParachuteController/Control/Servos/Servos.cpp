@@ -56,6 +56,12 @@ uint8_t Servos :: GetRightMotorPosition() {
 	return rightMotorPosition_mm;
 }
 
+void Servos :: InitPIDController() {
+	previousTime = 0;
+	previousAccY = 0;
+	globalIntegral = 0;
+}
+
 void Servos :: AutoControlMotors() {
 	/*if (Imu :: GetAccXYZ()[0] > 150) {
 		SetLeftMotorPosition(0);
@@ -84,6 +90,7 @@ void Servos :: AutoControlMotors() {
 
 void Servos :: SetAutoControlMotors(bool b) {
 	autoControlMotors = b;
+	InitPIDController();
 }
 
 bool Servos :: GetAutoControlMotors() {

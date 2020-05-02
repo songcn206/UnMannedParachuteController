@@ -235,12 +235,13 @@ class ExternalEeprom {
 			if (writesWithinPage == maxWritesPerPage) {
 				currentPage++;
 				writesWithinPage = 0;
-				currentAddress = currentPage * bytesPerPage;
+				currentAddress = (uint32_t)currentPage * bytesPerPage;
 			} else if (firstPacket) {
 				firstPacket = false;
 			} else {
 				currentAddress += bytesPerPacket;
 			}
+			
 		}
 		
 		// For saving float value to EEPROM array

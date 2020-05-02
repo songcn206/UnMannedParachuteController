@@ -41,8 +41,8 @@ struct ImuSpi :: ImuSettings s1 = {.addr = 6, .value = 0b00000001}; // PWR_MGMT_
 struct ImuSpi :: ImuSettings s2 = {.addr = 7, .value = 0};			// PWR_MGMT_2: Enable cc and gyro	
 
 struct ImuSpi :: ImuSettings s3 = {.addr = 127, .value = 0b00100000}; // REG_BANK_SEL: Change to 2
-struct ImuSpi :: ImuSettings s4 = {.addr = 1, .value = 0b00000111}; // ACCEL_CONFIG: +-16g
-struct ImuSpi :: ImuSettings s5 = {.addr = 20, .value = 0b00000111}; // ACCEL_CONFIG: +-2000dps
+struct ImuSpi :: ImuSettings s4 = {.addr = 1, .value = 0b00000011}; // GYRO_CONFIG: +-500dps
+struct ImuSpi :: ImuSettings s5 = {.addr = 20, .value = 0b00000001}; // ACCEL_CONFIG: +-2g
 struct ImuSpi :: ImuSettings s6 = {.addr = 127, .value = 0};		// REG_BANK_SEL: Change to bank 0
 struct ImuSpi :: ImuSettings s7 = {.addr = 3, .value = 0b00110000}; // USER_CTRL: Enable I2C master
 struct ImuSpi :: ImuSettings s8 = {.addr = 127, .value = 0b00110000}; // REG_BANK_SEL: Change to bank 3

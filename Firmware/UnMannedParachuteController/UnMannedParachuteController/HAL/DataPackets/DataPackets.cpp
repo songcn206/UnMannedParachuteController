@@ -14,7 +14,7 @@ bool DataPackets :: saveData = false;
 
 void DataPackets :: SendStatus() {
 	/*ExtUart :: SendString("[DATA]");
-	ExtUart :: SendString(" AX ")
+	ExtUart :: SendString(" AX ");
 	ExtUart :: SendInt(Imu :: GetAccXYZ()[0]);
 	ExtUart :: SendString(" AY ");
 	ExtUart :: SendInt(Imu :: GetAccXYZ()[1]); 
