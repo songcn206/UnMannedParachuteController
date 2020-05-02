@@ -29,7 +29,7 @@ class ExpMovingFilter {
 };
 
 struct AccConf {
-	static constexpr float alpha = 0.01f;
+	static constexpr float alpha = 0.08f;
 }; 
 
 struct GyroConf {
