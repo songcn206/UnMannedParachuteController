@@ -31,7 +31,7 @@ class Servos {
 		static bool autoControlMotors;
 		
 		// P variables
-		static constexpr float autoControlPConstant = 0.075;
+		static constexpr float autoControlPConstant = 0.02;
 		
 		// PID variables and constants
 		static uint32_t previousTime;
