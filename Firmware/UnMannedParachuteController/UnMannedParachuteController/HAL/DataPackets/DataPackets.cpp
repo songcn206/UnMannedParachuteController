@@ -42,20 +42,23 @@ void DataPackets :: SendStatus() {
 	ExtUart :: SendUInt(ParseGPSUart :: GetGPSCount());
 	ExtUart :: SendString(" D ");
 	ExtUart :: SendUInt(Sonar :: GetDistance());
-	ExtUart :: SendString(" APr ");
-	ExtUart :: SendFloat(AbsoluteBaro :: GetPressure());
+	
 	ExtUart :: SendString(" DPr ");
 	ExtUart :: SendInt(DiffBaro :: GetPressure());
 	ExtUart :: SendString(" RM ");
 	ExtUart :: SendUInt(Servos :: GetRightMotorPosition());
 	ExtUart :: SendString(" LM ");
 	ExtUart :: SendUInt(Servos :: GetLeftMotorPosition());
-	ExtUart :: SendString("\n");*/
-	
+	*/
+	ExtUart :: SendString(" APr ");
+	ExtUart :: SendFloat(AbsoluteBaro :: GetPressure());
+	ExtUart :: SendString("\n");
 	DebugUart :: SendString("[DATA]");
 	DebugUart :: SendString(" MX ");
-	DebugUart :: SendInt(Imu :: GetMagXYZ()[0]);
-	DebugUart :: SendString(" No ");
+	//DebugUart :: SendInt(Imu :: GetMagXYZ()[0]);
+	//DebugUart :: SendString(" No ");
+	DebugUart :: SendString(" APr ");
+	DebugUart :: SendFloat(AbsoluteBaro :: GetPressure());
 	DebugUart :: SendUInt(ParseGPSUart :: GetGPSCount());
 	DebugUart :: SendString(" D ");
 	DebugUart :: SendUInt(Sonar :: GetDistance());

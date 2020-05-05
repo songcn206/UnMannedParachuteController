@@ -37,7 +37,7 @@ class Servos {
 		static uint32_t previousTime;
 		static int16_t previousAccY;
 		static int32_t globalIntegral;
-		static constexpr float PidPValue = 0.075f;
+		static constexpr float PidPValue = 0.02f;
 		static constexpr float PidIValue = 0.0005f; // Empirically tested 0.001
 		static constexpr float PidDValue = 0.0001f; // Empirically tested 0.0001
 		static constexpr float PidIDegrade = 0.999;  // Empirically tested
