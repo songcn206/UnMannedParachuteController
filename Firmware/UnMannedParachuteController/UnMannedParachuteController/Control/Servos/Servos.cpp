@@ -81,8 +81,8 @@ void Servos :: AutoControlMotors() {
 		
 	} else {
 		int16_t accY = Imu :: GetAccXYZ()[1];
-		int16_t controllerValue = PController(accY);
-		//int16_t controllerValue = PIDController(accY);
+		//int16_t controllerValue = PController(accY);
+		int16_t controllerValue = PIDController(accY);
 		SetRightMotorPosition(-controllerValue);
 		SetLeftMotorPosition(controllerValue);
 	}

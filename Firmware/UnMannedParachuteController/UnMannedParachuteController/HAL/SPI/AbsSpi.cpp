@@ -22,7 +22,7 @@ volatile uint8_t AbsSpi :: DataAddr[3] = {
 0x2a
 };
 
-struct AbsSpi :: BaroSettings set0 = {.addr = 0x10, .value = 0b00100000}; 
+struct AbsSpi :: BaroSettings set0 = {.addr = 0x10, .value = 0b01010000}; 
 	
 volatile AbsSpi :: BaroSettings AbsSpi :: settings[1] = {
 set0
