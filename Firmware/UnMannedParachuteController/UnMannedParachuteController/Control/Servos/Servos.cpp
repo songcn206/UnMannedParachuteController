@@ -66,9 +66,9 @@ void Servos :: AutoControlMotors() {
 	/*if (Imu :: GetAccXYZ()[0] > 150) {
 		SetLeftMotorPosition(0);
 		SetRightMotorPosition(0);
-	} else if (Sonar :: GetDistance() < automaticTurnOffDistance) {
+	} else */if (Sonar :: GetDistance() < automaticTurnOffDistance) {
 		autoControlMotors = false;
-	} */if (Sonar :: GetDistance() < breakingDistance_mm) {
+	} else if (Sonar :: GetDistance() < breakingDistance_mm) {
 		uint16_t motorBreaking = (Sonar :: GetDistance() - automaticTurnOffDistance) * (-0.078947) + 150;
 		
 		if (leftMotorPosition_mm < motorBreaking) {

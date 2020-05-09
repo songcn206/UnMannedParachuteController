@@ -37,10 +37,10 @@ class Servos {
 		static uint32_t previousTime;
 		static int16_t previousAccY;
 		static int32_t globalIntegral;
-		static constexpr float PidPValue = 0.01f;
-		static constexpr float PidIValue = 0.0002f; // Empirically tested 0.001
-		static constexpr float PidDValue = 0.0001f; // Empirically tested 0.0001
-		static constexpr float PidIDegrade = 0.999;  // Empirically tested
+		static constexpr float PidPValue = 0.005f;
+		static constexpr float PidIValue = 0.00004f; // Empirically tested 0.001
+		static constexpr float PidDValue = 0.00005f; // Empirically tested 0.0001
+		static constexpr float PidIDegrade = 0.99;  // Empirically tested
 		
 	public:	
 		static void SetLeftMotorPosition(int16_t len); 
