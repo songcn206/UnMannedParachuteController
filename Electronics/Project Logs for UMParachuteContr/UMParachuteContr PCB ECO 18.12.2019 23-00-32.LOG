@@ -1,8 +1,0 @@
-Added Component: Designator=IC6(NEO-6M Module)
-Add component. Clean all parameters for all variants
-Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Datasheet"; VariantName = "[No Variations]"
-Add component (AddParameter): Name = "ComponentLink1URL"; Value = "https://www.u-blox.com/sites/default/files/products/documents/NEO-6_DataSheet_(GPS.G6-HW-09005).pdf"; VariantName = "[No Variations]"
-Added Pin To Net: NetName=3V3 Pin=IC6-1
-Added Pin To Net: NetName=NetD11_C Pin=IC6-2
-Added Pin To Net: NetName=NetD14_C Pin=IC6-3
-Added Pin To Net: NetName=GND Pin=IC6-4
